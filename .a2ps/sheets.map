@@ -1,0 +1,3 @@
+#promela: /*.pml/ not needed since default in style sheets
+
+verilog: /*.v/ /*.vh/ /*.sv/

@@ -233,6 +233,53 @@ Follow this procedure to hide zero values in selected cells. If the value in one
    2. On the Format menu, click Cells, and then click the Number tab.
    3. In the Category list, click Custom.
    4. In the Type box, type 0;-0;;@
+** Source highlight
+   To highlight source code:
+*** Use  Highlight Code Converter:
+    1. Paste into Code-Converter.
+    2. Select Syntax
+    3. Select Color theme (example edit-eclipse).
+       Good options: earendel, edit-emacs, edit-gedit, nuvola
+    4. Copy preview to clipboard
+    5. Paste into Wordpad
+    6. Copy from Wordpad
+    7. Paste into powerpoint: Don't use Paste, Don't use Paste Special. 
+    8. Right click on slide:  Under context menu, Paste there are four icon options:
+      1) Use Destination Theme
+      2) Use Source formatting
+      3) As Picture
+      4) Keep Text Only
+      Select "Use Source Formatting".
 
+*** If GUI is not working then
+    highlight.exe -S spn --style=earendel -O rtf -i inputfile.pml -o outputfile.rtf
+    Then open in Wordpad and copy as above.
+
+*** Use Source-highlight
+    source-highlight -i inputfile.pml -o outputfile.html
+    Open in Word.
+    Copy to powerpoint.
+
+*** Use emacs
+    M-x htmlfontify-buffer 
+    Then write to html file
+    Open in word or copy into word
+    Then copy into powerpoint.
+
+
+** Minimal Debian Install
+*** wajig
+*** less
+*** i3
+    i3, i3status, suckless-tools
+*** openssh-client
+*** rxvt-unicode font xft:Inconsolata
+*** xorg
+*** fonts-inconsolata
+*** fontconfig
+*** git
+*** libc-i386
+
+    
 
 

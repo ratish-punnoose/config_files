@@ -222,17 +222,20 @@
 
 
 * Misc
-Bootcamp can break powerpoint
+** Bootcamp can break powerpoint
+** Excel
+*** Hide zero values in cells
+    Cells
+    Excel
 
-Cells
-Excel
+    Follow this procedure to hide zero values in selected cells. If the
+    value in one of these cells changes to a nonzero value, the format
+    of the value will be similar to the general number format. 
 
-Follow this procedure to hide zero values in selected cells. If the value in one of these cells changes to a nonzero value, the format of the value will be similar to the general number format.
-
-   1. Select the cells that contain the zero (0) values that you want to hide.
-   2. On the Format menu, click Cells, and then click the Number tab.
-   3. In the Category list, click Custom.
-   4. In the Type box, type 0;-0;;@
+    1. Select the cells that contain the zero (0) values that you want to hide.
+    2. On the Format menu, click Cells, and then click the Number tab.
+    3. In the Category list, click Custom.
+    4. In the Type box, type 0;-0;;@
 ** Source highlight
    To highlight source code:
 *** Use  Highlight Code Converter:
@@ -265,7 +268,7 @@ Follow this procedure to hide zero values in selected cells. If the value in one
     Then write to html file
     Open in word or copy into word
     Then copy into powerpoint.
-
+    
 
 ** Minimal Debian Install
 *** wajig
@@ -279,7 +282,41 @@ Follow this procedure to hide zero values in selected cells. If the value in one
 *** fontconfig
 *** git
 *** libc-i386
+*** ia32-libs 
+    First requires multiarch install
+    dpkg --add-architecture i386
+** Cygwin, Windows7 Quirkiness
+*** Virtualstore
+    This is a feature of Windows Vista designed to ensure that old
+    applications that assume that they can write to LOCAL_MACHINE
+    still work.  These writes are redirected to
+    AppData/Local/VirtualStore.
 
-    
+    With Cygwin32, when you write files in directories that are not
+    permissible, or create symlinks, they actually go into
+    VirtualStore.  With Cygwin64, this is not the case.
+
+     
+
+
+
+* i3 Shortcuts
+  - Mod+Enter :: start a new terminal
+  - Mod+Shift+Q :: Kill
+  - Mod+d :: dmenu
+  - Mod+L/R/U/D :: Switch focus
+  - Mod+Shift+L/R/U/D :: Move focused window
+  - Mod+h :: Horizontal split mode
+  - Mod+v :: Viertical split mode
+  - Mod+f :: Full screen for focused container
+  - Mod+s :: Stacking mode
+  - Mod+w :: Tabbed mode
+  - Mod+e :: Default mode
+  - Mod+[1:0] :: Switch workspace 1:10
+  - Mod+Shift+[1:0] :: Move container to workspace
+  - Mod+Shift+R :: restart
+  - Mod+Shift+E :: exit
+  - Mod+r :: resize mode
+  - Esc/Enter :: Exit resize mode
 
 

@@ -221,6 +221,8 @@
   - Ctrl+F 		:: Select search box
 
 
+* Git
+  - git ls-files :: list files in git repo
 * Misc
 ** Bootcamp can break powerpoint
 ** Excel

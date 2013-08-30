@@ -114,3 +114,16 @@ fi
 # alias lma='alias | grep -e "alias g[0-9]"|grep -v "alias m"|sed "s/alias //"'
 # touch ~/.bookmarks
 # source ~/.bookmarks
+
+# rsync -a = -rlptgoD
+#            -r recursive
+#            -l copy symlinks as symlinks
+#            -p preserve permissions (not good for samba)
+#            -t preserve modification times
+#            -g preserve group
+#            -o preserve owner
+#            -D preserve device files 
+#            --progress show progress
+#            -i itemize changes
+alias bkup='rsync --modify-window=3 --delete -rlt  --no-perms -n -i'
+alias bkup!='rsync --modify-window=3 --delete -rlt --no-perms --progress'

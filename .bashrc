@@ -7,6 +7,8 @@ case $- in
       *) return;;
 esac
 
+# Disable Ctrl-D
+set -o ignoreeof
 
 # User specific aliases and functions
 

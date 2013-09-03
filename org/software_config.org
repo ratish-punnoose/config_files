@@ -27,6 +27,13 @@
     - ~/ :: goto home directory
     - C-f :: go back temporarily to normal find file
 
+** Hideshow
+   - C-c @ ESC C-s :: show all
+   - C-c @ ESC C-h :: hide all
+   - C-c @ C-s :: show block
+   - C-c @ C-h :: hide block
+   - C-c @ C-c :: toggle hide/show
+
 * Org Mode
 ** Visibility
    - <TAB> 		:: Show/hide

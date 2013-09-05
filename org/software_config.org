@@ -13,9 +13,27 @@
    - C-M p 		:: Jump to begin of matching paren
 
 ** Lisp
-   - C-x C-e :: Evaluate Lisp in *scratch* before cursor and print
-                result in minibuffer
-   - C-j :: Evalute Lisp but insert result after cursor.
+*** Evaluation
+    - C-x C-e :: Evaluate Lisp in *scratch* before cursor and print
+                 result in minibuffer
+    - C-j :: Evalute Lisp but insert result after cursor.
+*** Movement
+    - C-M-f/C-M-b :: Move forward/backward dexp
+    - C-M-@ :: highlight sexp
+    - C-M-u :: expand selection upwards
+    - C-M-d :: next enclosed dexp
+*** Deletion
+    - C-M-k :: Delete
+    - C-M-Backspace :: delete sexp before cursor
+*** Indentation
+    - C-M-q :: indent whole func with cursor on (
+*** Insertion
+    - M-(  :: a pair of parens
+    - C-u 2 M-( :: enclose the next 2 sexps with paren
+*** Code completion
+    - C-c TAB :: automatic completion for (defv to (defvar
+*** Code comment
+    - M-; :: Add line comment
 ** Menu
    - F1 :: show, hide menu.
 ** Search
@@ -33,6 +51,7 @@
    - C-c @ C-s :: show block
    - C-c @ C-h :: hide block
    - C-c @ C-c :: toggle hide/show
+
 
 * Org Mode
 ** Visibility

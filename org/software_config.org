@@ -493,3 +493,172 @@
   - Esc/Enter :: Exit resize mode
 
 
+
+* TEst
+#+BEGIN_SRC emacs-lisp
+    ;; Technique
+    ;; org-map-entries
+    ;; org-entry-properties with time argument.
+    (org-entry-properties nil 'special "CLOCK") ;; This provides all time tags.
+    ;; time tags are retrieved as an alist.
+    ;;  however time ranges outside of clock only 
+    ;; map alist to a date or to a date range.
+    ;; consolidate dates, and date ranges.
+    ;; Date tree with link org-make-link-string
+    ;; 
+    ;; org-entry-beginning-position
+    ;; org-entry-end-position
+    ;; org-scanner-tags
+    ;; org-trust-scanner-tags t  locally
+    ;; org-entry-properties with time argument.
+    (org-entry-properties nil 'special "CLOCK") ;; This provides all time tags.
+    ;; Regular expression search for clock
+    ;; ^[ \t]*"  org-clock-string  "[ \t]*\\(?:\\(\\[.*?\\]\\)-+\\(\\[.*?\\]\\)
+    ;; re-search-forward has an optional argument for limit to limit search.
+    ;; Consolidate all time values into day, month, year.
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :results output silent
+    ;; Just return a list of the following list
+    ;; (formatted_heading date_list)
+    (defun org-narrow-to-within-dblock ()
+      "Narrow buffer to the current dblock."
+      (org-beginning-of-dblock)
+      (forward-line 1)
+      (narrow-to-region (point) (point))
+      )
+    
+    (defun org-heading-date-info ()
+      ;;
+      ;; Only return relevant headlines
+      ;; Returns either nil or a list
+      (let ((t_arr (make-vector 4 nil))  
+            (tstring ["TIMESTAMP" "DEADLINE" "SCHEDULED" "CLOCK"]))
+        (dolist (entry ;; each entry in 
+                  (org-entry-properties nil 'special "CLOCK") ;; list of timetags
+                  t_arr) ;; temporary var
+          (let* ((propname (car entry))
+                 (pos (position propname tstring :test 'equal)))
+            (if pos  
+                (aset t_arr pos (append (elt t_arr pos) 
+                                        (list (cdr entry))   ))
+              )))
+         ;; If any of the timestamps are present, return the headline and timestamps
+         ;; else return nil
+         (if (position nil t_arr :test-not 'equal)
+             (cons (nth 4 (org-heading-components)) (copy-sequence t_arr) )
+           nil)
+         ))
+    
+  (defun org-custom-datetree-make-new-entry (text)
+    "Make new entry as last child of current entry.
+  Add TEXT as headline, and position the cursor in the second line so that
+  a timestamp can be added there."
+    (let ((org-show-following-heading t)
+          (org-show-siblings t)
+          (org-show-hierarchy-above t)
+          (org-show-entry-below t)
+          col)
+      (outline-next-heading)
+      (org-back-over-empty-lines)
+      (or (looking-at "[ \t]*$")
+          (progn (insert "\n") (backward-char 1)))
+      (org-insert-heading nil t)
+      (org-do-demote)
+      (setq col (current-column))
+      (insert text "\n")
+      (if org-adapt-indentation (org-indent-to-column col))
+      (let ((org-show-following-heading t)
+            (org-show-siblings t)
+            (org-show-hierarchy-above t)
+            (org-show-entry-below t))
+        (org-show-context))))
+    
+  
+      
+    (defun org-test-datetree-insert(hding_daylist)
+      (let* ((text (car hding_daylist))
+             (days (cdr hding_daylist)))
+    
+        (mapc (lambda(day) 
+                (progn
+                  (org-datetree-find-date-create 
+                   (org-date-to-gregorian day) t)
+                  ;;(outline-next-heading)
+                  ;;(org-insert-item)
+                  ;;(insert text)
+                  (org-insert-subheading nil)
+                  (insert text)
+                ))
+              days)) )
+  
+    (defun org-heading-date-format (heading_info)
+      ;;  heading_info is a cons
+      ;;  car: text of heading
+      ;;  cdr: vector with time string for different time tags
+      (let* ((heading (car heading_info))
+             (formatted_heading (org-make-link-string (copy-sequence heading)))
+             (ts (cdr heading_info))
+             daylist )
+        ;; ts is a vector. Each element is a list of strings or nil
+        ;; map each list of strings to a date,
+        ;; flatten vector
+        ;; keep unique dates.
+        (setq daylist
+              (delq nil (delete-dups
+                         (apply 'append 
+                                (mapcar 
+                                 (lambda (tstr_list) 
+                                   (if tstr_list  
+                                       (mapcar 
+                                          (lambda (tstr) 
+                                            (org-time-string-to-absolute tstr)) 
+                                        tstr_list)))  
+                                 ts)))))
+        (cons heading  daylist)))
+      
+    
+    (defun org-dblock-write:myblock (params)
+        "Get dates/time/clock and create a datetree"
+        (let* ( (mappedvals (org-map-entries 'org-heading-date-info))
+                (heading_info (remove nil mappedvals)) 
+                (hding_daylists (mapcar 'org-heading-date-format  heading_info))    )
+    
+        
+          (print "printing hding_daylists")
+          (print hding_daylists)
+          ;; Parse date strings
+          ;; Format link string
+          (save-restriction
+            (org-narrow-to-within-dblock)
+            (org-insert-subheading nil)
+            (insert "Journal Report\n")
+            (insert ":PROPERTIES:\n:DATE_TREE: t\n:END:\n")
+            ;; 1. Insert a time tag one headline level below the current block. 
+            ;; 2. Provide a DATE_TREE? property
+            (mapc 'org-test-datetree-insert hding_daylists)
+    
+            ;;(org-test-datetree-insert "text1")
+            ;;(org-test-datetree-insert "text2")
+            ;;(org-test-datetree-insert "text3")
+            ;;(outline-next-heading)
+            ;;(org-insert-heading nil t)
+            ;;(org-do-demote)
+            ;;(outline-next-heading)
+            ;;;(org-insert-heading nil t)
+            ;;(org-do-demote)
+            ;;(org-agenda-insert-diary-make-new-entry "dummy text2")
+            ;; remove extra new line added by previous command
+            )
+          )
+        )
+#+END_SRC
+#+BEGIN: myblock
+
+** Journal Report
+:PROPERTIES:
+:DATE_TREE: t
+:END:
+
+#+END:
+

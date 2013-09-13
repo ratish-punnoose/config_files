@@ -52,6 +52,87 @@
    - C-c @ C-h :: hide block
    - C-c @ C-c :: toggle hide/show
 
+** VHDL mode
+*** Template generation
+    After typing a VHDL keyword and entering 'SPC' youa re prompted
+    for arguments.  'RET' or C-g to cancel. Optional arguments are
+    indicated by square brackets.  Explicit invocation C-c C-i- C-c.
+*** Header insertion
+    C-c C-t C-h :: insert header.  Look for customization
+    `vhdl-header.
+*** Stuttering
+    Double striking of keys inserts cumbersome VHDL syntax elements.
+    Enable by enabling 'vhdl-stutter-mode
+    - ;;  ::  " : " 
+    - ;;; ::  " := "
+    - ..  ::  "  => "
+    - ==  ::  " = = "
+    - [ ::  (
+    - ] ::  )
+    - [[ :: [
+    - ]] :: ]
+    - '' :: \"
+    - -- ::  comment
+    - --CR ::  comment out
+    - ---  ::  horizontal line
+    - ---- ::  display comment
+*** Word Completion
+    Typing Tab looks for a VHDL keyword or a word in the
+    buffer. Retyping TAB toggles through alternative completions.
+    Typing Tab after "("  inserts complete parenthesized expressions
+*** Alignment
+    Aligning operators, keywords, to beautify.
+    Prefix is C-c C-aa
+    - C-c C-a C-a :: aligns a group of consecutive lines
+    - C-c C-a C-i :: aligns block withs same indent
+    - C-c C-a C-d :: all lines within declaration
+    - C-c C-a M-a :: region
+    - C-c C-a C-c :: inline comments
+    - C-c C-a M-c :: comemnts for a region
+*** Code filling
+    Condenses code, by removing comments etc.
+    Prefix is C-c C-f
+    - C-c C-f C-f :: fills a list enclosed by paren
+    - C-c C-f C-g :: group of lines
+    - C-c C-f C-i :: block withs ame indent
+    - C-c C-f M-f :: entire region
+*** Code beautification
+    vhdl-beautify-buffer. Can be run non-interactively as 
+    emacs -batch -I ~/.emacs filename.vhd -f vhdl-beautify-buffer
+*** Port translation
+    Generic and Port clauses can be copied and then pasted as:
+    - C-c C-p C-w :: Copy
+    - C-c C-p M-w :: Copy
+    - C-c C-p C-f :: Port flatten
+    - C-c C-p C-r  :: Reverse ports
+    - C-c C-p C-c  :: Paste component
+    - C-c C-p C-e :: Paste entity
+    - C-c C-p C-i :: Paste instance
+    - C-p C-p C-s :: Paste signals
+    - C-p C-p C-c :: Paste constants
+    - C-p C-p C-g :: Paste generic map
+    - C-p C-p C-z :: Paste initializations
+    - C-p C-p C-t :: Paste testbench
+*** Speedbar
+    Automatically opened if 'vhdl-speedbar-auto-open is non-nil
+    Check 'vhdl-project-alist
+    - f :: file mode
+    - h :: hierarchy
+    - H :: project hierarcy
+*** Structural composition
+    - C-c C-c C-n :: Create skeleton for new component
+    - C-c C-c C-p :: Place component declaration and instantiation
+    - C-c C-c C-w :: Automatically connect subcomponents using rules.
+*** Hide-show
+    Using vhdl-hs-minor-mode
+    vhdl-hideshow-menu : if non nil then start up with hideshow
+    vhdl-hide-all-init: if non nil then hide all on startup.
+*** Code update
+    - C-c C-u C-s : Update sensitivity list in current process
+    - C-c C-u M-s : Of all processes in buffer.
+*** Code Fixing
+    - C-c C-x C-p : Fixes parenthesis
+
 
 * Org Mode
 ** Visibility
@@ -311,24 +392,7 @@
       )
 #+END_SRC
 #+BEGIN: myblock
-* 2013
-** 2013-09 September
-*** 2013-09-01 Sunday
-**** Looking at org code
-
-**** Another test
-
-**** Test
-
-***
-*** 2013-09-03 Tuesday
-** Another test
-
-* emacs
-
-#+END:
-
-
+   
 * Windows Shortcuts
   - Win + Tab		:: Aero Flip
   - Ctrl + Win + Tab	:: Aero Flip Hold.  Can release Ctrl+Win and
@@ -661,4 +725,5 @@
 :END:
 
 #+END:
+
 

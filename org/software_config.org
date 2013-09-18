@@ -11,6 +11,8 @@
 ** Navigation
    - C-M n 		:: Jump to end of matching paren
    - C-M p 		:: Jump to begin of matching paren
+   - C-t :: Tags search
+   - Alt-, :: Next tag
 
 ** Lisp
 *** Evaluation
@@ -51,6 +53,8 @@
    - C-c @ C-s :: show block
    - C-c @ C-h :: hide block
    - C-c @ C-c :: toggle hide/show
+   - C-,  :: toggle for a block (custom)
+   - C-M-, :: toggle for whole buffer
 
 ** VHDL mode
 *** Template generation

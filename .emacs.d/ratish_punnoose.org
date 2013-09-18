@@ -115,6 +115,41 @@ color-theme-alice-blue, color-theme-andreas
 ;;(toggle-scroll-bar)
 #+end_src
 
+** HideShow
+;; Invoke HideShow mode with M-x hs-minor-mode.
+;; For Emacs 20:
+;;    * C-c S show all
+;;    * C-c H hide all
+;;    * C-c s show block
+;;    * C-c h hide block
+;;
+;; For Emacs 21:
+;; 
+;;    * C-c @ ESC C-s show all
+;;    * C-c @ ESC C-h hide all
+;;    * C-c @ C-s show block
+;;    * C-c @ C-h hide block
+;;    * C-c @ C-c toggle hide/show
+;; http://www.emacswiki.org/cgi-bin/wiki/HideShow
+;;http://www.gnu.org/software/emacs/manual/html_node/Hideshow.html#Hideshow
+#+BEGIN_SRC emacs-lisp
+  (setq hs-hide-comments-when-hiding-all t)
+  
+  ;;  Toggle hide/show for a specific block
+  (global-set-key (kbd "C-,") 'hs-toggle-hiding)
+  
+  ;; Global toggle
+  (defvar rjp/hs-status nil "Current state of hideshow")
+  (defun rjp/toggle-hs-all() "Toggle hideshow all."
+    (interactive)
+    (setq rjp/hs-status (not rjp/hs-status))
+    (if rjp/hs-status (hs-hide-all) (hs-show-all)))
+  (global-set-key (kbd "C-M-,") 'rjp/toggle-hs-all)
+  
+  ;; Startup in hs-minor-mode with all hidden
+  (add-hook 'prog-mode-hook #'hs-minor-mode)
+  (add-hook 'hs-minor-mode-hook #'hs-hide-all)
+#+END_SRC
 * Navigation
 Easier keys for switching windows
 
@@ -141,6 +176,11 @@ Easier keys for switching windows
 (global-set-key (kbd "C-<right>") 'windmove-right)        ; move to right window
 (global-set-key (kbd "C-<up>") 'windmove-up)              ; move to upper window
 (global-set-key (kbd "C-<down>") 'windmove-down)          ; move to downer window
+#+END_SRC
+* Tags
+#+BEGIN_SRC emacs-lisp
+;; Tags search
+(global-set-key "\C-t" 'tags-search)
 #+END_SRC
 * Org-mode
 ** Setup before loading org
@@ -344,23 +384,14 @@ the two lines below.
 
 ** Generic Language extensions
 #+BEGIN_SRC emacs-lisp
-(setq auto-mode-alist
-      (append '(("\\.C$"  . c++-mode)
-		("\\.cc$" . c++-mode)
-		("\\.hh$" . c++-mode)
-		("\\.c$"  . c++-mode)
-		("\\.h$"  . c++-mode)
-		("\\.pov$"  . c++-mode)
-		("\\.m$"  . matlab-mode)
-		("\\.php$"  . php-mode)
-		("\\.php3$"  . php-mode)
-		("\\.rb$"  . ruby-mode)
-		("\\.pml$"  . promela-mode)
-		("\\.smv$"  . nusmv-mode)
-		("\\.spin$"  . promela-mode)
-		("\\.js$"  . javascript-mode)
-		("\\.java$" . java-mode))
-	      auto-mode-alist))
+  (setq auto-mode-alist
+        (append '(
+                  ("\\.m$"  . matlab-mode)
+                  ("\\.pml$"  . promela-mode)
+                  ("\\.smv$"  . nusmv-mode)
+                  ("\\.spin$"  . promela-mode)
+                  )
+                auto-mode-alist))
 #+END_SRC
 ** Matlab
 #+BEGIN_SRC emacs-lisp
@@ -371,6 +402,32 @@ the two lines below.
   ;;(setq matlab-shell-command "/usr/local/bin/matlabShell")
   (custom-set-variables
    '(matlab-functions-have-end t))
+#+END_SRC
+** VHDL
+#+BEGIN_SRC emacs-lisp
+  (custom-set-variables 
+   '(vhdl-hide-all-init t)
+   '(vhdl-hideshow-menu t)
+   '(vhdl-index-menu t)
+   '(vhdl-speedbar-auto-open nil))
+#+END_SRC
+** C,C++
+#+BEGIN_SRC emacs-lisp
+(add-hook 'c-mode-hook 'imenu-add-menubar-index)
+(add-hook 'c++-mode-hook 'imenu-add-menubar-index)
+(add-hook 'c-mode-hook '(lambda () (c-set-style "linux")))
+(add-hook 'c++-mode-hook '(lambda () (c-set-style "linux")))
+(add-hook 'objc-mode-hook '(lambda () (c-set-style "linux")))
+;; ;;;;;;;;;;;; C, C++ customization
+(setq ckeywords '("FILE" "\\sw+_t"  "u_\\sw*"
+		  "_PRETTY_"))
+(setq c-font-lock-extra-types ckeywords)
+(setq c++-font-lock-extra-types ckeywords)
+#+END_SRC
+** Promela
+#+BEGIN_SRC emacs-lisp
+(setq-default  promela-block-indent 8)
+(setq-default promela-auto-match-delimiter nil)
 #+END_SRC
 * Testing
 #+BEGIN_SRC emacs-lisp
@@ -415,8 +472,6 @@ the two lines below.
 ;; Compile
 (global-set-key "\C-xm" 'compile)
 
-;; Tags search
-(global-set-key "\C-t" 'tags-search)
 
 
 ;; Use highlight symbol library for quick search for word under cursor
@@ -468,12 +523,6 @@ Add this to .emacs to run gofmt on the current buffer when saving:
 (provide 'go-mode-load)
 ;; ========================================================
 
-(autoload 'java-mode "/usr/lib/emacs/site-lisp/java-mode" "java mode" t nil)
-
-
-(autoload 'php-mode "php-mode" "PHP Mode" t)
-
-(autoload 'javascript-mode "javascript-mode" "JavaScript mode" t)
 
 (autoload 'ruby-mode "ruby-mode" "Ruby Mode" t)
 (setq ruby-indent-level 4)
@@ -493,55 +542,6 @@ Add this to .emacs to run gofmt on the current buffer when saving:
 (autoload 'markdown-mode "markdown-mode" "Markdown major mode" t)
 
 
-(add-hook 'c-mode-hook 'font-lock-mode)
-(add-hook 'c++-mode-hook 'font-lock-mode)		
-(add-hook 'c-mode-hook 'imenu-add-menubar-index)
-(add-hook 'c++-mode-hook 'imenu-add-menubar-index)
-(add-hook 'c-mode-hook '(lambda () (c-set-style "linux")))
-(add-hook 'c++-mode-hook '(lambda () (c-set-style "linux")))
-(add-hook 'objc-mode-hook '(lambda () (c-set-style "linux")))
-(add-hook 'c-mode-hook 'hs-minor-mode)
-(add-hook 'c++-mode-hook 'hs-minor-mode)		
-(add-hook 'vhdl-mode-hook 'hs-minor-mode)		
-(add-hook 'ruby-mode-hook 'hs-minor-mode)		
-
-;; Invoke HideShow mode with M-x hs-minor-mode.
-;; For Emacs 20:
-;;    * C-c S show all
-;;    * C-c H hide all
-;;    * C-c s show block
-;;    * C-c h hide block
-;;
-;; For Emacs 21:
-;; 
-;;    * C-c @ ESC C-s show all
-;;    * C-c @ ESC C-h hide all
-;;    * C-c @ C-s show block
-;;    * C-c @ C-h hide block
-;;    * C-c @ C-c toggle hide/show
-;; http://www.emacswiki.org/cgi-bin/wiki/HideShow
-;;http://www.gnu.org/software/emacs/manual/html_node/Hideshow.html#Hideshow
-(setq hs-hide-comments-when-hiding-all t)
-
-;;  Toggle hide/show
-(global-set-key (kbd "C-,") 'hs-toggle-hiding)
-
-
-
-
-;; ;;;;;;;;;;;; C, C++ customization
-(setq ckeywords '("FILE" "\\sw+_t"  "u_\\sw*"
-		  "_PRETTY_"))
-(setq c-font-lock-extra-types ckeywords)
-(setq c++-font-lock-extra-types ckeywords)
-
-
-
-;; On windows set default font to Consolas
-
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Set the colors
-;; http://www.geocities.com/kensanata/colors.html has a list of colors
 
 
 

@@ -381,7 +381,16 @@ the two lines below.
 #+END_SRC
 
 * Language Support
-
+** Highlight symbol
+Highlight symbols
+Doesn't currently work properly with hideshow
+#+BEGIN_SRC emacs-lisp :tangle no
+  (require 'highlight-symbol)
+  (add-hook 'prog-mode-hook (lambda () (highlight-symbol-mode)))
+  (setq highlight-symbol-on-navigation-p t)
+  (global-set-key [f3] 'highlight-symbol-next)
+  (global-set-key [(shift f3)] 'highlight-symbol-prev)
+#+END_SRC
 ** Generic Language extensions
 #+BEGIN_SRC emacs-lisp
   (setq auto-mode-alist

@@ -1,3 +1,4 @@
+include(/usr/share/a2ps/sheets/sheets.map)
 #promela: /*.pml/ not needed since default in style sheets
 
 verilog: /*.v/ /*.vh/ /*.sv/

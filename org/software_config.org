@@ -13,7 +13,8 @@
    - C-M p 		:: Jump to begin of matching paren
    - C-t :: Tags search
    - Alt-, :: Next tag
-
+   - C-Spc C-Spc::  Set mark
+   - C-u C-Spc :: Jump to previous mark
 ** Lisp
 *** Evaluation
     - C-x C-e :: Evaluate Lisp in *scratch* before cursor and print

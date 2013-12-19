@@ -173,6 +173,7 @@
 ** Todo
    - C-c C-t 		:: Change Todo state
    - Shift+Left/Right 	:: Change Todo state
+   - C-c C-w  :: Refile
 
 ** Drawers
    - C-c C-x d		:: Insert active region in drawer

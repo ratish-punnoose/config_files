@@ -323,6 +323,28 @@ My customization to allow folding and unfolding
     )
 #+END_SRC
 
+
+** Export drawers with latex
+Export org-drawers with latex enclosed in a \drawername{contents}
+format.
+#+BEGIN_SRC emacs-lisp
+    (defun rjp/chomp (str)
+          "Chomp leading and tailing whitespace from STR."
+          (while (string-match "\\`\n+\\|^\\s-+\\|\\s-+$\\|\n+\\'"
+                               str)
+            (setq str (replace-match "" t t str)))
+          str)
+    ;;
+    (defun rjp/org-latex-drawer-format (name contents)
+      "Create a customized latex drawer export"
+      (format "\n\\%s{%s}\n" name (rjp/chomp contents) )
+    )
+    ;;
+    (custom-set-variables  
+     '(org-latex-format-drawer-function 
+       (quote rjp/org-latex-drawer-format))       ) 
+    ;;
+#+END_SRC
 * Cygwin and Windows
 Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]
 

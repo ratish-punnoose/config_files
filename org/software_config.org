@@ -8,11 +8,15 @@
         the same text on multiple rows, just select the beginning and
         end, C-x r t and then type in the characters to insert on
         every row.
+** Editing
+   - M-l/u :: Turn following word to lowercase/uppercase
+   - C-x C-l/u ::  downcase/upcase region
 ** Navigation
    - C-M n 		:: Jump to end of matching paren
    - C-M p 		:: Jump to begin of matching paren
    - C-t :: Tags search
    - Alt-, :: Next tag
+   - Alt-. :: Find tag under cursor
    - C-Spc C-Spc::  Set mark
    - C-u C-Spc :: Jump to previous mark
 ** Lisp
@@ -42,6 +46,8 @@
 ** Search
    - rgrep :: Search through multiple files in directory tree through
               file pattern.
+   - C-s C-* :: Search at point.  Requires Ratish's custom addition
+
 ** IDO mode
 *** File open mode C-x C-f
     - // :: goto root directory
@@ -137,6 +143,83 @@
     - C-c C-u M-s : Of all processes in buffer.
 *** Code Fixing
     - C-c C-x C-p : Fixes parenthesis
+
+** Latex mode
+*** Reftex
+    - C-c =  ::  Create a TOC for document
+    - C-c (  ::  Insert a label
+    - C-c )  ::  Insert a reference
+    - C-c [  ::  Insert citation by searching in bibtex database
+    - C-c &  ::  With cursor on a cross-reference, view original
+**** Multi-file documents
+     Add the following at the end of a document.
+     Use TeX-master for AucTex mode and tex-main-file for emacs latex
+
+     %%% Local Variables: ***
+     %%% mode:latex ***
+     %%% tex-main-file: "thesis.tex"  ***
+     %%% End: ***
+
+
+*** Bibtex
+    - C-c C-e C-a :: Journal
+    - C-c C-e :: 
+    - C-c C-e ::
+** Auctex
+   - C-c _ :: Prompt for master file
+   - C-c ^ :: Go to master file
+   - C-c C-e :: Insert environment
+   - C-c C-j :: Next item
+   - C-c % :: toggle commenting of paragraph
+   - C-c ; :: toggle commenting of region
+** Reftex
+   - C-c [ :: Insert reference
+   
+** UTF8 symbols
+   In general can be inserted using insert-char SYMBOL_NAME
+   - ∈ :: element of
+   - ∧ | ∨ :: logical and | or with many options
+   - ⇒ :: rightwards double arrow
+   - ≔ :: colon equals
+** Magit
+*** Custom
+    - C-x g :: Start magit in buffer (RJP custom), invokes magit-status
+*** General
+    - g :: reload status buffer
+    - Tab :: toggle visibility/expand/contract
+    - S-Tab :: toggle visibility of subtree
+    - s :: Stage. Could be untracked file, modified file, hunk of file
+    - S :: Stage All
+    - u/U :: unstage/ unstage All
+    - k :: Discard/Delete/revert
+    - c :: Commit
+    - i :: Add file to .gitignore
+    - I :: Add file to .git/info/exclude instead of .gitignore
+    - Ctrl+W :: Copy SHA of any commit
+*** History
+   - l/L :: History (show commit log)  / Verbose
+   - Ret or Space :: Expand.  Space is like more.  Keeps your state in
+                     top buffer and can scroll through changes.
+   - x/X :: Delete all commits after specific commit, but keep files in
+          dirty state.  This allows easy rebase.  With capital X, will
+            revert all files to that specific commit (i.e., will lose
+            all changes)
+**** Reflog, Recovering delted commits
+      - h :: See the reflog
+**** Blame
+     - magit-blame-mode :: Annotates lines with author and commit
+**** Rebase
+     - R :: Rebase
+     - E :: Interactive Rebase
+
+*** Stash
+   - z/Z :: Create new stash
+   - a/A ::  Apply/Pop stash
+   - k :: Drop stash
+*** Branch
+   - b/B :: Switch to branch / Create and switch
+          
+        
 
 
 * Org Mode
@@ -239,6 +322,7 @@
    - C-c C-q 		:: Insert tag from anywhere in the section
    - C-c C-c 		:: Insert tag when cursor on headline
    - C-c \ 		:: Create a sparse tree matching tags
+   - C-c C-c, S+Tab     :: Exit sparse tree, then revert to normal tree.
 *** Matching searches on tags
     [[http://orgmode.org/manual/Matching-tags-and-properties.html#Matching-tags-and-properties][Orgmode tag searching]]
 *** Tag groups
@@ -429,6 +513,14 @@
   - Win+B 		:: Focuses the System Tray icons
   - Ctrl+S+Esc 		:: Task Manager
 
+* MS Word Outline mode
+  - Alt+Shift+[L/R]Arrow     :: Promote/Demote paragraph
+  - Ctrl+Shift+N             ::  Demote to body text
+  - Alt+Shift+[Up/Dn]Arrow   :: Move paragraphs [Up/Dn]
+  - Alt+Shift+[plus/minus]   :: Expand/Collapse text under heading
+  - Alt+Shift+A              :: Expand/Collapse all text and headings
+  - Alt+Shift+n              :: Show all headings up to Heading n
+
 * Outlook
   - Ctrl+Shift+I	:: Inbox
   - Alt+S 		:: Send
@@ -564,3 +656,9 @@
 
 
 
+* Cygwin
+** X11
+   To run each X app on its own.
+   - 1. Start X serfer:  X -multiwindow
+   - 2. export display: export DISPLAY=:0.0
+   - 3. start application

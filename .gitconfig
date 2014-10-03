@@ -25,7 +25,7 @@
 	path = c:/Program Files (x86)/KDiff3/kdiff3.exe
 [core]
 #	editor = \"C:/Program Files (x86)/GitExtensions/GitExtensions.exe\" fileeditor
-        editor = emacs
+	editor = emacs
 	excludesfile = ~/.gitignore
 [color]
 	ui = true

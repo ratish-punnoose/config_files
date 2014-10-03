@@ -111,7 +111,7 @@ XTerm*background: black
 XTerm*foreground: SkyBlue
 XTerm*font: 9x15bold
 XTerm*cursorColor: OrangeRed1
-#XTerm*geometry: 80x24
+!XTerm*geometry: 80x24
 
 *visualBell:		true
 *scrollTtyOutput:	False
@@ -119,8 +119,8 @@ XTerm*cursorColor: OrangeRed1
 Scrollbar.JumpCursor:	True
 
 XConsole.text.geometry:	480x130
-#XConsole.text.x:  700
-#XConsole.text.y: 1000
+!XConsole.text.x:  700
+!XConsole.text.y: 1000
 XConsole.verbose:	true
 XConsole*iconic:	true
 XConsole*font:		fixed

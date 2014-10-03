@@ -32,6 +32,10 @@ loaded. Disable.
 #+BEGIN_SRC emacs-lisp
 (set 'ido-use-filename-at-point nil)
 #+END_SRC
+** Do auto-fill for everything not just comments
+#+BEGIN_SRC emacs-lisp
+;;(setq comment-auto-fill-only-comments nil)
+#+END_SRC
 * Package Management
 
 * Options
@@ -135,6 +139,9 @@ color-theme-alice-blue, color-theme-andreas
 #+BEGIN_SRC emacs-lisp
   (setq hs-hide-comments-when-hiding-all t)
   
+  ;; Add Promela
+  ;;(add-to-list 'hs-special-modes-alist '(promela-mode "{" "}" "/[*/]" nil nil))
+  
   ;;  Toggle hide/show for a specific block
   (global-set-key (kbd "C-,") 'hs-toggle-hiding)
   
@@ -177,6 +184,23 @@ Easier keys for switching windows
 (global-set-key (kbd "C-<up>") 'windmove-up)              ; move to upper window
 (global-set-key (kbd "C-<down>") 'windmove-down)          ; move to downer window
 #+END_SRC
+* Search at Point
+To use this, start search with C-s and then type C-*
+#+BEGIN_SRC emacs-lisp
+(defun isearch-yank-symbol ()
+  "*Put symbol at current point into search string."
+  (interactive)
+  (let ((sym (symbol-at-point)))
+    (if sym
+        (progn
+          (setq isearch-regexp t
+                isearch-string (concat "\\_<" (regexp-quote (symbol-name sym)) "\\_>")
+                isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
+                isearch-yank-flag t))
+      (ding)))
+  (isearch-search-and-update))
+(define-key isearch-mode-map (kbd "C-*") 'isearch-yank-symbol)
+#+END_SRC
 * Tags
 #+BEGIN_SRC emacs-lisp
 ;; Tags search
@@ -197,7 +221,8 @@ evaluate this file itself.
 
 ** Org global configuration and shortcuts
 #+begin_src emacs-lisp 
-(set-time-zone-rule "GMT+7")
+;;(set-time-zone-rule "GMT+8")
+;;(set-time-zone-rule "PST")
 (setq org-directory "~/org")
 
 
@@ -249,6 +274,8 @@ Also log into drawer
 #+END_SRC
 ** Org beamer
 *** Emphasis lists are set before org is loaded. Currently this is set in [[file:init.el::(setq%20org-emphasis-alist][init.el]].
+Note in init.el by self describes that it is not used by beamer
+anymore.  Don't remember details.
 #+begin_src emacs-lisp :tangle no
   (setq org-emphasis-alist 
         (quote (("*" bold "<b>" "</b>") 
@@ -323,7 +350,6 @@ My customization to allow folding and unfolding
     )
 #+END_SRC
 
-
 ** Export drawers with latex
 Export org-drawers with latex enclosed in a \drawername{contents}
 format.
@@ -345,6 +371,22 @@ format.
        (quote rjp/org-latex-drawer-format))       ) 
     ;;
 #+END_SRC
+** Org-present
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook 
+              '(lambda() 
+                 (autoload 'org-present "org-present" nil t)))
+  (add-hook 'org-present-mode-hook
+             (lambda ()
+               (org-present-big)
+               (org-display-inline-images)))
+  
+  (add-hook 'org-present-mode-quit-hook
+             (lambda ()
+               (org-present-small)
+               (org-remove-inline-images)))
+#+END_SRC
+
 * Cygwin and Windows
 Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]
 
@@ -353,7 +395,7 @@ Set the shell to use cygwin's bash, if Emacs finds it is running
 under Windows and c:\cygwin exists.  Assumes that c:\cygwin\bin is
 not already in the Windows path.
 #+begin_src emacs-lisp
-  (let* ((cygwin-root "c:/cygwin")
+  (let* ((cygwin-root "c:/cygwin64")
          (cygwin-bin (concat cygwin-root "/bin")))
     (when (and (eq 'windows-nt system-type) 
  	     (file-readable-p cygwin-root))
@@ -403,6 +445,14 @@ the two lines below.
 #+END_SRC
 
 * Language Support
+** Turn on starter-kit-coding-hook for progmodes
+#+BEGIN_SRC emacs-lisp
+(defun starter-kit-local-comment-auto-fill ()
+    (auto-fill-mode t))
+
+(add-hook 'prog-mode-hook #'run-starter-kit-coding-hook)
+;;(add-hook 'prog-mode-hook #'auto-fill-mode)
+#+END_SRC
 ** Highlight symbol
 Highlight symbols
 Doesn't currently work properly with hideshow
@@ -457,12 +507,32 @@ Doesn't currently work properly with hideshow
 #+END_SRC
 ** Promela
 #+BEGIN_SRC emacs-lisp
+(require 'promela-mode)
 (setq-default  promela-block-indent 8)
 (setq-default promela-auto-match-delimiter nil)
+#+END_SRC
+** Latex
+*** Reftex
+Add reftex mode 
+#+BEGIN_SRC emacs-lisp
+(add-hook 'latex-mode-hook 'reftex-mode)
 #+END_SRC
 * Testing
 #+BEGIN_SRC emacs-lisp
 (setq initial-scratch-message "dummy message")
+#+END_SRC
+* Smex
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; Old M-x
+;;(global-set-key (kbd "C-c C-x M-x") 'execute-extended-command)
+#+END_SRC
+* Magit
+Magit mostly just works.  Only thing to add here is to add a simple
+keystroke to start it.
+#+BEGIN_SRC emacs-lisp
+(define-key global-map "\C-xg" 'magit-status)
 #+END_SRC
 * Not converted yet
 :PROPERTIES:

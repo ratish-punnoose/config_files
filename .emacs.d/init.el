@@ -5,26 +5,6 @@
 ;; This is the first thing to get loaded.
 ;;
 
-;; Not used by beamer anymore
-  ;; (setq org-emphasis-alist 
-  ;;       (quote (("*" bold "<b>" "</b>") 
-  ;;               ("/" italic "<i>" "</i>")
-  ;;               ("_" underline "<span style=\"text-decoration:underline;\">" "</span>")
-  ;;               ("=" org-code "<code>" "</code>" verbatim)
-  ;;               ("~" org-verbatim "<code>" "</code>" verbatim)
-  ;;               ("+" (:strike-through t) "<del>" "</del>")
-  ;;               ("@" org-warning "<b>" "</b>")))
-  ;;       org-export-latex-emphasis-alist 
-  ;;       (quote (("*" "\\textbf{%s}" nil)
-  ;;               ("/" "\\emph{%s}" nil) 
-  ;;               ("_" "\\underline{%s}" nil)
-  ;;               ("+" "\\texttt{%s}" nil)
-  ;;               ("=" "\\verb=%s=" nil)
-  ;;               ("~" "\\verb~%s~" t)
-  ;;               ("@" "\\alert{%s}" nil)))
-  ;;       )
-
-
 ;; load Org-mode from source when the ORG_HOME environment variable is set
 (when (getenv "ORG_HOME")
   (let ((org-lisp-dir (expand-file-name "lisp" (getenv "ORG_HOME"))))

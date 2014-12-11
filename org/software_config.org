@@ -8,6 +8,8 @@
         the same text on multiple rows, just select the beginning and
         end, C-x r t and then type in the characters to insert on
         every row.
+   - C-x SPC ::  Rectangular selection.  Selection is no different
+                 except that highlighting is rectangular.
 ** Editing
    - M-l/u :: Turn following word to lowercase/uppercase
    - C-x C-l/u ::  downcase/upcase region
@@ -41,12 +43,23 @@
     - C-c TAB :: automatic completion for (defv to (defvar
 *** Code comment
     - M-; :: Add line comment
+*** Debugging
+    - M-x edebug-defun :: In definition of func, to enable debuging
+    - M-x edebug-trace ::
+    - M-x eval-defun ::  Stop function instrumentation
+    - i :: Step in
+    - o :: Step out
+    - SPC :: Step by step debug
+    - e ::  Print variables value
 ** Menu
    - F1 :: show, hide menu.
 ** Search
    - rgrep :: Search through multiple files in directory tree through
               file pattern.
    - C-s C-* :: Search at point.  Requires Ratish's custom addition
+   - C-s :: search forward
+   - C-r  :: search backward
+   - M-p :: Start editing previous search term
 
 ** IDO mode
 *** File open mode C-x C-f
@@ -176,6 +189,7 @@
    - C-c [ :: Insert reference
    
 ** UTF8 symbols
+   Can get name of a character using describe-char
    In general can be inserted using insert-char SYMBOL_NAME
    - ∈ :: element of
    - ∧ | ∨ :: logical and | or with many options
@@ -317,6 +331,10 @@
         for local
    - C-c C-o  		:: Follow link
    - "<<link_target>>" 	:: This is a link target
+*** Custom links target
+    - [[+TAB :: Bring up targets in local file
+    - [[+ C-u - TAB :: Bring up targets in all include files
+   
 ** Tags							:mytag:mytag2:mytag3:
    - ":tag1:tag2:"	:: Tags at the end of headlines
    - C-c C-q 		:: Insert tag from anywhere in the section
@@ -636,6 +654,7 @@
 
 
 * i3 Shortcuts
+  Mod1 = Alt, Mod4 = Win
   - Mod+Enter :: start a new terminal
   - Mod+Shift+Q :: Kill
   - Mod+d :: dmenu
@@ -655,10 +674,17 @@
   - Esc/Enter :: Exit resize mode
 
 
-
+  
 * Cygwin
 ** X11
    To run each X app on its own.
    - 1. Start X serfer:  X -multiwindow
    - 2. export display: export DISPLAY=:0.0
    - 3. start application
+* Unix tools
+** sed
+   To delete a line in file and pipe output.
+   find . -name "*.v" | xargs cat | sed -e '/^$/ d' -e '/^\/\// d' | wc -l
+   cat *.vhd | sed -e '/^$/ d' -e '/^--/ d' | wc -l
+
+

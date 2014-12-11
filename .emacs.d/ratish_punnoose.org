@@ -94,7 +94,7 @@ color-theme-alice-blue, color-theme-andreas
 (if window-system
     (tool-bar-mode -1)
 )
-#+end_src emacs-lisp
+#+end_src
 
 *** Title and Status [[http://mnemonikk.org/][mnemonikk]]
 #+begin_src emacs-lisp
@@ -386,7 +386,85 @@ format.
                (org-present-small)
                (org-remove-inline-images)))
 #+END_SRC
+** List of targets
+Can use org-all-targets *Automatically added by starter kit. 
+- Use org-in-regexp 
+- org-bracket-link-regexp
+- Option for using prefix C-u - Tab to send a prefix arg to the
+  following function since in org-cycle,
+  run-hook-with-args-until-success is not passed the arguments
+#+BEGIN_SRC emacs-lisp
+  (defun rjp/org-all-included-targets()
+    "Get the ORG targets from the current file and all included ORG
+  files.  If the included files include other files, this will recurse
+    over all those files."
+    (interactive)
+    (save-excursion 
+      (let* ((inc-re "^#\\+INCLUDE:[ \t]+\"\\([^\t\n\r\"]*\\)\"[ \t]*.*$") 
+             (thisfile (buffer-file-name))
+             (included-file-list (list thisfile)  )
+             (targets (list nil))
+             ;; A Function that can retrieve included files and targets
+             ;; given a filename
+             (f (lambda(file) 
+                  (let ((tmplst nil);; temporary include list
+                        (buf (if (file-readable-p file)
+                                 (find-file-noselect file)))
+                        incfile ;; one include file from list
+                        tgt)  ;; target
+                    (if buf
+                        (progn
+                          (set-buffer buf)
+                          (setq tgt (org-all-targets))
+                          (nconc targets tgt) ;; append and nil tgt is removed
 
+                          ;; Search for files included from here.
+                          (goto-char (point-min))
+                          (while (re-search-forward inc-re nil t)
+                            (add-to-list 'tmplst
+                                         (expand-file-name
+                                          (match-string 1))))
+
+                          ;; iterate over include list
+                          (while tmplst 
+                            (setq incfile (car tmplst)) 
+                            ;; if not already in list then ...
+                            (if (not (member incfile '
+                                             included-file-list))
+                                (progn
+                                  ;; Add to list and recurse
+                                  (add-to-list 'included-file-list 
+                                               incfile)
+                                  (setq tmplst (cdr tmplst))
+                                  (funcall f incfile)))) ) ))) ))
+
+        ;; Body of let statement
+        (funcall f thisfile)    
+        ;; return value is targets
+        (print (cdr targets))
+        )))
+
+;; Add a hook to bring up a tab list when TAB is hit after [[
+  (add-hook 'org-tab-before-tab-emulation-hook 
+              (lambda (&rest args)  
+                ;; If at the right point (which is following two left square brackets)
+                "list targets in org file and complete"
+                (interactive "P")
+                (if (string= 
+                     (buffer-substring-no-properties 
+                      (point) (- (point) 2)  ) 
+                     "[[")
+                    ;; Right place. Check if we are called with an argument
+                    (insert (ido-completing-read 
+                             "Target:" 
+                             (if (equal args '(-))
+                                 (rjp/org-all-included-targets)
+                               (org-all-targets) ))   
+                            "]]")
+                    (if (equal args '(-))
+                        (rjp/org-all-i)
+                      )  )))
+#+END_SRC
 * Cygwin and Windows
 Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]
 
@@ -398,7 +476,7 @@ not already in the Windows path.
   (let* ((cygwin-root "c:/cygwin64")
          (cygwin-bin (concat cygwin-root "/bin")))
     (when (and (eq 'windows-nt system-type) 
- 	     (file-readable-p cygwin-root))
+               (file-readable-p cygwin-root))
     
       (setq exec-path (cons cygwin-bin exec-path))
       (setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
@@ -419,13 +497,13 @@ not already in the Windows path.
 
 ** Cygwin paths
 #+begin_src emacs-lisp
-  ;; Fix windows problems of trying to check file permissions
-  ;; Causes emacs to stutter
-  (setq w32-get-true-file-attributes nil)
-  
-  ;; Cygwin mount paths
-  (require 'cygwin-mount)
-  (cygwin-mount-activate)
+    ;; Fix windows problems of trying to check file permissions
+    ;; Causes emacs to stutter
+  (when (eq 'windows-nt system-type)
+    (setq w32-get-true-file-attributes nil)
+    ;; Cygwin mount paths
+    (require 'cygwin-mount)
+    (cygwin-mount-activate))
 #+end_src
 
 ** Line endings
@@ -511,20 +589,25 @@ Doesn't currently work properly with hideshow
 (setq-default  promela-block-indent 8)
 (setq-default promela-auto-match-delimiter nil)
 #+END_SRC
-** Latex
-*** Reftex
-Add reftex mode 
+** NuSMV
 #+BEGIN_SRC emacs-lisp
-(add-hook 'latex-mode-hook 'reftex-mode)
+(autoload 'nusmv-mode "nusmv-mode" "NuSMV mode")
 #+END_SRC
-* Testing
+** Latex
+*** Configuration via starter kit
 #+BEGIN_SRC emacs-lisp
-(setq initial-scratch-message "dummy message")
+(starter-kit-load "latex")
+#+END_SRC
+*** Reftex 
+This section is no longer required.  Done by starter kit.
+Add reftex mode  
+#+BEGIN_SRC emacs-lisp :tangle no
+(add-hook 'latex-mode-hook 'reftex-mode)
 #+END_SRC
 * Smex
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;;(global-set-key (kbd "M-x") 'smex)
+;;(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 ;; Old M-x
 ;;(global-set-key (kbd "C-c C-x M-x") 'execute-extended-command)
 #+END_SRC
@@ -533,6 +616,15 @@ Magit mostly just works.  Only thing to add here is to add a simple
 keystroke to start it.
 #+BEGIN_SRC emacs-lisp
 (define-key global-map "\C-xg" 'magit-status)
+#+END_SRC
+* Helm
+Helm for autocompletes
+#+BEGIN_SRC emacs-lisp
+(helm-mode 1)
+#+END_SRC
+* Testing
+#+BEGIN_SRC emacs-lisp
+(setq initial-scratch-message "dummy message")
 #+END_SRC
 * Not converted yet
 :PROPERTIES:
@@ -627,18 +719,6 @@ Add this to .emacs to run gofmt on the current buffer when saving:
 
 (autoload 'ruby-mode "ruby-mode" "Ruby Mode" t)
 (setq ruby-indent-level 4)
-
-(autoload 'promela-mode "promela-mode" "PROMELA mode" nil t)
-(setq-default  promela-block-indent 8)
-(setq-default promela-auto-match-delimiter nil)
-(add-hook 'promela-mode-hook '(lambda ()
-				( setq promela-auto-match-delimiter nil)
-				))
-(add-hook 'promela-mode-hook '(lambda ()
-				( setq promela-block-indent 4)
-				))
-
-(autoload 'nusmv-mode "nusmv-mode" "NuSMV mode" nil t)
 
 (autoload 'markdown-mode "markdown-mode" "Markdown major mode" t)
 

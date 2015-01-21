@@ -1,6 +1,29 @@
 * Emacs
 ** Selection
    - C-x h 		:: Select all
+** Registers
+   - C-x r  :: Common prefix for all register operations
+   - M-x view-register R :: view contents of register R
+*** Positions
+    - SPC R :: Saves bookmark to location in register R
+    - j   R ::  Jumps to position in register R
+*** Bookmarks (Persistent positions)
+    - m [BOOKMARK] :: Save bookmark with optional name BOOKMARK
+    - b BOOKMARK :: Jump to bookmark named bookmark
+    - l :: List all bookmarks
+*** Text
+    - s   R :: Save text to register R
+    - i   R :: Insert text from register R
+    - r   R :: Save rectangle to register R
+    - i   R :: Insert rectangle from register R
+*** Window config
+    - w   R :: Save window config of current frame to register R
+    - f   R :: Save window config of all frames to register R
+    - j   R :: Restore window config
+*** Keyboard Macros
+    - j   R :: execute macro in register R
+    - C-x C-k x R :: Save macro toregister R
+
 ** Rectangle
    - C-x r k 		:: Kill rectangle
    - C-x r y 		:: Yank rectangle
@@ -66,7 +89,191 @@
     - // :: goto root directory
     - ~/ :: goto home directory
     - C-f :: go back temporarily to normal find file
+** Helm
+*** Default config
+    - C-x c ::  Prefix to invoke helm commands
+    - RET :: select
+    - C-n/p :: up down (in addition to arrow)
+    - C-v/M-v :: prev next pages
+    - M-< / M-> :: top bottom of buffer
+    - C-spc ::  Mark candidate
+    - M-a :: Select all candidates
+    - C-c C-i :: insert marked candidates into narrowing buffer
+    - C-t ::  Switch between horizontal and verital Helm
+    - C-w :: yank word at point, starting from point to end of word
+         into helm buffer
+    - M-n :: yank symbol at point
+**** Helm Mini (Buffers)
+     Filter patterns
+     - *<major-mode> or !*<major-mode> :: Filter by mode,
+          eg. *!lisp,!sh,!fun to filter all except for
+          lisp,sh,fundamendal mode buffers.
+     - /directory/ :: Narrows to buffers that are in
+          directory. E.g. /.emacs.d/ narrows to buffers in dir.
+     - ^pat :: buffer name starts with pat
+     - @searchterm :: Narrows to buffers that have searchterm
+     - C-s :: helm-moccur whill show matching searchterms
+**** Helm find files
+     Can also create files and directories (append slash)
+     - C-s :: grep the file
+     - C-u C-s :: recursively grep
+     - ~/ / ./  :: at end of pattern to reach home, root, start dir
+     - C-u helm-find-files :: Prefix command will list visited
+          directories, can jump there.
+     - C-c h :: In find-files session, use this to show visited files
+          directories. Can jump from there.
+**** Help regexp
+     - <prefix> r :: regexp interactive
+**** Occur
+     - <prefix> o :: helm occur  (Custom)
+**** Helm Mark rings
+**** registers
+     - <prefix> C-x r i :: View register (helm-register) 
 
+*** Custom config
+    - TAB :: Action Menu for  Persistent action
+    - C-z ::  execute persistent action
+*** Helm Projectile
+    - C-c p p :: Switch/start project
+    - C-c p f :: Find file in project
+** Selection
+   - C-x h 		:: Select all
+** Registers
+   - C-x r  :: Common prefix for all register operations
+   - M-x view-register R :: view contents of register R
+*** Positions
+    - SPC R :: Saves bookmark to location in register R
+    - j   R ::  Jumps to position in register R
+*** Bookmarks (Persistent positions)
+    - m [BOOKMARK] :: Save bookmark with optional name BOOKMARK
+    - b BOOKMARK :: Jump to bookmark named bookmark
+    - l :: List all bookmarks
+*** Text
+    - s   R :: Save text to register R
+    - i   R :: Insert text from register R
+    - r   R :: Save rectangle to register R
+    - i   R :: Insert rectangle from register R
+*** Window config
+    - w   R :: Save window config of current frame to register R
+    - f   R :: Save window config of all frames to register R
+    - j   R :: Restore window config
+*** Keyboard Macros
+    - j   R :: execute macro in register R
+    - C-x C-k x R :: Save macro toregister R
+
+** Rectangle
+   - C-x r k 		:: Kill rectangle
+   - C-x r y 		:: Yank rectangle
+   - C-x r t            :: Insert rectangle.  This is a superb command. To insert
+        the same text on multiple rows, just select the beginning and
+        end, C-x r t and then type in the characters to insert on
+        every row.
+   - C-x SPC ::  Rectangular selection.  Selection is no different
+                 except that highlighting is rectangular.
+** Editing
+   - M-l/u :: Turn following word to lowercase/uppercase
+   - C-x C-l/u ::  downcase/upcase region
+** Navigation
+   - C-M n 		:: Jump to end of matching paren
+   - C-M p 		:: Jump to begin of matching paren
+   - C-t :: Tags search
+   - Alt-, :: Next tag
+   - Alt-. :: Find tag under cursor
+   - C-Spc C-Spc::  Set mark
+   - C-u C-Spc :: Jump to previous mark
+** Lisp
+*** Evaluation
+    - C-x C-e :: Evaluate Lisp in *scratch* before cursor and print
+                 result in minibuffer
+    - C-j :: Evalute Lisp but insert result after cursor.
+*** Movement
+    - C-M-f/C-M-b :: Move forward/backward dexp
+    - C-M-@ :: highlight sexp
+    - C-M-u :: expand selection upwards
+    - C-M-d :: next enclosed dexp
+*** Deletion
+    - C-M-k :: Delete
+    - C-M-Backspace :: delete sexp before cursor
+*** Indentation
+    - C-M-q :: indent whole func with cursor on (
+*** Insertion
+    - M-(  :: a pair of parens
+    - C-u 2 M-( :: enclose the next 2 sexps with paren
+*** Code completion
+    - C-c TAB :: automatic completion for (defv to (defvar
+*** Code comment
+    - M-; :: Add line comment
+*** Debugging
+    - M-x edebug-defun :: In definition of func, to enable debuging
+    - M-x edebug-trace ::
+    - M-x eval-defun ::  Stop function instrumentation
+    - i :: Step in
+    - o :: Step out
+    - SPC :: Step by step debug
+    - e ::  Print variables value
+** Menu
+   - F1 :: show, hide menu.
+** Search
+   - rgrep :: Search through multiple files in directory tree through
+              file pattern.
+   - C-s C-* :: Search at point.  Requires Ratish's custom addition
+   - C-s :: search forward
+   - C-r  :: search backward
+   - M-p :: Start editing previous search term
+
+** IDO mode
+*** File open mode C-x C-f
+    - // :: goto root directory
+    - ~/ :: goto home directory
+    - C-f :: go back temporarily to normal find file
+** Helm
+*** Default config
+    - C-x c ::  Prefix to invoke helm commands
+    - RET :: select
+    - C-n/p :: up down (in addition to arrow)
+    - C-v/M-v :: prev next pages
+    - M-< / M-> :: top bottom of buffer
+    - C-spc ::  Mark candidate
+    - M-a :: Select all candidates
+    - C-c C-i :: insert marked candidates into narrowing buffer
+    - C-t ::  Switch between horizontal and verital Helm
+    - C-w :: yank word at point, starting from point to end of word
+         into helm buffer
+    - M-n :: yank symbol at point
+**** Helm Mini (Buffers)
+     Filter patterns
+     - *<major-mode> or !*<major-mode> :: Filter by mode,
+          eg. *!lisp,!sh,!fun to filter all except for
+          lisp,sh,fundamendal mode buffers.
+     - /directory/ :: Narrows to buffers that are in
+          directory. E.g. /.emacs.d/ narrows to buffers in dir.
+     - ^pat :: buffer name starts with pat
+     - @searchterm :: Narrows to buffers that have searchterm
+     - C-s :: helm-moccur whill show matching searchterms
+**** Helm find files
+     Can also create files and directories (append slash)
+     - C-s :: grep the file
+     - C-u C-s :: recursively grep
+     - ~/ / ./  :: at end of pattern to reach home, root, start dir
+     - C-u helm-find-files :: Prefix command will list visited
+          directories, can jump there.
+     - C-c h :: In find-files session, use this to show visited files
+          directories. Can jump from there.
+**** Help regexp
+     - <prefix> r :: regexp interactive
+**** Occur
+     - <prefix> o :: helm occur  (Custom)
+**** Helm Mark rings
+**** registers
+     - <prefix> C-x r i :: View register (helm-register) 
+
+*** Custom config
+    - TAB :: Action Menu for  Persistent action
+    - C-z ::  execute persistent action
+*** Helm Projectile
+    - C-c p p :: Switch/start project
+    - C-c p f :: Find file in project
+    -  :: 
 ** Hideshow
    - C-c @ ESC C-s :: show all
    - C-c @ ESC C-h :: hide all
@@ -235,6 +442,12 @@
           
         
 
+** Buffer  read status
+   - C-x C-q :: toggle read status
+** Diff
+   - M-x ediff-region-wordsize :: Diff a region of a buffer.
+** Line number
+   - linum-mode :: Line number mode
 
 * Org Mode
 ** Visibility
@@ -686,5 +899,645 @@
    To delete a line in file and pipe output.
    find . -name "*.v" | xargs cat | sed -e '/^$/ d' -e '/^\/\// d' | wc -l
    cat *.vhd | sed -e '/^$/ d' -e '/^--/ d' | wc -l
+* Typesetting
+  - http://www.cs.sfu.ca/~ggbaker/reference/characters/#dash
+  - http://practicaltypography.com/body-text.html
+
+
+
+
+
+
+
+ :: 
+** Hideshow
+   - C-c @ ESC C-s :: show all
+   - C-c @ ESC C-h :: hide all
+   - C-c @ C-s :: show block
+   - C-c @ C-h :: hide block
+   - C-c @ C-c :: toggle hide/show
+   - C-,  :: toggle for a block (custom)
+   - C-M-, :: toggle for whole buffer
+
+** VHDL mode
+*** Template generation
+    After typing a VHDL keyword and entering 'SPC' youa re prompted
+    for arguments.  'RET' or C-g to cancel. Optional arguments are
+    indicated by square brackets.  Explicit invocation C-c C-i- C-c.
+*** Header insertion
+    C-c C-t C-h :: insert header.  Look for customization
+    `vhdl-header.
+*** Stuttering
+    Double striking of keys inserts cumbersome VHDL syntax elements.
+    Enable by enabling 'vhdl-stutter-mode
+    - ;;  ::  " : " 
+    - ;;; ::  " := "
+    - ..  ::  "  => "
+    - ==  ::  " = = "
+    - [ ::  (
+    - ] ::  )
+    - [[ :: [
+    - ]] :: ]
+    - '' :: \"
+    - -- ::  comment
+    - --CR ::  comment out
+    - ---  ::  horizontal line
+    - ---- ::  display comment
+*** Word Completion
+    Typing Tab looks for a VHDL keyword or a word in the
+    buffer. Retyping TAB toggles through alternative completions.
+    Typing Tab after "("  inserts complete parenthesized expressions
+*** Alignment
+    Aligning operators, keywords, to beautify.
+    Prefix is C-c C-aa
+    - C-c C-a C-a :: aligns a group of consecutive lines
+    - C-c C-a C-i :: aligns block withs same indent
+    - C-c C-a C-d :: all lines within declaration
+    - C-c C-a M-a :: region
+    - C-c C-a C-c :: inline comments
+    - C-c C-a M-c :: comemnts for a region
+*** Code filling
+    Condenses code, by removing comments etc.
+    Prefix is C-c C-f
+    - C-c C-f C-f :: fills a list enclosed by paren
+    - C-c C-f C-g :: group of lines
+    - C-c C-f C-i :: block withs ame indent
+    - C-c C-f M-f :: entire region
+*** Code beautification
+    vhdl-beautify-buffer. Can be run non-interactively as 
+    emacs -batch -I ~/.emacs filename.vhd -f vhdl-beautify-buffer
+*** Port translation
+    Generic and Port clauses can be copied and then pasted as:
+    - C-c C-p C-w :: Copy
+    - C-c C-p M-w :: Copy
+    - C-c C-p C-f :: Port flatten
+    - C-c C-p C-r  :: Reverse ports
+    - C-c C-p C-c  :: Paste component
+    - C-c C-p C-e :: Paste entity
+    - C-c C-p C-i :: Paste instance
+    - C-p C-p C-s :: Paste signals
+    - C-p C-p C-c :: Paste constants
+    - C-p C-p C-g :: Paste generic map
+    - C-p C-p C-z :: Paste initializations
+    - C-p C-p C-t :: Paste testbench
+*** Speedbar
+    Automatically opened if 'vhdl-speedbar-auto-open is non-nil
+    Check 'vhdl-project-alist
+    - f :: file mode
+    - h :: hierarchy
+    - H :: project hierarcy
+*** Structural composition
+    - C-c C-c C-n :: Create skeleton for new component
+    - C-c C-c C-p :: Place component declaration and instantiation
+    - C-c C-c C-w :: Automatically connect subcomponents using rules.
+*** Hide-show
+    Using vhdl-hs-minor-mode
+    vhdl-hideshow-menu : if non nil then start up with hideshow
+    vhdl-hide-all-init: if non nil then hide all on startup.
+*** Code update
+    - C-c C-u C-s : Update sensitivity list in current process
+    - C-c C-u M-s : Of all processes in buffer.
+*** Code Fixing
+    - C-c C-x C-p : Fixes parenthesis
+
+** Latex mode
+*** Reftex
+    - C-c =  ::  Create a TOC for document
+    - C-c (  ::  Insert a label
+    - C-c )  ::  Insert a reference
+    - C-c [  ::  Insert citation by searching in bibtex database
+    - C-c &  ::  With cursor on a cross-reference, view original
+**** Multi-file documents
+     Add the following at the end of a document.
+     Use TeX-master for AucTex mode and tex-main-file for emacs latex
+
+     %%% Local Variables: ***
+     %%% mode:latex ***
+     %%% tex-main-file: "thesis.tex"  ***
+     %%% End: ***
+
+
+*** Bibtex
+    - C-c C-e C-a :: Journal
+    - C-c C-e :: 
+    - C-c C-e ::
+** Auctex
+   - C-c _ :: Prompt for master file
+   - C-c ^ :: Go to master file
+   - C-c C-e :: Insert environment
+   - C-c C-j :: Next item
+   - C-c % :: toggle commenting of paragraph
+   - C-c ; :: toggle commenting of region
+** Reftex
+   - C-c [ :: Insert reference
+   
+** UTF8 symbols
+   Can get name of a character using describe-char
+   In general can be inserted using insert-char SYMBOL_NAME
+   - ∈ :: element of
+   - ∧ | ∨ :: logical and | or with many options
+   - ⇒ :: rightwards double arrow
+   - ≔ :: colon equals
+** Magit
+*** Custom
+    - C-x g :: Start magit in buffer (RJP custom), invokes magit-status
+*** General
+    - g :: reload status buffer
+    - Tab :: toggle visibility/expand/contract
+    - S-Tab :: toggle visibility of subtree
+    - s :: Stage. Could be untracked file, modified file, hunk of file
+    - S :: Stage All
+    - u/U :: unstage/ unstage All
+    - k :: Discard/Delete/revert
+    - c :: Commit
+    - i :: Add file to .gitignore
+    - I :: Add file to .git/info/exclude instead of .gitignore
+    - Ctrl+W :: Copy SHA of any commit
+*** History
+   - l/L :: History (show commit log)  / Verbose
+   - Ret or Space :: Expand.  Space is like more.  Keeps your state in
+                     top buffer and can scroll through changes.
+   - x/X :: Delete all commits after specific commit, but keep files in
+          dirty state.  This allows easy rebase.  With capital X, will
+            revert all files to that specific commit (i.e., will lose
+            all changes)
+**** Reflog, Recovering delted commits
+      - h :: See the reflog
+**** Blame
+     - magit-blame-mode :: Annotates lines with author and commit
+**** Rebase
+     - R :: Rebase
+     - E :: Interactive Rebase
+
+*** Stash
+   - z/Z :: Create new stash
+   - a/A ::  Apply/Pop stash
+   - k :: Drop stash
+*** Branch
+   - b/B :: Switch to branch / Create and switch
+          
+        
+
+** Buffer  read status
+   - C-x C-q :: toggle read status
+
+* Org Mode
+** Visibility
+   - <TAB> 		:: Show/hide
+   - Shift + <TAB>      :: Global show/hide. With argument, up to
+        level n.
+   - C-u <TAB> 		:: Global cycle Overview->Contents->Show All->Overview
+   - C-c C-x v 		::  Copy visible text:  (org-copy-visible)
+   - C-c <TAB> 		:: Expose children of current subtree.  With argument,
+                  to level n
+
+** Motion
+   - C-c C-n		:: Next visible heading
+   - C-c C-p		:: Previous visible heading 
+   - C-c C-f		:: Next heading same level 
+   - C-c C-b		:: Previous heading same level
+   - C-c C-j		:: Jump to any location (org-goto)
+ 
+** Editing
+   - M+Enter		:: Insert next heading at same level
+   - C+Enter		:: Insert new heading after body of current
+   - M + <L/R/U/D>	:: Promote/Demote/Up/Down current heading
+   - M+S+<L/R/U/D>	:: Move subtree (Promote/Demote/Up/Down) 
+   - C-c C-x [C-w/M-W/C-y]	:: Kill/Copy/Yank Subtree
+   - C-c *		:: Turn normal line or list into heading
+   - C-c - ::  Turn heading into normal list
+   - Lists: 
+     - Unordered -, +, *
+     - Ordered 1., 1).
+       To start with a diferent value, start text with [@20]
+     - Description, definition::  Extended description
+
+** Todo
+   - C-c C-t 		:: Change Todo state
+   - Shift+Left/Right 	:: Change Todo state
+   - C-c C-w  :: Refile
+
+** Drawers
+   - C-c C-x d		:: Insert active region in drawer
+
+** Blocks
+   Org mode uses begin..end blocks 
+
+*** Insertion using quick templates
+    Type '<' followed by a template selector and <Tab>
+    Template selector can be:
+    - s                 :: #+BEGIN_SRC ... #+END_SRC 
+    - e			:: #+BEGIN_EXAMPLE ... #+END_EXAMPLE
+    - q			:: #+BEGIN_QUOTE ... #+END_QUOTE 
+    - v			:: #+BEGIN_VERSE ... #+END_VERSE 
+    - c			:: #+BEGIN_CENTER ... #+END_CENTER 
+    - l			:: #+BEGIN_LaTeX ... #+END_LaTeX 
+    - L			:: #+LaTeX: 
+    - h			:: #+BEGIN_HTML ... #+END_HTML 
+    - H			:: #+HTML: 
+    - a			:: #+BEGIN_ASCII ... #+END_ASCII 
+    - A			:: #+ASCII: 
+    - i			:: #+INDEX: line 
+    - I			:: #+INCLUDE: line 
+
+
+*** Dynamic Blocks
+    Specially marked regions that are updated by user-written function
+    #+BEGIN: block-update-time: format "on %H:%M"
+    #+END:
+    - C-c C-x C-u 	:: Update dynamic block at point
+    - C-u C-c C-x C-u 	:: Update all dynamic blocks
+
+
+** Clocking
+   C-c C-x C-j :: Jump to task being clocked.
+** Tables
+*** Creation and formatting   
+    - Line with | 	:: Starts table if | is first non-whitespace character
+    - Line with |- 	:: Horizontal separator
+    - <TAB> 		:: Moves to the next field, realigns
+    - S + <TAB> 	:: Move to previous field, realign
+    - Enter 		:: Moves to next row, realigns
+    - C-c C-c 		:: Realign the table
+    - <Number> 		:: If a field contains <N>, N is width of col
+*** Editing
+    - M-<L/R/U/D> 	:: Move col or row left,right,up,down
+    - M-S-<L/U> 	:: Kill current col/row
+    - M-S-<R/D> 	:: Insert new col/row
+    - C-c - 		:: Insert horiz line below cur row
+    - C-c Enter 	:: Insert horiz line below cur row and move cursor down
+    - C-c ` 		:: Edit partially hidden cell
+*** Copy/Paste
+    - C-c C-x [M-w/C-w/C-y] :: Copy/Kill/Yank rectangular region of table
+** Links
+   - "[[link][desc]"	:: Create link
+   - C-c C-l 		:: Edit Link
+   - "#local" 		:: Local link type.  Without #, does a search
+        for local
+   - C-c C-o  		:: Follow link
+   - "<<link_target>>" 	:: This is a link target
+*** Custom links target
+    - [[+TAB :: Bring up targets in local file
+    - [[+ C-u - TAB :: Bring up targets in all include files
+   
+** Tags							:mytag:mytag2:mytag3:
+   - ":tag1:tag2:"	:: Tags at the end of headlines
+   - C-c C-q 		:: Insert tag from anywhere in the section
+   - C-c C-c 		:: Insert tag when cursor on headline
+   - C-c \ 		:: Create a sparse tree matching tags
+   - C-c C-c, S+Tab     :: Exit sparse tree, then revert to normal tree.
+*** Matching searches on tags
+    [[http://orgmode.org/manual/Matching-tags-and-properties.html#Matching-tags-and-properties][Orgmode tag searching]]
+*** Tag groups
+
+** Properties and Columns
+   :PROPERTIES:
+   :COLUMNS: %8ITEM[Which] %Title[TITLE] %Artist[ARTIST]
+   :Title:    my title
+   :Artist: Some random artist
+   :Value: 1
+   :END:
+   - ":prop1:" 		:: Properties are like tags but with
+        value. They are inserted into a special drawer.
+   - ":prop2:" 		:: Drawer is called "PROPERTIES". Each is on a
+        single line.
+   - ":prop3_ALL:" 	:: Allowed values for a property
+   - C-c C-x p 		:: Set property
+   - C-c C-c 		:: Executes property commands
+   - S-<L/R> 		:: Previous/Next allowed property
+   - C-c C-c c 		:: Compute property at point
+*** Columns
+    - C-c C-x C-c 	:: Turn on column mode
+    - q 		:: Exit column view
+    - C-c C-x i 	:: Insert a dynamic block capturing column view
+    - C-c C-c 		:: Update dynamic block
+
+** Beamer
+   - C-c C-e t		:: Insert default org export template
+   - C-c C-b 		:: Specify type of block
+
+
+** Time Log
+#+BEGIN_SRC emacs-lisp
+    ;; Technique
+    ;; org-map-entries
+    ;; org-entry-properties with time argument.
+    (org-entry-properties nil 'special "CLOCK") ;; This provides all time tags.
+    ;; time tags are retrieved as an alist.
+    ;;  however time ranges outside of clock only 
+    ;; map alist to a date or to a date range.
+    ;; consolidate dates, and date ranges.
+    ;; Date tree with link org-make-link-string
+    ;; 
+    ;; org-entry-beginning-position
+    ;; org-entry-end-position
+    ;; org-scanner-tags
+    ;; org-trust-scanner-tags t  locally
+    ;; org-entry-properties with time argument.
+    (org-entry-properties nil 'special "CLOCK") ;; This provides all time tags.
+    ;; Regular expression search for clock
+    ;; ^[ \t]*"  org-clock-string  "[ \t]*\\(?:\\(\\[.*?\\]\\)-+\\(\\[.*?\\]\\)
+    ;; re-search-forward has an optional argument for limit to limit search.
+    ;; Consolidate all time values into day, month, year.
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :results output silent
+  ;; Just return a list of the following list
+  ;; (formatted_heading date_list)
+  (defun org-narrow-to-within-dblock ()
+    "Narrow buffer to the current dblock."
+    (org-beginning-of-dblock)
+    (forward-line 1)
+    (narrow-to-region (point) (point))
+    )
+  
+  (defun org-heading-date-info ()
+    ;;
+    ;; Only return relevant headlines
+    ;; Returns either nil or a list
+    (let ((t_arr (make-vector 4 nil))  
+          (tstring ["TIMESTAMP" "DEADLINE" "SCHEDULED" "CLOCK"]))
+      (dolist (entry ;; each entry in 
+                (org-entry-properties nil 'special "CLOCK") ;; list of timetags
+                t_arr) ;; temporary var
+        (let* ((propname (car entry))
+               (pos (position propname tstring :test 'equal)))
+          (if pos  
+              (aset t_arr pos (append (elt t_arr pos) 
+                                      (list (cdr entry))   ))
+            )))
+       ;; If any of the timestamps are present, return the headline and timestamps
+       ;; else return nil
+       (if (position nil t_arr :test-not 'equal)
+           (cons (nth 4 (org-heading-components)) (copy-sequence t_arr) )
+         nil)
+       ))
+  
+    
+  (defun org-test-datetree-insert(hding_daylist)
+    (let* ((text (car hding_daylist))
+           (days (cdr hding_daylist)))
+  
+      (mapc (lambda(day) 
+              (org-datetree-find-date-create 
+               (org-date-to-gregorian day) t)
+              ;;(outline-next-heading)
+              ;;(org-insert-item)
+              ;;(insert text)
+              (org-agenda-insert-diary-make-new-entry text)
+              )
+            days)) )
+  
+  (defun org-heading-date-format (heading_info)
+    ;;  heading_info is a cons
+    ;;  car: text of heading
+    ;;  cdr: vector with time string for different time tags
+    (let* ((heading (car heading_info))
+           (formatted_heading (org-make-link-string (copy-sequence heading)))
+           (ts (cdr heading_info))
+           daylist )
+      ;; ts is a vector. Each element is a list of strings or nil
+      ;; map each list of strings to a date,
+      ;; flatten vector
+      ;; keep unique dates.
+      (setq daylist
+            (delq nil (delete-dups
+                       (apply 'append 
+                              (mapcar 
+                               (lambda (tstr_list) 
+                                 (if tstr_list  
+                                     (mapcar 
+                                        (lambda (tstr) 
+                                          (org-time-string-to-absolute tstr)) 
+                                      tstr_list)))  
+                               ts)))))
+      (cons heading  daylist)))
+    
+  
+  (defun org-dblock-write:myblock (params)
+      "Get dates/time/clock and create a datetree"
+      (let* ( (mappedvals (org-map-entries 'org-heading-date-info))
+              (heading_info (remove nil mappedvals)) 
+              (hding_daylists (mapcar 'org-heading-date-format  heading_info))    )
+  
+      
+        (print "printing hding_daylists")
+        (print hding_daylists)
+        ;; Parse date strings
+        ;; Format link string
+        (save-restriction
+          (org-narrow-to-within-dblock)
+          (mapc 'org-test-datetree-insert hding_daylists)
+  
+          ;;(org-test-datetree-insert "text1")
+          ;;(org-test-datetree-insert "text2")
+          ;;(org-test-datetree-insert "text3")
+          ;;(outline-next-heading)
+          ;;(org-insert-heading nil t)
+          ;;(org-do-demote)
+          ;;(outline-next-heading)
+          ;;;(org-insert-heading nil t)
+          ;;(org-do-demote)
+          ;;(org-agenda-insert-diary-make-new-entry "dummy text2")
+          ;; remove extra new line added by previous command
+          )
+        )
+      )
+#+END_SRC
+#+BEGIN: myblock
+   
+* Windows Shortcuts
+  - Win + Tab		:: Aero Flip
+  - Ctrl + Win + Tab	:: Aero Flip Hold.  Can release Ctrl+Win and
+       can flip by just using tab. 
+  - Win + R		:: Run
+  - Win + D		:: Minimize everything (show desktop)
+  - Win + Pause/Break	:: Open CtrlPanel->System
+  - Win + G		:: Show gadgets
+  - Win + L		:: Lock computer
+  - Win + Q		:: Communicator
+  - Win + Home		:: Clear all but the active window
+  - Win+Space		:: All windows become transparent so you can
+       see through to the desktop 
+  - Win+Up arrow	:: Maximize the active window
+  - Win+Down arrow	:: Minimize the window/Restore the window if it's maximized
+  - Win+<arrow>		:: Dock the window to each side of the monitor
+  - Win+S+<arrow> 	:: Dock with dual monitors
+  - Win+T		:: Focus and scroll through items on the taskbar.
+  - Win+P		:: Adjust presentation settings for your display
+  - Win+(+/-)		:: Zoom in/out
+  - S+Click taskbar item:: Open a new instance of that application
+  - Win+ (1-9) 		:: application pinned to the taskbar in that position
+  - S+Win+ (1-9) 	:: New instance of the application pinned to the taskbar
+  - Ctrl+Win+ ( 1-9)	:: Cycles through open windows for the application
+  - Alt+Win+(1-9)	:: Opens the Jump List for the application
+       pinned to the taskbar. 
+  - Win+T		:: Focus and scroll through items on the taskbar.
+  - Win+B 		:: Focuses the System Tray icons
+  - Ctrl+S+Esc 		:: Task Manager
+
+* MS Word Outline mode
+  - Alt+Shift+[L/R]Arrow     :: Promote/Demote paragraph
+  - Ctrl+Shift+N             ::  Demote to body text
+  - Alt+Shift+[Up/Dn]Arrow   :: Move paragraphs [Up/Dn]
+  - Alt+Shift+[plus/minus]   :: Expand/Collapse text under heading
+  - Alt+Shift+A              :: Expand/Collapse all text and headings
+  - Alt+Shift+n              :: Show all headings up to Heading n
+
+* Outlook
+  - Ctrl+Shift+I	:: Inbox
+  - Alt+S 		:: Send
+  - Ctrl+R 		:: Reply
+  - Ctrl+Shift+R 	:: Reply All
+  - Ctrl+F 		:: Forward
+  - Ctrl+Shift+V 	:: Move to Folder
+  - Ctrl+N 		:: New Message
+  - Ctrl+O 		:: Open message
+  - Ctrl + ./, 		:: Next/ Prev Message
+  - Ctrl+1 		:: Go to mail
+  - Ctrl + 2 		:: Go to calendar
+  - Ctrl + 6 		:: Folder List
+  - Ctrl + Y 		:: Go to different folder
+  - Alt+J 		:: Move to Subject field
+
+* Explorer
+  - Ctrl+N 		:: New Window
+  - Ctrl+W 		:: Close window
+  - Ctrl+S+N 		:: New folder
+  - Ctrl + . 		:: Rotate picture clockwise
+  - Ctrl + , 		:: Rotate picture counter-clockwise
+  - Left Arrow 		:: Collapse selection
+  - Alt+Enter  		:: Properties
+  - Alt+P 		:: Display Preview pane
+  - Alt+Left Arrow   	:: Visit previous folder
+  - Backspace 		:: View previous folder
+  - Alt+Up arrow	:: Parent folder
+  - Alt+D 		::  Select address bar
+  - Ctrl+E 		:: Select search box
+  - Ctrl+F 		:: Select search box
+
+
+* Git
+  - git ls-files :: list files in git repo
+* Misc
+** Bootcamp can break powerpoint
+** Excel
+*** Hide zero values in cells
+    Cells
+    Excel
+
+    Follow this procedure to hide zero values in selected cells. If the
+    value in one of these cells changes to a nonzero value, the format
+    of the value will be similar to the general number format. 
+
+    1. Select the cells that contain the zero (0) values that you want to hide.
+    2. On the Format menu, click Cells, and then click the Number tab.
+    3. In the Category list, click Custom.
+    4. In the Type box, type 0;-0;;@
+** Source highlight
+   To highlight source code:
+*** Use  Highlight Code Converter:
+    1. Paste into Code-Converter.
+    2. Select Syntax
+    3. Select Color theme (example edit-eclipse).
+       Good options: earendel, edit-emacs, edit-gedit, nuvola
+    4. Copy preview to clipboard
+    5. Paste into Wordpad
+    6. Copy from Wordpad
+    7. Paste into powerpoint: Don't use Paste, Don't use Paste Special. 
+    8. Right click on slide:  Under context menu, Paste there are four icon options:
+      1) Use Destination Theme
+      2) Use Source formatting
+      3) As Picture
+      4) Keep Text Only
+      Select "Use Source Formatting".
+
+*** If GUI is not working then
+    highlight.exe -S spn --style=earendel -O rtf -i inputfile.pml -o outputfile.rtf
+    Then open in Wordpad and copy as above.
+
+*** Use Source-highlight
+    source-highlight -i inputfile.pml -o outputfile.html
+    Open in Word.
+    Copy to powerpoint.
+
+*** Use emacs
+    M-x htmlfontify-buffer 
+    Then write to html file
+    Open in word or copy into word
+    Then copy into powerpoint.
+    
+
+** Minimal Debian Install
+*** wajig
+*** less
+*** i3
+    i3, i3status, suckless-tools
+*** openssh-client
+*** rxvt-unicode font xft:Inconsolata
+*** xorg
+*** fonts-inconsolata
+*** fontconfig
+*** git
+*** libc-i386
+*** ia32-libs 
+    First requires multiarch install
+    dpkg --add-architecture i386
+** Cygwin, Windows7 Quirkiness
+*** Virtualstore
+    This is a feature of Windows Vista designed to ensure that old
+    applications that assume that they can write to LOCAL_MACHINE
+    still work.  These writes are redirected to
+    AppData/Local/VirtualStore.
+
+    With Cygwin32, when you write files in directories that are not
+    permissible, or create symlinks, they actually go into
+    VirtualStore.  With Cygwin64, this is not the case.
+
+     
+
+
+
+* i3 Shortcuts
+  Mod1 = Alt, Mod4 = Win
+  - Mod+Enter :: start a new terminal
+  - Mod+Shift+Q :: Kill
+  - Mod+d :: dmenu
+  - Mod+L/R/U/D :: Switch focus
+  - Mod+Shift+L/R/U/D :: Move focused window
+  - Mod+h :: Horizontal split mode
+  - Mod+v :: Viertical split mode
+  - Mod+f :: Full screen for focused container
+  - Mod+s :: Stacking mode
+  - Mod+w :: Tabbed mode
+  - Mod+e :: Default mode
+  - Mod+[1:0] :: Switch workspace 1:10
+  - Mod+Shift+[1:0] :: Move container to workspace
+  - Mod+Shift+R :: restart
+  - Mod+Shift+E :: exit
+  - Mod+r :: resize mode
+  - Esc/Enter :: Exit resize mode
+
+
+  
+* Cygwin
+** X11
+   To run each X app on its own.
+   - 1. Start X serfer:  X -multiwindow
+   - 2. export display: export DISPLAY=:0.0
+   - 3. start application
+* Unix tools
+** sed
+   To delete a line in file and pipe output.
+   find . -name "*.v" | xargs cat | sed -e '/^$/ d' -e '/^\/\// d' | wc -l
+   cat *.vhd | sed -e '/^$/ d' -e '/^--/ d' | wc -l
+* Typesetting
+  - http://www.cs.sfu.ca/~ggbaker/reference/characters/#dash
+  - http://practicaltypography.com/body-text.html
+
+
+
+
+
 
 

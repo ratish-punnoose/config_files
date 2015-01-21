@@ -541,6 +541,13 @@ Doesn't currently work properly with hideshow
   (global-set-key [f3] 'highlight-symbol-next)
   (global-set-key [(shift f3)] 'highlight-symbol-prev)
 #+END_SRC
+** Comment region
+C-c C-c is set to comment region in the cc-modes in the standard lisp
+dirs. It would be preferable to bind a standard key to
+comment-or-uncomment-region in all progmodes
+#+BEGIN_SRC emacs-lisp
+(global-set-key "\C-c\C-c" 'comment-or-uncomment-region)
+#+END_SRC
 ** Generic Language extensions
 #+BEGIN_SRC emacs-lisp
   (setq auto-mode-alist
@@ -604,12 +611,10 @@ Add reftex mode
 #+BEGIN_SRC emacs-lisp :tangle no
 (add-hook 'latex-mode-hook 'reftex-mode)
 #+END_SRC
-* Smex
+
+** Ruby
 #+BEGIN_SRC emacs-lisp
-;;(global-set-key (kbd "M-x") 'smex)
-;;(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; Old M-x
-;;(global-set-key (kbd "C-c C-x M-x") 'execute-extended-command)
+(setq ruby-indent-level 4)
 #+END_SRC
 * Magit
 Magit mostly just works.  Only thing to add here is to add a simple
@@ -620,7 +625,44 @@ keystroke to start it.
 * Helm
 Helm for autocompletes
 #+BEGIN_SRC emacs-lisp
-(helm-mode 1)
+  ;; http://tuhdo.github.io/helm-intro.html
+  ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+  ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+  ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-unset-key (kbd "C-x c"))
+
+    (when (require 'helm-config nil 'noerror)
+
+      
+      (global-set-key (kbd "M-x") 'helm-M-x)       ; Even without this, M-x does some helm completeion
+
+      (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+            helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
+            helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+            helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+            helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+            helm-ff-file-name-history-use-recentf t)
+      (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+      (global-set-key (kbd "C-x b") 'helm-mini)
+      (global-set-key (kbd "C-x C-f") 'helm-find-files)
+      (global-set-key (kbd "C-c h o") 'helm-occur)
+      (helm-mode 1)
+      (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+      (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+      (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+      )
+#+END_SRC
+* Projectile and Helm Projectile
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (when (require 'helm-projectile nil 'noerror)
+    (projectile-global-mode)
+    (setq projectile-completion-system 'helm)
+    (helm-projectile-on)
+    ;; On windows native indexing is slow
+    ;;(setq projectile-indexing-method 'alien)
+    )
 #+END_SRC
 * Testing
 #+BEGIN_SRC emacs-lisp
@@ -666,68 +708,8 @@ Helm for autocompletes
 (global-set-key "\C-xm" 'compile)
 
 
-
-;; Use highlight symbol library for quick search for word under cursor
- ;; highlight symbol at point and jump to next automatically
-(require 'highlight-symbol)
-(setq highlight-symbol-on-navigation-p t)
-(global-set-key (kbd "C-x *") 'highlight-symbol-next)
-(global-set-key (kbd "C-*") 'highlight-symbol-prev)
-
 ;;
 ;; Toggle read-only status of a buffer C-x C-q 
-
-
-
-
-;;(load "sample-setups/zephyr-setup")
-;;(load "~/.zephyr-ssh")
-
-(defun linux-c-mode ()
-  (c-mode)
-  (c-set-style "linux"))
-
-;;============================GO ========================
-(autoload 'go-mode "go-mode" "\
-Major mode for editing Go source text.
-
-This provides basic syntax highlighting for keywords, built-ins,
-functions, and some types.  It also provides indentation that is
-\(almost) identical to gofmt.
-
-\(fn)" t nil)
-
-(add-to-list 'auto-mode-alist (cons "\\.go$" #'go-mode))
-
-(autoload 'gofmt "go-mode" "\
-Pipe the current buffer through the external tool `gofmt`.
-Replace the current buffer on success; display errors on failure.
-
-\(fn)" t nil)
-
-(autoload 'gofmt-before-save "go-mode" "\
-Add this to .emacs to run gofmt on the current buffer when saving:
- (add-hook 'before-save-hook #'gofmt-before-save)
-
-\(fn)" t nil)
-
-;;;***
-
-(provide 'go-mode-load)
-;; ========================================================
-
-
-(autoload 'ruby-mode "ruby-mode" "Ruby Mode" t)
-(setq ruby-indent-level 4)
-
-(autoload 'markdown-mode "markdown-mode" "Markdown major mode" t)
-
-
-
-
-
-(put 'upcase-region 'disabled nil)
-
 
 
 

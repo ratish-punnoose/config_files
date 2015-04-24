@@ -28,9 +28,12 @@
 #	editor = \"C:/Program Files (x86)/GitExtensions/GitExtensions.exe\" fileeditor
 	editor = emacs
 	excludesfile = ~/.gitignore
+	fscache = true
 [color]
 	ui = true
 [gui]
 	recentrepo = C:/Users/rjpunno/cpp/stkchk/tmp2
 [push]
 	default = upstream
+[gc]
+	auto = 256

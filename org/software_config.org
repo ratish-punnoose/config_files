@@ -33,6 +33,12 @@
         every row.
    - C-x SPC ::  Rectangular selection.  Selection is no different
                  except that highlighting is rectangular.
+** Picture mode
+   - C-c C-k :: kill rectangle
+   - C-c C-y :: Yank rectangle
+   - C-c C-w X :: Kill to register A
+   - C-c C-x X :: Yank from register X
+
 ** Editing
    - M-l/u :: Turn following word to lowercase/uppercase
    - C-x C-l/u ::  downcase/upcase region
@@ -136,144 +142,8 @@
 *** Helm Projectile
     - C-c p p :: Switch/start project
     - C-c p f :: Find file in project
-** Selection
-   - C-x h 		:: Select all
-** Registers
-   - C-x r  :: Common prefix for all register operations
-   - M-x view-register R :: view contents of register R
-*** Positions
-    - SPC R :: Saves bookmark to location in register R
-    - j   R ::  Jumps to position in register R
-*** Bookmarks (Persistent positions)
-    - m [BOOKMARK] :: Save bookmark with optional name BOOKMARK
-    - b BOOKMARK :: Jump to bookmark named bookmark
-    - l :: List all bookmarks
-*** Text
-    - s   R :: Save text to register R
-    - i   R :: Insert text from register R
-    - r   R :: Save rectangle to register R
-    - i   R :: Insert rectangle from register R
-*** Window config
-    - w   R :: Save window config of current frame to register R
-    - f   R :: Save window config of all frames to register R
-    - j   R :: Restore window config
-*** Keyboard Macros
-    - j   R :: execute macro in register R
-    - C-x C-k x R :: Save macro toregister R
-
-** Rectangle
-   - C-x r k 		:: Kill rectangle
-   - C-x r y 		:: Yank rectangle
-   - C-x r t            :: Insert rectangle.  This is a superb command. To insert
-        the same text on multiple rows, just select the beginning and
-        end, C-x r t and then type in the characters to insert on
-        every row.
-   - C-x SPC ::  Rectangular selection.  Selection is no different
-                 except that highlighting is rectangular.
-** Editing
-   - M-l/u :: Turn following word to lowercase/uppercase
-   - C-x C-l/u ::  downcase/upcase region
-** Navigation
-   - C-M n 		:: Jump to end of matching paren
-   - C-M p 		:: Jump to begin of matching paren
-   - C-t :: Tags search
-   - Alt-, :: Next tag
-   - Alt-. :: Find tag under cursor
-   - C-Spc C-Spc::  Set mark
-   - C-u C-Spc :: Jump to previous mark
-** Lisp
-*** Evaluation
-    - C-x C-e :: Evaluate Lisp in *scratch* before cursor and print
-                 result in minibuffer
-    - C-j :: Evalute Lisp but insert result after cursor.
-*** Movement
-    - C-M-f/C-M-b :: Move forward/backward dexp
-    - C-M-@ :: highlight sexp
-    - C-M-u :: expand selection upwards
-    - C-M-d :: next enclosed dexp
-*** Deletion
-    - C-M-k :: Delete
-    - C-M-Backspace :: delete sexp before cursor
-*** Indentation
-    - C-M-q :: indent whole func with cursor on (
-*** Insertion
-    - M-(  :: a pair of parens
-    - C-u 2 M-( :: enclose the next 2 sexps with paren
-*** Code completion
-    - C-c TAB :: automatic completion for (defv to (defvar
-*** Code comment
-    - M-; :: Add line comment
-*** Debugging
-    - M-x edebug-defun :: In definition of func, to enable debuging
-    - M-x edebug-trace ::
-    - M-x eval-defun ::  Stop function instrumentation
-    - i :: Step in
-    - o :: Step out
-    - SPC :: Step by step debug
-    - e ::  Print variables value
-** Menu
-   - F1 :: show, hide menu.
-** Search
-   - rgrep :: Search through multiple files in directory tree through
-              file pattern.
-   - C-s C-* :: Search at point.  Requires Ratish's custom addition
-   - C-s :: search forward
-   - C-r  :: search backward
-   - M-p :: Start editing previous search term
-
-** IDO mode
-*** File open mode C-x C-f
-    - // :: goto root directory
-    - ~/ :: goto home directory
-    - C-f :: go back temporarily to normal find file
-** Helm
-*** Default config
-    - C-x c ::  Prefix to invoke helm commands
-    - RET :: select
-    - C-n/p :: up down (in addition to arrow)
-    - C-v/M-v :: prev next pages
-    - M-< / M-> :: top bottom of buffer
-    - C-spc ::  Mark candidate
-    - M-a :: Select all candidates
-    - C-c C-i :: insert marked candidates into narrowing buffer
-    - C-t ::  Switch between horizontal and verital Helm
-    - C-w :: yank word at point, starting from point to end of word
-         into helm buffer
-    - M-n :: yank symbol at point
-**** Helm Mini (Buffers)
-     Filter patterns
-     - *<major-mode> or !*<major-mode> :: Filter by mode,
-          eg. *!lisp,!sh,!fun to filter all except for
-          lisp,sh,fundamendal mode buffers.
-     - /directory/ :: Narrows to buffers that are in
-          directory. E.g. /.emacs.d/ narrows to buffers in dir.
-     - ^pat :: buffer name starts with pat
-     - @searchterm :: Narrows to buffers that have searchterm
-     - C-s :: helm-moccur whill show matching searchterms
-**** Helm find files
-     Can also create files and directories (append slash)
-     - C-s :: grep the file
-     - C-u C-s :: recursively grep
-     - ~/ / ./  :: at end of pattern to reach home, root, start dir
-     - C-u helm-find-files :: Prefix command will list visited
-          directories, can jump there.
-     - C-c h :: In find-files session, use this to show visited files
-          directories. Can jump from there.
-**** Help regexp
-     - <prefix> r :: regexp interactive
-**** Occur
-     - <prefix> o :: helm occur  (Custom)
-**** Helm Mark rings
-**** registers
-     - <prefix> C-x r i :: View register (helm-register) 
-
-*** Custom config
-    - TAB :: Action Menu for  Persistent action
-    - C-z ::  execute persistent action
-*** Helm Projectile
-    - C-c p p :: Switch/start project
-    - C-c p f :: Find file in project
-    -  :: 
+    - M-SPC ::  Mark files
+    - C-c p p [C-u] C-s :: Search files. with C-u recursive.
 ** Hideshow
    - C-c @ ESC C-s :: show all
    - C-c @ ESC C-h :: hide all
@@ -891,9 +761,12 @@
 * Cygwin
 ** X11
    To run each X app on its own.
-   - 1. Start X serfer:  X -multiwindow
+   - 1. Start X server:  X -multiwindow
    - 2. export display: export DISPLAY=:0.0
    - 3. start application
+   - OR  try
+     - xwin -multiwindow &  (Verified Mar 3, 2015)
+   - Common mistakes:  Check for colon in DISPLAY variable
 * Unix tools
 ** sed
    To delete a line in file and pipe output.

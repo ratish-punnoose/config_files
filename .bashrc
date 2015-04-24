@@ -17,11 +17,6 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-if [ -f ~/.DIR_COLORS ]; then
-    	eval `dircolors -b ~/.DIR_COLORS`
-fi
-
-
 #PS1=$'\h{\w}\!: '
 # -----------------------------------------------------------------
 # BASH PROMPT
@@ -40,7 +35,7 @@ parse_git_branch() {
 #export PS1='[\[\033[0;35m\]\h\[\033[0;36m\] \w\[\033[00m\]\[\033[33m\]$(parse_git_branch)\[\033[00m\]]\$ '
 
 #           White         path Light Cyan                       reset
-PS1='{\[\033[1;37m\]\w\[\033[1;36m\]$(parse_git_branch)\[\033[00m\]}\!: '
+PS1='\h{\[\033[1;37m\]\w\[\033[1;36m\]$(parse_git_branch)\[\033[00m\]}\!: '
 
 
 # If this is an xterm set the title to user@host:dir
@@ -56,9 +51,9 @@ esac
 
 #alias px='ps aux | grep $USER'
 alias rm='rm -i'
-alias l.='ls -F -d .[a-zA-Z]* --color=tty'
-#alias ll='ls -F -l -color=tty'
-alias ls='ls -F'
+alias l.='ls -F -d .* --color=auto'
+alias ll='ls -F -l --color=auto'
+alias ls='ls -F --color=auto'
 
 PATH=$PATH:/usr/sbin:/usr/local/bin:$HOME/bin
 EDITOR=emacs
@@ -69,10 +64,9 @@ HISTSIZE=100
 #LIBRARY_PATH=/usr/local/lib
 #TCL_LIBRARY=/usr/local/ns-allinone-2.30/tcl8.4.13/library
 
-http_proxy=http://wwwproxy.ran.sandia.gov:80
-export PATH EDITOR http_proxy
+export PATH EDITOR
 
-
+# Set http_proxy in /etc/profile.d/http_proxy.sh if needed
 
 if [ -f ~/.config/.DIR_COLORS ]; then
     	eval `dircolors -b ~/.config/.DIR_COLORS`

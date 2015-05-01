@@ -29,11 +29,11 @@ if [ -x /usr/bin/ssh-agent ]; then
             . ~/.agent.env -s > /dev/null
  
             if ! kill -0 $SSH_AGENT_PID > /dev/null 2>&1; then
-                ssh-agent -s > ~/.agent.env
+                ssh-agent -s -t 1d > ~/.agent.env
                 . ~/.agent.env > /dev/null 2>&1
             fi
         else
-            ssh-agent -s > ~/.agent.env
+            ssh-agent -s -t 1d > ~/.agent.env
             . ~/.agent.env > /dev/null 2>&1
         fi
     fi

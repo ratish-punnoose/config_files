@@ -28,14 +28,52 @@ parse_git_branch() {
         echo ".$git_branch"
     fi
 }
-    
+
+
+prompt_command () {
+    if [ $? -eq 0 ]; then # set an error string for the prompt, if applicable
+        ERRPROMPT=""
+    else
+        ERRPROMPT='ERR->($?) \n'
+    fi
+    #if [ "\$(type -t __git_ps1)" ]; then # if we're in a Git repo, show current branch
+    #    BRANCH="\$(__git_ps1 '[ %s ] ')"
+    #fi
+    #local GREEN="\[\033[0;32m\]"
+    #local CYAN="\[\033[0;36m\]"
+    local BCYAN="\[\033[1;36m\]"
+    #local BLUE="\[\033[0;34m\]"
+    #local GRAY="\[\033[0;37m\]"
+    #local DKGRAY="\[\033[1;30m\]"
+    local WHITE="\[\033[1;37m\]"
+    local RED="\[\033[1;33;41m\]"
+    # return color to Terminal setting for text color
+    local DEFAULT="\[\033[0;39m\]"
+    # set the titlebar to the last 2 fields of pwd
+    #local TITLEBAR='\[\e]2;`pwdtail`\a'
+    local RESET='\[\033[00m\]'
+#    export PS1="\[${TITLEBAR}\]${CYAN}[ ${BCYAN}\u${GREEN}@${BCYAN}\
+#\h${DKGRAY}(${LOAD}) ${WHITE}${TIME} ${CYAN}]${RED}$ERRPROMPT${GRAY}\
+#\w\n${GREEN}${BRANCH}${DEFAULT}$ "
+    export PS1="${RED}$ERRPROMPT${RESET}\
+\h{\
+${WHITE}\w\
+${BCYAN}$(parse_git_branch)\
+${RESET}}\
+\!: "
+}
+export PROMPT_COMMAND=prompt_command
+
+
 # sexy prompt
 #   Purple         host    Cyan         path   reset          Brown                                reset
 # '[\[\033[0;35m\]  \h  \[\033[0;36m\]   \w   \[\033[00m\]  \[\033[33m\]   $(parse_git_branch)   \[\033[00m\]]\$ '
 #export PS1='[\[\033[0;35m\]\h\[\033[0;36m\] \w\[\033[00m\]\[\033[33m\]$(parse_git_branch)\[\033[00m\]]\$ '
 
 #           White         path Light Cyan                       reset
-PS1='\h{\[\033[1;37m\]\w\[\033[1;36m\]$(parse_git_branch)\[\033[00m\]}\!: '
+#PS1='\h{\[\033[1;37m\]\w\[\033[1;36m\]$(parse_git_branch)\[\033[00m\]}\!: '
+
+
 
 
 # If this is an xterm set the title to user@host:dir

@@ -37,7 +37,21 @@ loaded. Disable.
 ;;(setq comment-auto-fill-only-comments nil)
 #+END_SRC
 * Package Management
-
+#+BEGIN_SRC emacs-lisp
+  (require 'use-package)
+  ;;(use-package paredit)
+  ;;(use-package paredit-everywhere)
+  (use-package rainbow-delimiters 
+                   :ensure t
+                   :config
+                   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  (use-package indent-guide
+               :ensure t
+               :config
+               (indent-guide-global-mode)
+               (setq indent-guide-delay 0.5) 
+               (setq indent-guide-recursive t))
+#+END_SRC
 * Options
 #+BEGIN_SRC emacs-lisp
 ;; Reload files automatically

@@ -21,7 +21,8 @@ fi
 #   source /usr/share/cdargs/cdargs-alias.sh
 #fi
 
-
+: ${DISPLAY:=:0.0}
+export DISPLAY
 
 if [ -x /usr/bin/ssh-agent ]; then
     if [ -z $SSH_AUTH_SOCK ]; then

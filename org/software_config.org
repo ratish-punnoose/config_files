@@ -42,6 +42,9 @@
 ** Editing
    - M-l/u :: Turn following word to lowercase/uppercase
    - C-x C-l/u ::  downcase/upcase region
+   - C-d :: Delete char
+   - M-d :: Delete word
+   - M-Del or M-Bkspc :: Delete word backwards
 ** Navigation
    - C-M n 		:: Jump to end of matching paren
    - C-M p 		:: Jump to begin of matching paren
@@ -51,6 +54,7 @@
    - C-Spc C-Spc::  Set mark
    - C-u C-Spc :: Jump to previous mark
 ** Lisp
+   Also see paredit
 *** Evaluation
     - C-x C-e :: Evaluate Lisp in *scratch* before cursor and print
                  result in minibuffer
@@ -318,7 +322,16 @@
    - M-x ediff-region-wordsize :: Diff a region of a buffer.
 ** Line number
    - linum-mode :: Line number mode
-
+** Paredit
+   These are commands to use with paredit.  
+   Also check smartparens which may be better.
+   Check also "http://danmidwood.com/content/2014/11/21/animated-paredit.html"
+   - M-( ::  Wraps the following sexpression with parentheses
+   - M-" :: Wraps the S-expression with quotes
+   - C-)/( :: slurp forward/backward
+   - C-}/C-{ :: barf forward
+   - C-M-f/b :: move forward/backward in sexp
+        
 * Org Mode
 ** Visibility
    - <TAB> 		:: Show/hide

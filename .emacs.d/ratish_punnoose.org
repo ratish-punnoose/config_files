@@ -511,7 +511,7 @@ not already in the Windows path.
     (setq w32-get-true-file-attributes nil)
     ;; Cygwin mount paths
     (use-package cygwin-mount
-      :defer 5
+      :ensure t
       :config
       (cygwin-mount-activate)    )
     )

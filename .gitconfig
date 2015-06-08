@@ -2,7 +2,7 @@
 	name = Ratish Punnoose
 	email = rjpunno@sandia.gov
 [http]
-	proxy = http://wwwproxy.ran.sandia.gov:80/
+##	proxy = http://wwwproxy.ran.sandia.gov:80/
         sslVerify = false
 [alias]
 	co = checkout

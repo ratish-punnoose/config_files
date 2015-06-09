@@ -2,7 +2,9 @@
 	name = Ratish Punnoose
 	email = rjpunno@sandia.gov
 [http]
-##	proxy = http://wwwproxy.ran.sandia.gov:80/
+        # System level proxy settings can be set in /etc/gitconfig
+        #	Eg.  proxy = http://wwwproxy.xxxx.ccc:80/
+        #  Specific settings can also be included.  See include section below.
         sslVerify = false
 [alias]
 	co = checkout
@@ -37,3 +39,5 @@
 	default = upstream
 [gc]
 	auto = 256
+[include]
+        path = ~/.gitconfig.system

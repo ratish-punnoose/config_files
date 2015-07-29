@@ -1,4 +1,11 @@
 * Emacs
+** MS Windows Install
+*** Libraries for images and zlib
+    Available for download at ezwinports
+    (http://sourceforge.net/projects/ezwinports)
+    - Check value of variable dynamic-library-alist . This contains
+      names of dlls.
+    - 
 ** Selection
    - C-x h 		:: Select all
 ** Registers
@@ -947,6 +954,8 @@
 *** ia32-libs 
     First requires multiarch install
     dpkg --add-architecture i386
+*** lsb
+    Try lsb-core
 ** Cygwin, Windows7 Quirkiness
 *** Virtualstore
     This is a feature of Windows Vista designed to ensure that old

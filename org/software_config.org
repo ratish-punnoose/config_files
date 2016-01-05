@@ -101,7 +101,12 @@
    - C-s :: search forward
    - C-r  :: search backward
    - M-p :: Start editing previous search term
-
+*** Search at Point
+    In query-replace-regexp mode C-M-%, type M-n to copy the word
+    under cursor into query-replace arguments (can be done for both
+    find and replace arguments)
+** Copy word at point
+   - C-M-SPC M-w :: Select and copy word without moving cursor
 ** IDO mode
 *** File open mode C-x C-f
     - // :: goto root directory
@@ -697,13 +702,22 @@
 
 * Cygwin
 ** X11
-   To run each X app on its own.
-   - 1. Start X server:  X -multiwindow
-   - 2. export display: export DISPLAY=:0.0
-   - 3. start application
-   - OR  try
-     - xwin -multiwindow &  (Verified Mar 3, 2015)
-   - Common mistakes:  Check for colon in DISPLAY variable
+*** Running
+    To run each X app on its own.
+    - 1. Start X server:  X -multiwindow
+    - 2. export display: export DISPLAY=:0.0
+    - 3. start application
+    - OR  try
+      - xwin -multiwindow &  (Verified Mar 3, 2015)
+    - Common mistakes:  Check for colon in DISPLAY variable
+*** Problems with windows and Virtual Desktop
+    This can be done by clicking with the middle mouse button on the
+    title bar of an Cygwin X Windows window, such as an xterm, and
+    select "Add Window Rule". In the dialog near bottom there is
+    "Method for hiding the window", change it to "Hide by move
+    window". Do not forget to press "Add" and "Apply" buttons
+    afterwards.
+    [[https://cygwin.com/ml/cygwin-xfree/2013-05/msg00012.html]]
 * Unix tools
 ** sed
    To delete a line in file and pipe output.

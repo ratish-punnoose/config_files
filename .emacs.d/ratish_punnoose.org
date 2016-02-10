@@ -202,9 +202,11 @@ Easier keys for switching windows
 (global-set-key (kbd "C-<down>") 'windmove-down)          ; move to downer window
 #+END_SRC
 * Search at Point
-To use this, start search with C-s and then type C-*
+To use this, start search with C-s and then type C-*.
+Note: find-tag-default-as-regexp and find-tag-default-as-symbol-regexp
+are useful here.
 #+BEGIN_SRC emacs-lisp
-(defun isearch-yank-symbol ()
+(defun isearch-yank-symbol-orig ()
   "*Put symbol at current point into search string."
   (interactive)
   (let ((sym (symbol-at-point)))
@@ -216,7 +218,20 @@ To use this, start search with C-s and then type C-*
                 isearch-yank-flag t))
       (ding)))
   (isearch-search-and-update))
+(defun isearch-yank-symbol ()
+  "*Put symbol at current point into search string."
+  (interactive)
+  (let ((sym (symbol-at-point)))
+    (if sym
+        (progn
+          (setq isearch-regexp t
+                isearch-string (find-tag-default-as-regexp)
+                isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
+                isearch-yank-flag t))
+      (ding)))
+  (isearch-search-and-update))
 (define-key isearch-mode-map (kbd "C-*") 'isearch-yank-symbol)
+(define-key isearch-mode-map [(down)] 'isearch-yank-symbol)
 #+END_SRC
 * Tags
 #+BEGIN_SRC emacs-lisp

@@ -56,7 +56,7 @@
 ** Navigation
    - C-M n 		:: Jump to end of matching paren
    - C-M p 		:: Jump to begin of matching paren
-   - C-t :: Tags search
+   - C-t :: Tags search.  Use down arrow to pick word at point.
    - Alt-, :: Next tag
    - Alt-. :: Find tag under cursor
    - C-Spc C-Spc::  Set mark
@@ -95,17 +95,21 @@
 ** Menu
    - F1 :: show, hide menu.
 ** Search
+    In query-replace-regexp mode C-M-%, use (DOWN ARROW) to copy the word
+    under cursor into query-replace arguments (can be done for both
+    find and replace arguments)   To search for standalone word use  \bword\b  \b is a boundary marker.
    - rgrep :: Search through multiple files in directory tree through
               file pattern.
-   - C-s C-* :: Search at point.  Requires Ratish's custom addition
    - C-s :: search forward
+   - M-s . ::  Search using symbol at point.  Hooks to isearch-forward-symbol-at-point
+   - C-s C-*, C-s DOWN :: Search at point.  Requires Ratish's custom addition
+   - M-s h . ::  Highlight symbol at point throughout file.
+   - M-% :: Search-Replace
+   - C-M-% :: Searc-Replace Regexp (Use down arrow to select current symbol)
    - C-r  :: search backward
    - M-p :: Start editing previous search term
-*** Search at Point
-    In query-replace-regexp mode C-M-%, type M-n to copy the word
-    under cursor into query-replace arguments (can be done for both
-    find and replace arguments)
-** Copy word at point
+
+** Copy word at point (doesn't seem to work RJP 1/29/16)
    - C-M-SPC M-w :: Select and copy word without moving cursor
 ** IDO mode
 *** File open mode C-x C-f
@@ -113,6 +117,11 @@
     - ~/ :: goto home directory
     - C-f :: go back temporarily to normal find file
 ** Helm
+   Using Helm:  
+   1. Start up helm-mini using C-x b.  This will give a list
+      of buffers.
+   2. Select buffers.  Using the C-spc
+   3. Perform action using C-z.  This will provide a list of actions.
 *** Default config
     - C-x c ::  Prefix to invoke helm commands
     - RET :: select
@@ -367,6 +376,7 @@
    - M+S+<L/R/U/D>	:: Move subtree (Promote/Demote/Up/Down) 
    - C-c C-x [C-w/M-W/C-y]	:: Kill/Copy/Yank Subtree
    - C-c *		:: Turn normal line or list into heading
+   - C-c ; ::    Comment Heading
    - C-c - ::  Turn heading into normal list
    - Lists: 
      - Unordered -, +, *
@@ -980,6 +990,7 @@
     With Cygwin32, when you write files in directories that are not
     permissible, or create symlinks, they actually go into
     VirtualStore.  With Cygwin64, this is not the case.
+** TCL
+   to unload autoloaded files type command "auto_reset" at interpreter
 
-
-    
+   

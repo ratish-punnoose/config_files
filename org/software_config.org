@@ -348,7 +348,7 @@
    Check also "http://danmidwood.com/content/2014/11/21/animated-paredit.html"
    - M-( ::  Wraps the following sexpression with parentheses
    - M-" :: Wraps the S-expression with quotes
-   - C-)/( :: slurp forward/backward
+   - C->/< :: slurp forward/backward
    - C-}/C-{ :: barf forward
    - C-M-f/b :: move forward/backward in sexp
         

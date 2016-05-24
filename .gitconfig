@@ -10,7 +10,7 @@
 	co = checkout
 	br = branch
 	ci = commit
-	st = status -sb
+	s  = status -sb
 	last = log -l HEAD
         gr = log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"
 	gr1 = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white) %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative

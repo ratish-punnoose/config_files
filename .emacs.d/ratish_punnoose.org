@@ -206,18 +206,6 @@ To use this, start search with C-s and then type C-*.
 Note: find-tag-default-as-regexp and find-tag-default-as-symbol-regexp
 are useful here.
 #+BEGIN_SRC emacs-lisp
-(defun isearch-yank-symbol-orig ()
-  "*Put symbol at current point into search string."
-  (interactive)
-  (let ((sym (symbol-at-point)))
-    (if sym
-        (progn
-          (setq isearch-regexp t
-                isearch-string (concat "\\_<" (regexp-quote (symbol-name sym)) "\\_>")
-                isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
-                isearch-yank-flag t))
-      (ding)))
-  (isearch-search-and-update))
 (defun isearch-yank-symbol ()
   "*Put symbol at current point into search string."
   (interactive)
@@ -230,8 +218,16 @@ are useful here.
                 isearch-yank-flag t))
       (ding)))
   (isearch-search-and-update))
-(define-key isearch-mode-map (kbd "C-*") 'isearch-yank-symbol)
+;;(define-key isearch-mode-map (kbd "C-*") 'isearch-yank-symbol)
 (define-key isearch-mode-map [(down)] 'isearch-yank-symbol)
+#+END_SRC
+* Copy word at point
+#+BEGIN_SRC emacs-lisp
+  (defun rjp/copy-word-at-point ()
+      "Copy word at point with underscores."
+      (interactive)
+      (kill-new (thing-at-point 'symbol) ))
+  (define-key global-map (kbd "\C-xw") 'rjp/copy-word-at-point)
 #+END_SRC
 * Tags
 #+BEGIN_SRC emacs-lisp
@@ -588,7 +584,7 @@ comment-or-uncomment-region in all progmodes
                 auto-mode-alist))
 #+END_SRC
 ** Paredit mode
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package paredit
     :ensure t
     :defer 2

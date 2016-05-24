@@ -8,6 +8,7 @@
     - 
 ** Selection
    - C-x h 		:: Select all
+   - C-x w ::   Copy Word (RJP Custom)
 ** Registers
    - C-x r  :: Common prefix for all register operations
    - M-x view-register R :: view contents of register R
@@ -111,6 +112,7 @@
 
 ** Copy word at point (doesn't seem to work RJP 1/29/16)
    - C-M-SPC M-w :: Select and copy word without moving cursor
+   - C-x w ::  Copy word (RJP custom works 2016/02/22)
 ** IDO mode
 *** File open mode C-x C-f
     - // :: goto root directory
@@ -690,6 +692,19 @@
 
 * Git
   - git ls-files :: list files in git repo
+** Bundles
+   Check log and create bundle using
+   #+BEGIN_EXAMPLE
+   git log master ^da88da
+   git bundle create commits.bundle master ^da88da
+   #+END_EXAMPLE
+   On the other side, 
+   #+BEGIN_EXAMPLE
+   git bundle verify ./commits.bundle
+   git bundle list-heads ../commits.bundle  # To list branches 
+   git fetch ../commits.bundle master:other-master  # Fetch master from bundle into our branch
+   #+END_EXAMPLE
+
 * i3 Shortcuts
   Mod1 = Alt, Mod4 = Win
   - Mod+Enter :: start a new terminal
@@ -992,5 +1007,22 @@
     VirtualStore.  With Cygwin64, this is not the case.
 ** TCL
    to unload autoloaded files type command "auto_reset" at interpreter
+** Windows port forwarding
+   #+BEGIN_EXAMPLE
+   netsh interface portproxy add v4tov4 listenport=4422 listenaddress=192.168.1.111 connectport=80 connectaddress=192.168.0.33
+   #+END_EXAMPLE
+** VirtualBox port forwarding
+   For accessing daemons running on virtual box do the following:
+   1. Within VirtualBox
+      1. Setup daemons within virtual box.
+      2. In /etc/hosts alias the name of the host machine as seen on
+         the network.
+   2. VirtualBox Setting
+      1. In Network Settings, Port Forwarding, setup all necessary
+         port forwards.
+   3. Remember to change any necessary environment variables to point
+      at new location
 
-   
+
+
+      

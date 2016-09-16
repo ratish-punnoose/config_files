@@ -172,6 +172,7 @@
     - C-c p f :: Find file in project
     - M-SPC ::  Mark files
     - C-c p p [C-u] C-s :: Search files. with C-u recursive.
+    - C-c p s g :: Keeping cursor on symbol, search through project
 ** Hideshow
    - C-c @ ESC C-s :: show all
    - C-c @ ESC C-h :: hide all
@@ -353,7 +354,11 @@
    - C->/< :: slurp forward/backward
    - C-}/C-{ :: barf forward
    - C-M-f/b :: move forward/backward in sexp
-        
+** Flycheck
+   See if flycheck is enabled. Flycheck supersedes flymake.
+   - C-c ! c :: Check current buffer
+   - C-c ! C :: Clear errors in buffer
+   - C-c ! l :: List errors
 * Org Mode
 ** Visibility
    - <TAB> 		:: Show/hide

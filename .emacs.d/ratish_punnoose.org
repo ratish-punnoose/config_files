@@ -576,7 +576,9 @@ Syntax check
     :defer 2
     :init (global-flycheck-mode)
     :config (setq flycheck-check-syntax-automatically '(mode-enabled save))
-    (setq flycheck-idle-change-delay   5))
+    (setq flycheck-idle-change-delay   5)
+    ;(setq flycheck-global-modes '(python-mode))
+    )
 #+END_SRC
 ** Highlight symbol
 Highlight symbols
@@ -747,8 +749,8 @@ Helm for autocompletes
   (when (require 'helm-config nil 'noerror)
 
 
-1    (global-set-key (kbd "M-x") 'helm-M-x)       ; Even without this, M-x does some helm completeion
 
+    (global-set-key (kbd "M-x") 'helm-M-x)       ; Even without this, M-x does some helm completeion
     (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
           helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
           helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
@@ -760,9 +762,9 @@ Helm for autocompletes
     (global-set-key (kbd "C-x C-f") 'helm-find-files)
     (global-set-key (kbd "C-c h o") 'helm-occur)
     (helm-mode 1)
-    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-    (define-key helm-map (kbd "C-z")  'helm-select-action)
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+    (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
 
     )
 #+END_SRC

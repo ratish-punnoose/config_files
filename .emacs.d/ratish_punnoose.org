@@ -47,17 +47,18 @@ loaded. Disable.
 #+END_SRC
 * Appearance
 ** Font
-Set default font to Consolas.  This is done using 
+Set default font to Consolas.  This is done using
 Options-> Save Options.
 #+begin_src emacs-lisp
     ;;(set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso8859-1")
-  (cond ((eq system-type 'windows-nt)
+  (cond ((or (eq system-type 'windows-nt)
+             (eq system-type 'cygwin))
          (custom-set-faces
           ;; custom-set-faces was added by Custom.
           ;; If you edit it by hand, you could mess it up, so be careful.
           ;; Your init file should contain only one such instance.
           ;; If there is more than one, they won't work right.
-          '(default ((t (:family "Consolas" :foundry "outline" :slant normal 
+          '(default ((t (:family "Consolas" :foundry "outline" :slant normal
                                  :weight normal :height 113 :width normal))))))
         ((eq system-type 'gnu/linux)
          (custom-set-faces
@@ -65,8 +66,8 @@ Options-> Save Options.
           ;; If you edit it by hand, you could mess it up, so be careful.
           ;; Your init file should contain only one such instance.
           ;; If there is more than one, they won't work right.
-          '(default ((t (:family "Inconsolata" :foundry "outline" :slant normal 
-                                 :weight normal :height 113 :width normal)))))))    
+          '(default ((t (:family "Inconsolata" :foundry "outline" :slant normal
+                                 :weight normal :height 113 :width normal)))))))
   (global-font-lock-mode t)
 #+end_src
 
@@ -74,13 +75,13 @@ Options-> Save Options.
 *** Colors
 #+begin_src emacs-lisp
 (setq default-frame-alist
-      '((minibuffer . 1) 
+      '((minibuffer . 1)
          (menu-bar-lines . 1)
          (cursor-color .  "cyan")
          (foreground-color . "grey" )
          (background-color . "black")
          (mouse-color . "yellow" )))
-#+end_src  
+#+end_src
 *** Color themes
 To use a color theme. Use load-library and then color-theme.
 Suitable color themes are aalto-dark, aalto-light,
@@ -124,7 +125,7 @@ color-theme-alice-blue, color-theme-andreas
 ;;    * C-c h hide block
 ;;
 ;; For Emacs 21:
-;; 
+;;
 ;;    * C-c @ ESC C-s show all
 ;;    * C-c @ ESC C-h hide all
 ;;    * C-c @ C-s show block
@@ -134,13 +135,13 @@ color-theme-alice-blue, color-theme-andreas
 ;;http://www.gnu.org/software/emacs/manual/html_node/Hideshow.html#Hideshow
 #+BEGIN_SRC emacs-lisp
   (setq hs-hide-comments-when-hiding-all t)
-  
+
   ;; Add Promela
   ;;(add-to-list 'hs-special-modes-alist '(promela-mode "{" "}" "/[*/]" nil nil))
-  
+
   ;;  Toggle hide/show for a specific block
   (global-set-key (kbd "C-,") 'hs-toggle-hiding)
-  
+
   ;; Global toggle
   (defvar rjp/hs-status nil "Current state of hideshow")
   (defun rjp/toggle-hs-all() "Toggle hideshow all."
@@ -148,7 +149,7 @@ color-theme-alice-blue, color-theme-andreas
     (setq rjp/hs-status (not rjp/hs-status))
     (if rjp/hs-status (hs-hide-all) (hs-show-all)))
   (global-set-key (kbd "C-M-,") 'rjp/toggle-hs-all)
-  
+
   ;; Startup in hs-minor-mode with all hidden
   (add-hook 'prog-mode-hook #'hs-minor-mode)
   (add-hook 'hs-minor-mode-hook #'hs-hide-all)
@@ -161,31 +162,35 @@ color-theme-alice-blue, color-theme-andreas
                :defer 2
                :config
                (indent-guide-global-mode)
-               (setq indent-guide-delay 0.5) 
+               (setq indent-guide-delay 0.5)
                (setq indent-guide-recursive t))
 #+END_SRC
 
 ** Rainbow Delimiters
 #+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters 
+  (use-package rainbow-delimiters
                    :ensure t
                    :defer 2
                    :config
                    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
 
+** Trailing Whitespace
+#+BEGIN_SRC emacs-lisp
+(setq-default show-trailing-whitespace t)
+#+END_SRC
 * Navigation
 Easier keys for switching windows
 
 ** For moving to next/previous window
 #+begin_src emacs-lisp :tangle no
 (defun select-next-window ()
-  "Switch to the next window" 
+  "Switch to the next window"
   (interactive)
   (select-window (next-window)))
 
 (defun select-previous-window ()
-  "Switch to the previous window" 
+  "Switch to the previous window"
   (interactive)
   (select-window (previous-window)))
 
@@ -243,12 +248,12 @@ evaluate this file itself.
 - Speed commands: Use ? at beginning of headlines to see.
 - Code block fontification
 
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (starter-kit-load "org")
 #+end_src
 
 ** Org global configuration and shortcuts
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 ;;(set-time-zone-rule "GMT+8")
 ;;(set-time-zone-rule "PST")
 (setq org-directory "~/org")
@@ -269,12 +274,12 @@ evaluate this file itself.
 (setq  org-refile-targets '((org-agenda-files  :maxlevel . 3)))
 (setq org-default-notes-file (concat org-directory "/jnl.org"))
 (setq org-log-done 'time) ;; Record time of task completion
-(setq org-clock-into-drawer 1) 
+(setq org-clock-into-drawer 1)
 ;; (setq org-log-done 'note) ;; Record time+note of task completion
 
 ;; C-c c     (org-capture) Call the command org-capture
 ;; C-c C-c     (org-capture-finalize)
-;;      Once you have finished entering information into the capture buffer, 
+;;      Once you have finished entering information into the capture buffer,
 ;; C-c C-w (refile)
 ;; C-c C-k abort capture
 ;; C-u C-c c visit target of capture template
@@ -284,7 +289,7 @@ evaluate this file itself.
       '(("t" "Todo" entry (file+headline "~/org/jnl.org" "Todolist")
              "* TODO %?\n  %iAdded: %U")
 	      ("d" "Date" entry (file+datetree+prompt "~/org/jnl.org")
-             "* %?")        
+             "* %?")
         ("j" "Journal" entry (file+datetree "~/org/jnl.org")
              "* %?\nAdded: %U\n  %i")
 	      ("n" "NowAction" entry (file+datetree "~/org/jnl.org")
@@ -305,24 +310,24 @@ Also log into drawer
 Note in init.el by self describes that it is not used by beamer
 anymore.  Don't remember details.
 #+begin_src emacs-lisp :tangle no
-  (setq org-emphasis-alist 
-        (quote (("*" bold "<b>" "</b>") 
+  (setq org-emphasis-alist
+        (quote (("*" bold "<b>" "</b>")
                 ("/" italic "<i>" "</i>")
                 ("_" underline "<span style=\"text-decoration:underline;\">" "</span>")
                 ("=" org-code "<code>" "</code>" verbatim)
                 ("~" org-verbatim "<code>" "</code>" verbatim)
                 ("+" (:strike-through t) "<del>" "</del>")
                 ("@" org-warning "<b>" "</b>")))
-        org-export-latex-emphasis-alist 
+        org-export-latex-emphasis-alist
         (quote (("*" "\\textbf{%s}" nil)
-                ("/" "\\emph{%s}" nil) 
+                ("/" "\\emph{%s}" nil)
                 ("_" "\\underline{%s}" nil)
                 ("+" "\\texttt{%s}" nil)
                 ("=" "\\verb=%s=" nil)
                 ("~" "\\verb~%s~" t)
                 ("@" "\\alert{%s}" nil)))
         )
-  
+
 #+end_src
 *** Set code export to minted
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -334,7 +339,7 @@ anymore.  Don't remember details.
     (setq org-latex-minted-options
              '(("frame" "lines")
                ("fontsize" "\\scriptsize")
-               ("linenos" ""))) 
+               ("linenos" "")))
     ;; Add language alias
     (add-to-list 'org-latex-minted-langs '(verilog "v"))      )
 #+END_SRC
@@ -353,19 +358,19 @@ My customization to allow folding and unfolding
             (save-excursion (set-buffer buf) (apply command cmdargs)))
       )
     )
-    
+
   (defun f-ediff-org-unfold-tree-element ()
     "Unfold tree at diff location"
-    (f-ediff-org-showhide ediff-buffer-A 'org-reveal)  
-    (f-ediff-org-showhide ediff-buffer-B 'org-reveal)  
-    (f-ediff-org-showhide ediff-buffer-C 'org-reveal)  
+    (f-ediff-org-showhide ediff-buffer-A 'org-reveal)
+    (f-ediff-org-showhide ediff-buffer-B 'org-reveal)
+    (f-ediff-org-showhide ediff-buffer-C 'org-reveal)
     )
   ;;
   (defun f-ediff-org-fold-tree ()
     "Fold tree back to top level"
-    (f-ediff-org-showhide ediff-buffer-A 'hide-sublevels 1)  
-    (f-ediff-org-showhide ediff-buffer-B 'hide-sublevels 1)  
-    (f-ediff-org-showhide ediff-buffer-C 'hide-sublevels 1)  
+    (f-ediff-org-showhide ediff-buffer-A 'hide-sublevels 1)
+    (f-ediff-org-showhide ediff-buffer-B 'hide-sublevels 1)
+    (f-ediff-org-showhide ediff-buffer-C 'hide-sublevels 1)
     )
 #+END_SRC
 
@@ -385,29 +390,29 @@ format.
       (format "\n\\%s{%s}\n" name (rjp/chomp contents) )
     )
     ;;
-    (custom-set-variables  
-     '(org-latex-format-drawer-function 
-       (quote rjp/org-latex-drawer-format))       ) 
+    (custom-set-variables
+     '(org-latex-format-drawer-function
+       (quote rjp/org-latex-drawer-format))       )
     ;;
 #+END_SRC
 ** Org-present
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'org-mode-hook 
-              '(lambda() 
+  (add-hook 'org-mode-hook
+              '(lambda()
                  (autoload 'org-present "org-present" nil t)))
   (add-hook 'org-present-mode-hook
              (lambda ()
                (org-present-big)
                (org-display-inline-images)))
-  
+
   (add-hook 'org-present-mode-quit-hook
              (lambda ()
                (org-present-small)
                (org-remove-inline-images)))
 #+END_SRC
 ** List of targets
-Can use org-all-targets *Automatically added by starter kit. 
-- Use org-in-regexp 
+Can use org-all-targets *Automatically added by starter kit.
+- Use org-in-regexp
 - org-bracket-link-regexp
 - Option for using prefix C-u - Tab to send a prefix arg to the
   following function since in org-cycle,
@@ -418,14 +423,14 @@ Can use org-all-targets *Automatically added by starter kit.
   files.  If the included files include other files, this will recurse
     over all those files."
     (interactive)
-    (save-excursion 
-      (let* ((inc-re "^#\\+INCLUDE:[ \t]+\"\\([^\t\n\r\"]*\\)\"[ \t]*.*$") 
+    (save-excursion
+      (let* ((inc-re "^#\\+INCLUDE:[ \t]+\"\\([^\t\n\r\"]*\\)\"[ \t]*.*$")
              (thisfile (buffer-file-name))
              (included-file-list (list thisfile)  )
              (targets (list nil))
              ;; A Function that can retrieve included files and targets
              ;; given a filename
-             (f (lambda(file) 
+             (f (lambda(file)
                   (let ((tmplst nil);; temporary include list
                         (buf (if (file-readable-p file)
                                  (find-file-noselect file)))
@@ -445,40 +450,40 @@ Can use org-all-targets *Automatically added by starter kit.
                                           (match-string 1))))
 
                           ;; iterate over include list
-                          (while tmplst 
-                            (setq incfile (car tmplst)) 
+                          (while tmplst
+                            (setq incfile (car tmplst))
                             ;; if not already in list then ...
                             (if (not (member incfile '
                                              included-file-list))
                                 (progn
                                   ;; Add to list and recurse
-                                  (add-to-list 'included-file-list 
+                                  (add-to-list 'included-file-list
                                                incfile)
                                   (setq tmplst (cdr tmplst))
                                   (funcall f incfile)))) ) ))) ))
 
         ;; Body of let statement
-        (funcall f thisfile)    
+        (funcall f thisfile)
         ;; return value is targets
         (print (cdr targets))
         )))
 
 ;; Add a hook to bring up a tab list when TAB is hit after [[
-  (add-hook 'org-tab-before-tab-emulation-hook 
-              (lambda (&rest args)  
+  (add-hook 'org-tab-before-tab-emulation-hook
+              (lambda (&rest args)
                 ;; If at the right point (which is following two left square brackets)
                 "list targets in org file and complete"
                 (interactive "P")
-                (if (string= 
-                     (buffer-substring-no-properties 
-                      (point) (- (point) 2)  ) 
+                (if (string=
+                     (buffer-substring-no-properties
+                      (point) (- (point) 2)  )
                      "[[")
                     ;; Right place. Check if we are called with an argument
-                    (insert (ido-completing-read 
-                             "Target:" 
+                    (insert (ido-completing-read
+                             "Target:"
                              (if (equal args '(-))
                                  (rjp/org-all-included-targets)
-                               (org-all-targets) ))   
+                               (org-all-targets) ))
                             "]]")
                     (if (equal args '(-))
                         (rjp/org-all-i)
@@ -494,25 +499,25 @@ not already in the Windows path.
 #+begin_src emacs-lisp
   (let* ((cygwin-root "c:/cygwin64")
          (cygwin-bin (concat cygwin-root "/bin")))
-    (when (and (eq 'windows-nt system-type) 
+    (when (and (eq 'windows-nt system-type)
                (file-readable-p cygwin-root))
-    
+
       (setq exec-path (cons cygwin-bin exec-path))
       (setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
-    
+
       ;; By default use the Windows HOME.
       ;; Otherwise, uncomment below to set a HOME
       ;;      (setenv "HOME" (concat cygwin-root "/home/eric"))
-    
+
       ;; NT-emacs assumes a Windows shell. Change to baash.
       (setq shell-file-name "bash")
-      (setenv "SHELL" shell-file-name) 
-      (setq explicit-shell-file-name shell-file-name) 
-    
+      (setenv "SHELL" shell-file-name)
+      (setq explicit-shell-file-name shell-file-name)
+
       ;; This removes unsightly ^M characters that would otherwise
       ;; appear in the output of java applications.
       (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)))
-#+end_src 
+#+end_src
 
 ** Cygwin paths
 #+begin_src emacs-lisp
@@ -534,12 +539,22 @@ On windows emacs uses dos line feeds. Fix this.
 (setq default-buffer-file-coding-system 'utf-8-unix)
 #+END_SRC
 
+** Changing the executable-find to find files without extension
+#+BEGIN_SRC emacs-lisp
+  (when (eq 'windows-nt system-type)
+    (defun executable-find (command)
+      "Search for COMMAND in `exec-path' and return the absolute file name.
+  Return nil if COMMAND is not found anywhere in `exec-path'."
+      ;; Use 1 rather than file-executable-p to better match the behavior of
+      ;; call-process.
+      (locate-file command exec-path exec-suffixes :executable)))
+#+END_SRC
 ** Slow startup time on disconnected machine
 This is due to emacs not being able to obtain the hostname easily. To
 solve this find the hosts file on Windows. For Windows 7 it is at
 "c:\Windows\system32\drivers\etc".  Edit the hosts file and uncomment/add
 the two lines below.
-#+BEGIN_SRC 
+#+BEGIN_SRC
 127.0.0.1  localhost loopback
 ::1        localhost
 #+END_SRC
@@ -553,11 +568,21 @@ the two lines below.
 (add-hook 'prog-mode-hook #'run-starter-kit-coding-hook)
 ;;(add-hook 'prog-mode-hook #'auto-fill-mode)
 #+END_SRC
+** Flycheck
+Syntax check
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :defer 2
+    :init (global-flycheck-mode)
+    :config (setq flycheck-check-syntax-automatically '(mode-enabled save))
+    (setq flycheck-idle-change-delay   5))
+#+END_SRC
 ** Highlight symbol
 Highlight symbols
 Doesn't currently work properly with hideshow
 #+BEGIN_SRC emacs-lisp :tangle no
-  (use-package 'highlight-symbol
+  (use-package highlight-symbol
     :defer 2
     :config
     (add-hook 'prog-mode-hook (lambda () (highlight-symbol-mode)))
@@ -613,7 +638,7 @@ comment-or-uncomment-region in all progmodes
 #+END_SRC
 ** VHDL
 #+BEGIN_SRC emacs-lisp
-  (custom-set-variables 
+  (custom-set-variables
    '(vhdl-hide-all-init t)
    '(vhdl-hideshow-menu t)
    '(vhdl-index-menu t)
@@ -654,9 +679,9 @@ comment-or-uncomment-region in all progmodes
 #+BEGIN_SRC emacs-lisp
 (starter-kit-load "latex")
 #+END_SRC
-*** Reftex 
+*** Reftex
 This section is no longer required.  Done by starter kit.
-Add reftex mode  
+Add reftex mode
 #+BEGIN_SRC emacs-lisp :tangle no
 (add-hook 'latex-mode-hook 'reftex-mode)
 #+END_SRC
@@ -671,21 +696,59 @@ keystroke to start it.
 #+BEGIN_SRC emacs-lisp
 (define-key global-map "\C-xg" 'magit-status)
 #+END_SRC
+Remove VC for git
+#+BEGIN_SRC emacs-lisp
+(setq vc-handled-backends (delq 'Git vc-handled-backends))
+#+END_SRC
 * Helm
 Helm for autocompletes
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package helm
+    :ensure t
+    :diminish helm-mode
+    :init
+    ;; http://tuhdo.github.io/helm-intro.html
+    ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+    ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+    ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+    (global-set-key (kbd "C-c h") 'helm-command-prefix)
+    (global-unset-key (kbd "C-x c"))
+    (require 'helm-config)
+    :bind
+    (("C-c h"  . helm-command-prefix)
+     ("M-x"     . helm-M-x)
+     ("M-y"     . helm-show-kill-ring)
+     ("C-x b"   . helm-buffers-list)
+     ("C-x C-f" . helm-find-files)
+     ("C-c h o" . helm-occur)
+     :map helm-map
+     ([tab] . helm-execute-persistent-action)  ; rebind tab to run persistent action
+     ("C-i"  . helm-execute-persistent-action) ; make TAB works in terminal
+     ("C-z"  . helm-select-action))            ; list actions using C-z
+    :config
+    (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+          helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
+          helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+          helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+          helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+          helm-ff-file-name-history-use-recentf t)
+    (helm-mode 1) )
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; http://tuhdo.github.io/helm-intro.html
   ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
   ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
   ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
   (global-unset-key (kbd "C-x c"))
 
   (when (require 'helm-config nil 'noerror)
 
-      
-    (global-set-key (kbd "M-x") 'helm-M-x)       ; Even without this, M-x does some helm completeion
-    
+
+1    (global-set-key (kbd "M-x") 'helm-M-x)       ; Even without this, M-x does some helm completeion
+
     (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
           helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
           helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
@@ -697,15 +760,18 @@ Helm for autocompletes
     (global-set-key (kbd "C-x C-f") 'helm-find-files)
     (global-set-key (kbd "C-c h o") 'helm-occur)
     (helm-mode 1)
-    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-    (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-    
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+    (define-key helm-map (kbd "C-z")  'helm-select-action)
+
     )
 #+END_SRC
+
 * Projectile and Helm Projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (when (require 'helm-projectile nil 'noerror)
+  (use-package helm-projectile
+    :ensure t
+    :config
     (projectile-global-mode)
     (setq projectile-completion-system 'helm)
     (helm-projectile-on)
@@ -717,10 +783,3 @@ Helm for autocompletes
 #+BEGIN_SRC emacs-lisp
 (setq initial-scratch-message "dummy message")
 #+END_SRC
-
-
-
-
-
-
-

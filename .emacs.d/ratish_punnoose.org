@@ -1,7 +1,7 @@
 #+TITLE: Ratish Punnoose's Emacs configuration
 #+STARTUP: indent
 #+STARTUP: hidestars
-
+#+PROPERTY: header-args :tangle yes
 * Introduction
   Inspired by Sasha Chua's org mode base emacs configuration using
   org-babel. This is called from init.el. This is stored in a git
@@ -178,6 +178,7 @@ color-theme-alice-blue, color-theme-andreas
 ** Trailing Whitespace
 #+BEGIN_SRC emacs-lisp
 (setq-default show-trailing-whitespace t)
+(add-hook 'before-save-hook 'whitespace-cleanup)
 #+END_SRC
 * Navigation
 Easier keys for switching windows
@@ -288,11 +289,11 @@ evaluate this file itself.
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/org/jnl.org" "Todolist")
              "* TODO %?\n  %iAdded: %U")
-	      ("d" "Date" entry (file+datetree+prompt "~/org/jnl.org")
+              ("d" "Date" entry (file+datetree+prompt "~/org/jnl.org")
              "* %?")
         ("j" "Journal" entry (file+datetree "~/org/jnl.org")
              "* %?\nAdded: %U\n  %i")
-	      ("n" "NowAction" entry (file+datetree "~/org/jnl.org")
+              ("n" "NowAction" entry (file+datetree "~/org/jnl.org")
              "* %?" :clock-in t :clock-resume t)))
 
 ;; To define special keys to capture to a particular template without going through the interactive template selection, you can create your key binding like this:
@@ -332,7 +333,7 @@ anymore.  Don't remember details.
 *** Set code export to minted
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ox-latex
-    :defer 5
+    :defer 10
     :config
     (setq org-latex-listings 'minted)
     (add-to-list 'org-latex-packages-alist '("" "minted"))
@@ -573,7 +574,7 @@ Syntax check
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure t
-    :defer 2
+    :defer 5
     :init (global-flycheck-mode)
     :config (setq flycheck-check-syntax-automatically '(mode-enabled save))
     (setq flycheck-idle-change-delay   5)
@@ -655,7 +656,7 @@ comment-or-uncomment-region in all progmodes
 (add-hook 'objc-mode-hook '(lambda () (c-set-style "linux")))
 ;; ;;;;;;;;;;;; C, C++ customization
 (setq ckeywords '("FILE" "\\sw+_t"  "u_\\sw*"
-		  "_PRETTY_"))
+                  "_PRETTY_"))
 (setq c-font-lock-extra-types ckeywords)
 (setq c++-font-lock-extra-types ckeywords)
 #+END_SRC
@@ -702,11 +703,12 @@ Remove VC for git
 #+BEGIN_SRC emacs-lisp
 (setq vc-handled-backends (delq 'Git vc-handled-backends))
 #+END_SRC
-* Helm
-Helm for autocompletes
+* Helm and Projectile
+** Helm for autocompletes
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm
     :ensure t
+    :defer 2
     :diminish helm-mode
     :init
     ;; http://tuhdo.github.io/helm-intro.html
@@ -768,11 +770,11 @@ Helm for autocompletes
 
     )
 #+END_SRC
-
-* Projectile and Helm Projectile
+** Projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-projectile
     :ensure t
+    :defer 3
     :config
     (projectile-global-mode)
     (setq projectile-completion-system 'helm)
@@ -780,6 +782,13 @@ Helm for autocompletes
     ;; On windows native indexing is slow
     ;;(setq projectile-indexing-method 'alien)
     )
+#+END_SRC
+** Helm-AG
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-ag
+  :ensure t
+  :defer 4
+  )
 #+END_SRC
 * Testing
 #+BEGIN_SRC emacs-lisp

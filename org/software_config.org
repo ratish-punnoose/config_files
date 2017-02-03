@@ -5,9 +5,9 @@
     (http://sourceforge.net/projects/ezwinports)
     - Check value of variable dynamic-library-alist . This contains
       names of dlls.
-    - 
+    -
 ** Selection
-   - C-x h 		:: Select all
+   - C-x h              :: Select all
    - C-x w ::   Copy Word (RJP Custom)
 ** Registers
    - C-x r  :: Common prefix for all register operations
@@ -33,8 +33,8 @@
     - C-x C-k x R :: Save macro toregister R
 
 ** Rectangle
-   - C-x r k 		:: Kill rectangle
-   - C-x r y 		:: Yank rectangle
+   - C-x r k            :: Kill rectangle
+   - C-x r y            :: Yank rectangle
    - C-x r t            :: Insert rectangle.  This is a superb command. To insert
         the same text on multiple rows, just select the beginning and
         end, C-x r t and then type in the characters to insert on
@@ -55,8 +55,8 @@
    - M-d :: Delete word
    - M-Del or M-Bkspc :: Delete word backwards
 ** Navigation
-   - C-M n 		:: Jump to end of matching paren
-   - C-M p 		:: Jump to begin of matching paren
+   - C-M n              :: Jump to end of matching paren
+   - C-M p              :: Jump to begin of matching paren
    - C-t :: Tags search.  Use down arrow to pick word at point.
    - Alt-, :: Next tag
    - Alt-. :: Find tag under cursor
@@ -119,7 +119,7 @@
     - ~/ :: goto home directory
     - C-f :: go back temporarily to normal find file
 ** Helm
-   Using Helm:  
+   Using Helm:
    1. Start up helm-mini using C-x b.  This will give a list
       of buffers.
    2. Select buffers.  Using the C-spc
@@ -156,13 +156,28 @@
           directories, can jump there.
      - C-c h :: In find-files session, use this to show visited files
           directories. Can jump from there.
+     In this mode, the files can be narrowed by fuzzy matching.  At
+     any time with the list of helm selections. use C-s to search
+     through the file live.  A recursive file can also be made.
+     Here is a cool sequence of actions
+     1. helm find files.
+     2. narrow down to certain files
+     3. Do C-s to search.
+     4. Do C-z and select save to grep buffer.
+     5. In grep buffer, use C-Up, C-Dn to move up/down the grep
+        buffer, while each item is shown in the next window.
+     6. Use C-o to edit the grep item in the other window.
+
+
 **** Help regexp
      - <prefix> r :: regexp interactive
 **** Occur
      - <prefix> o :: helm occur  (Custom)
 **** Helm Mark rings
+     Mark buffers by C-SPC C-SPC.  This starts a mark and ends a
+     mark.  But by using helm mark rings, you can get back to this bookmark.
 **** registers
-     - <prefix> C-x r i :: View register (helm-register) 
+     - <prefix> C-x r i :: View register (helm-register)
 
 *** Custom config
     - TAB :: Action Menu for  Persistent action
@@ -193,7 +208,7 @@
 *** Stuttering
     Double striking of keys inserts cumbersome VHDL syntax elements.
     Enable by enabling 'vhdl-stutter-mode
-    - ;;  ::  " : " 
+    - ;;  ::  " : "
     - ;;; ::  " := "
     - ..  ::  "  => "
     - ==  ::  " = = "
@@ -227,7 +242,7 @@
     - C-c C-f C-i :: block withs ame indent
     - C-c C-f M-f :: entire region
 *** Code beautification
-    vhdl-beautify-buffer. Can be run non-interactively as 
+    vhdl-beautify-buffer. Can be run non-interactively as
     emacs -batch -I ~/.emacs filename.vhd -f vhdl-beautify-buffer
 *** Port translation
     Generic and Port clauses can be copied and then pasted as:
@@ -282,7 +297,7 @@
 
 *** Bibtex
     - C-c C-e C-a :: Journal
-    - C-c C-e :: 
+    - C-c C-e ::
     - C-c C-e ::
 ** Auctex
    - C-c _ :: Prompt for master file
@@ -293,7 +308,7 @@
    - C-c ; :: toggle commenting of region
 ** Reftex
    - C-c [ :: Insert reference
-   
+
 ** UTF8 symbols
    Can get name of a character using describe-char
    In general can be inserted using insert-char SYMBOL_NAME
@@ -338,7 +353,7 @@
    - k :: Drop stash
 *** Branch
    - b/B :: Switch to branch / Create and switch
-          
+
 ** Buffer  read status
    - C-x C-q :: toggle read status
 ** Diff
@@ -346,7 +361,7 @@
 ** Line number
    - linum-mode :: Line number mode
 ** Paredit
-   These are commands to use with paredit.  
+   These are commands to use with paredit.
    Also check smartparens which may be better.
    Check also "http://danmidwood.com/content/2014/11/21/animated-paredit.html"
    - M-( ::  Wraps the following sexpression with parentheses
@@ -361,109 +376,109 @@
    - C-c ! l :: List errors
 * Org Mode
 ** Visibility
-   - <TAB> 		:: Show/hide
+   - <TAB>              :: Show/hide
    - Shift + <TAB>      :: Global show/hide. With argument, up to
         level n.
-   - C-u <TAB> 		:: Global cycle Overview->Contents->Show All->Overview
-   - C-c C-x v 		::  Copy visible text:  (org-copy-visible)
-   - C-c <TAB> 		:: Expose children of current subtree.  With argument,
+   - C-u <TAB>          :: Global cycle Overview->Contents->Show All->Overview
+   - C-c C-x v          ::  Copy visible text:  (org-copy-visible)
+   - C-c <TAB>          :: Expose children of current subtree.  With argument,
                   to level n
 
 ** Motion
    - C-c C-n		:: Next visible heading
-   - C-c C-p		:: Previous visible heading 
-   - C-c C-f		:: Next heading same level 
+   - C-c C-p		:: Previous visible heading
+   - C-c C-f		:: Next heading same level
    - C-c C-b		:: Previous heading same level
    - C-c C-j		:: Jump to any location (org-goto)
- 
+
 ** Editing
    - M+Enter		:: Insert next heading at same level
    - C+Enter		:: Insert new heading after body of current
    - M + <L/R/U/D>	:: Promote/Demote/Up/Down current heading
-   - M+S+<L/R/U/D>	:: Move subtree (Promote/Demote/Up/Down) 
+   - M+S+<L/R/U/D>	:: Move subtree (Promote/Demote/Up/Down)
    - C-c C-x [C-w/M-W/C-y]	:: Kill/Copy/Yank Subtree
    - C-c *		:: Turn normal line or list into heading
    - C-c ; ::    Comment Heading
    - C-c - ::  Turn heading into normal list
-   - Lists: 
+   - Lists:
      - Unordered -, +, *
      - Ordered 1., 1).
        To start with a diferent value, start text with [@20]
      - Description, definition::  Extended description
 
 ** Todo
-   - C-c C-t 		:: Change Todo state
-   - Shift+Left/Right 	:: Change Todo state
+   - C-c C-t            :: Change Todo state
+   - Shift+Left/Right   :: Change Todo state
    - C-c C-w  :: Refile
 
 ** Drawers
    - C-c C-x d		:: Insert active region in drawer
 
 ** Blocks
-   Org mode uses begin..end blocks 
+   Org mode uses begin..end blocks
 
 *** Insertion using quick templates
     Type '<' followed by a template selector and <Tab>
     Template selector can be:
-    - s                 :: #+BEGIN_SRC ... #+END_SRC 
+    - s                 :: #+BEGIN_SRC ... #+END_SRC
     - e			:: #+BEGIN_EXAMPLE ... #+END_EXAMPLE
-    - q			:: #+BEGIN_QUOTE ... #+END_QUOTE 
-    - v			:: #+BEGIN_VERSE ... #+END_VERSE 
-    - c			:: #+BEGIN_CENTER ... #+END_CENTER 
-    - l			:: #+BEGIN_LaTeX ... #+END_LaTeX 
-    - L			:: #+LaTeX: 
-    - h			:: #+BEGIN_HTML ... #+END_HTML 
-    - H			:: #+HTML: 
-    - a			:: #+BEGIN_ASCII ... #+END_ASCII 
-    - A			:: #+ASCII: 
-    - i			:: #+INDEX: line 
-    - I			:: #+INCLUDE: line 
+    - q			:: #+BEGIN_QUOTE ... #+END_QUOTE
+    - v			:: #+BEGIN_VERSE ... #+END_VERSE
+    - c			:: #+BEGIN_CENTER ... #+END_CENTER
+    - l			:: #+BEGIN_LaTeX ... #+END_LaTeX
+    - L			:: #+LaTeX:
+    - h			:: #+BEGIN_HTML ... #+END_HTML
+    - H			:: #+HTML:
+    - a			:: #+BEGIN_ASCII ... #+END_ASCII
+    - A			:: #+ASCII:
+    - i			:: #+INDEX: line
+    - I			:: #+INCLUDE: line
 
 
 *** Dynamic Blocks
     Specially marked regions that are updated by user-written function
     #+BEGIN: block-update-time: format "on %H:%M"
     #+END:
-    - C-c C-x C-u 	:: Update dynamic block at point
-    - C-u C-c C-x C-u 	:: Update all dynamic blocks
+    - C-c C-x C-u       :: Update dynamic block at point
+    - C-u C-c C-x C-u   :: Update all dynamic blocks
 
 
 ** Clocking
    C-c C-x C-j :: Jump to task being clocked.
 ** Tables
-*** Creation and formatting   
-    - Line with | 	:: Starts table if | is first non-whitespace character
-    - Line with |- 	:: Horizontal separator
-    - <TAB> 		:: Moves to the next field, realigns
-    - S + <TAB> 	:: Move to previous field, realign
-    - Enter 		:: Moves to next row, realigns
-    - C-c C-c 		:: Realign the table
-    - <Number> 		:: If a field contains <N>, N is width of col
+*** Creation and formatting
+    - Line with |       :: Starts table if | is first non-whitespace character
+    - Line with |-      :: Horizontal separator
+    - <TAB>             :: Moves to the next field, realigns
+    - S + <TAB>         :: Move to previous field, realign
+    - Enter             :: Moves to next row, realigns
+    - C-c C-c           :: Realign the table
+    - <Number>          :: If a field contains <N>, N is width of col
 *** Editing
-    - M-<L/R/U/D> 	:: Move col or row left,right,up,down
-    - M-S-<L/U> 	:: Kill current col/row
-    - M-S-<R/D> 	:: Insert new col/row
-    - C-c - 		:: Insert horiz line below cur row
-    - C-c Enter 	:: Insert horiz line below cur row and move cursor down
-    - C-c ` 		:: Edit partially hidden cell
+    - M-<L/R/U/D>       :: Move col or row left,right,up,down
+    - M-S-<L/U>         :: Kill current col/row
+    - M-S-<R/D>         :: Insert new col/row
+    - C-c -             :: Insert horiz line below cur row
+    - C-c Enter         :: Insert horiz line below cur row and move cursor down
+    - C-c `             :: Edit partially hidden cell
 *** Copy/Paste
     - C-c C-x [M-w/C-w/C-y] :: Copy/Kill/Yank rectangular region of table
 ** Links
    - "[[link][desc]"	:: Create link
-   - C-c C-l 		:: Edit Link
-   - "#local" 		:: Local link type.  Without #, does a search
+   - C-c C-l            :: Edit Link
+   - "#local"           :: Local link type.  Without #, does a search
         for local
-   - C-c C-o  		:: Follow link
-   - "<<link_target>>" 	:: This is a link target
+   - C-c C-o            :: Follow link
+   - "<<link_target>>"  :: This is a link target
 *** Custom links target
     - [[+TAB :: Bring up targets in local file
     - [[+ C-u - TAB :: Bring up targets in all include files
-   
+
 ** Tags							:mytag:mytag2:mytag3:
    - ":tag1:tag2:"	:: Tags at the end of headlines
-   - C-c C-q 		:: Insert tag from anywhere in the section
-   - C-c C-c 		:: Insert tag when cursor on headline
-   - C-c \ 		:: Create a sparse tree matching tags
+   - C-c C-q            :: Insert tag from anywhere in the section
+   - C-c C-c            :: Insert tag when cursor on headline
+   - C-c \              :: Create a sparse tree matching tags
    - C-c C-c, S+Tab     :: Exit sparse tree, then revert to normal tree.
 *** Matching searches on tags
     [[http://orgmode.org/manual/Matching-tags-and-properties.html#Matching-tags-and-properties][Orgmode tag searching]]
@@ -476,24 +491,24 @@
    :Artist: Some random artist
    :Value: 1
    :END:
-   - ":prop1:" 		:: Properties are like tags but with
+   - ":prop1:"          :: Properties are like tags but with
         value. They are inserted into a special drawer.
-   - ":prop2:" 		:: Drawer is called "PROPERTIES". Each is on a
+   - ":prop2:"          :: Drawer is called "PROPERTIES". Each is on a
         single line.
-   - ":prop3_ALL:" 	:: Allowed values for a property
-   - C-c C-x p 		:: Set property
-   - C-c C-c 		:: Executes property commands
-   - S-<L/R> 		:: Previous/Next allowed property
-   - C-c C-c c 		:: Compute property at point
+   - ":prop3_ALL:"      :: Allowed values for a property
+   - C-c C-x p          :: Set property
+   - C-c C-c            :: Executes property commands
+   - S-<L/R>            :: Previous/Next allowed property
+   - C-c C-c c          :: Compute property at point
 *** Columns
-    - C-c C-x C-c 	:: Turn on column mode
-    - q 		:: Exit column view
-    - C-c C-x i 	:: Insert a dynamic block capturing column view
-    - C-c C-c 		:: Update dynamic block
+    - C-c C-x C-c       :: Turn on column mode
+    - q                 :: Exit column view
+    - C-c C-x i         :: Insert a dynamic block capturing column view
+    - C-c C-c           :: Update dynamic block
 
 ** Beamer
    - C-c C-e t		:: Insert default org export template
-   - C-c C-b 		:: Specify type of block
+   - C-c C-b            :: Specify type of block
 
 
 ** Time Log
@@ -503,11 +518,11 @@
     ;; org-entry-properties with time argument.
     (org-entry-properties nil 'special "CLOCK") ;; This provides all time tags.
     ;; time tags are retrieved as an alist.
-    ;;  however time ranges outside of clock only 
+    ;;  however time ranges outside of clock only
     ;; map alist to a date or to a date range.
     ;; consolidate dates, and date ranges.
     ;; Date tree with link org-make-link-string
-    ;; 
+    ;;
     ;; org-entry-beginning-position
     ;; org-entry-end-position
     ;; org-scanner-tags
@@ -529,20 +544,20 @@
     (forward-line 1)
     (narrow-to-region (point) (point))
     )
-  
+
   (defun org-heading-date-info ()
     ;;
     ;; Only return relevant headlines
     ;; Returns either nil or a list
-    (let ((t_arr (make-vector 4 nil))  
+    (let ((t_arr (make-vector 4 nil))
           (tstring ["TIMESTAMP" "DEADLINE" "SCHEDULED" "CLOCK"]))
-      (dolist (entry ;; each entry in 
+      (dolist (entry ;; each entry in
                 (org-entry-properties nil 'special "CLOCK") ;; list of timetags
                 t_arr) ;; temporary var
         (let* ((propname (car entry))
                (pos (position propname tstring :test 'equal)))
-          (if pos  
-              (aset t_arr pos (append (elt t_arr pos) 
+          (if pos
+              (aset t_arr pos (append (elt t_arr pos)
                                       (list (cdr entry))   ))
             )))
        ;; If any of the timestamps are present, return the headline and timestamps
@@ -551,14 +566,14 @@
            (cons (nth 4 (org-heading-components)) (copy-sequence t_arr) )
          nil)
        ))
-  
-    
+
+
   (defun org-test-datetree-insert(hding_daylist)
     (let* ((text (car hding_daylist))
            (days (cdr hding_daylist)))
-  
-      (mapc (lambda(day) 
-              (org-datetree-find-date-create 
+
+      (mapc (lambda(day)
+              (org-datetree-find-date-create
                (org-date-to-gregorian day) t)
               ;;(outline-next-heading)
               ;;(org-insert-item)
@@ -566,7 +581,7 @@
               (org-agenda-insert-diary-make-new-entry text)
               )
             days)) )
-  
+
   (defun org-heading-date-format (heading_info)
     ;;  heading_info is a cons
     ;;  car: text of heading
@@ -581,25 +596,25 @@
       ;; keep unique dates.
       (setq daylist
             (delq nil (delete-dups
-                       (apply 'append 
-                              (mapcar 
-                               (lambda (tstr_list) 
-                                 (if tstr_list  
-                                     (mapcar 
-                                        (lambda (tstr) 
-                                          (org-time-string-to-absolute tstr)) 
-                                      tstr_list)))  
+                       (apply 'append
+                              (mapcar
+                               (lambda (tstr_list)
+                                 (if tstr_list
+                                     (mapcar
+                                        (lambda (tstr)
+                                          (org-time-string-to-absolute tstr))
+                                      tstr_list)))
                                ts)))))
       (cons heading  daylist)))
-    
-  
+
+
   (defun org-dblock-write:myblock (params)
       "Get dates/time/clock and create a datetree"
       (let* ( (mappedvals (org-map-entries 'org-heading-date-info))
-              (heading_info (remove nil mappedvals)) 
+              (heading_info (remove nil mappedvals))
               (hding_daylists (mapcar 'org-heading-date-format  heading_info))    )
-  
-      
+
+
         (print "printing hding_daylists")
         (print hding_daylists)
         ;; Parse date strings
@@ -607,7 +622,7 @@
         (save-restriction
           (org-narrow-to-within-dblock)
           (mapc 'org-test-datetree-insert hding_daylists)
-  
+
           ;;(org-test-datetree-insert "text1")
           ;;(org-test-datetree-insert "text2")
           ;;(org-test-datetree-insert "text3")
@@ -624,11 +639,11 @@
       )
 #+END_SRC
 #+BEGIN: myblock
-   
+
 * Windows Shortcuts
   - Win + Tab		:: Aero Flip
   - Ctrl + Win + Tab	:: Aero Flip Hold.  Can release Ctrl+Win and
-       can flip by just using tab. 
+       can flip by just using tab.
   - Win + R		:: Run
   - Win + D		:: Minimize everything (show desktop)
   - Win + Pause/Break	:: Open CtrlPanel->System
@@ -637,23 +652,23 @@
   - Win + Q		:: Communicator
   - Win + Home		:: Clear all but the active window
   - Win+Space		:: All windows become transparent so you can
-       see through to the desktop 
+       see through to the desktop
   - Win+Up arrow	:: Maximize the active window
   - Win+Down arrow	:: Minimize the window/Restore the window if it's maximized
   - Win+<arrow>		:: Dock the window to each side of the monitor
-  - Win+S+<arrow> 	:: Dock with dual monitors
+  - Win+S+<arrow>       :: Dock with dual monitors
   - Win+T		:: Focus and scroll through items on the taskbar.
   - Win+P		:: Adjust presentation settings for your display
   - Win+(+/-)		:: Zoom in/out
   - S+Click taskbar item:: Open a new instance of that application
-  - Win+ (1-9) 		:: application pinned to the taskbar in that position
-  - S+Win+ (1-9) 	:: New instance of the application pinned to the taskbar
+  - Win+ (1-9)          :: application pinned to the taskbar in that position
+  - S+Win+ (1-9)        :: New instance of the application pinned to the taskbar
   - Ctrl+Win+ ( 1-9)	:: Cycles through open windows for the application
   - Alt+Win+(1-9)	:: Opens the Jump List for the application
-       pinned to the taskbar. 
+       pinned to the taskbar.
   - Win+T		:: Focus and scroll through items on the taskbar.
-  - Win+B 		:: Focuses the System Tray icons
-  - Ctrl+S+Esc 		:: Task Manager
+  - Win+B               :: Focuses the System Tray icons
+  - Ctrl+S+Esc          :: Task Manager
 
 * MS Word Outline mode
   - Alt+Shift+[L/R]Arrow     :: Promote/Demote paragraph
@@ -665,35 +680,35 @@
 
 * Outlook
   - Ctrl+Shift+I	:: Inbox
-  - Alt+S 		:: Send
-  - Ctrl+R 		:: Reply
-  - Ctrl+Shift+R 	:: Reply All
-  - Ctrl+F 		:: Forward
-  - Ctrl+Shift+V 	:: Move to Folder
-  - Ctrl+N 		:: New Message
-  - Ctrl+O 		:: Open message
-  - Ctrl + ./, 		:: Next/ Prev Message
-  - Ctrl+1 		:: Go to mail
-  - Ctrl + 2 		:: Go to calendar
-  - Ctrl + 6 		:: Folder List
-  - Ctrl + Y 		:: Go to different folder
-  - Alt+J 		:: Move to Subject field
+  - Alt+S               :: Send
+  - Ctrl+R              :: Reply
+  - Ctrl+Shift+R        :: Reply All
+  - Ctrl+F              :: Forward
+  - Ctrl+Shift+V        :: Move to Folder
+  - Ctrl+N              :: New Message
+  - Ctrl+O              :: Open message
+  - Ctrl + ./,          :: Next/ Prev Message
+  - Ctrl+1              :: Go to mail
+  - Ctrl + 2            :: Go to calendar
+  - Ctrl + 6            :: Folder List
+  - Ctrl + Y            :: Go to different folder
+  - Alt+J               :: Move to Subject field
 
 * Explorer
-  - Ctrl+N 		:: New Window
-  - Ctrl+W 		:: Close window
-  - Ctrl+S+N 		:: New folder
-  - Ctrl + . 		:: Rotate picture clockwise
-  - Ctrl + , 		:: Rotate picture counter-clockwise
-  - Left Arrow 		:: Collapse selection
-  - Alt+Enter  		:: Properties
-  - Alt+P 		:: Display Preview pane
-  - Alt+Left Arrow   	:: Visit previous folder
-  - Backspace 		:: View previous folder
+  - Ctrl+N              :: New Window
+  - Ctrl+W              :: Close window
+  - Ctrl+S+N            :: New folder
+  - Ctrl + .            :: Rotate picture clockwise
+  - Ctrl + ,            :: Rotate picture counter-clockwise
+  - Left Arrow          :: Collapse selection
+  - Alt+Enter           :: Properties
+  - Alt+P               :: Display Preview pane
+  - Alt+Left Arrow      :: Visit previous folder
+  - Backspace           :: View previous folder
   - Alt+Up arrow	:: Parent folder
-  - Alt+D 		::  Select address bar
-  - Ctrl+E 		:: Select search box
-  - Ctrl+F 		:: Select search box
+  - Alt+D               ::  Select address bar
+  - Ctrl+E              :: Select search box
+  - Ctrl+F              :: Select search box
 
 * Git
   - git ls-files :: list files in git repo
@@ -703,10 +718,10 @@
    git log master ^da88da
    git bundle create commits.bundle master ^da88da
    #+END_EXAMPLE
-   On the other side, 
+   On the other side,
    #+BEGIN_EXAMPLE
    git bundle verify ./commits.bundle
-   git bundle list-heads ../commits.bundle  # To list branches 
+   git bundle list-heads ../commits.bundle  # To list branches
    git fetch ../commits.bundle master:other-master  # Fetch master from bundle into our branch
    #+END_EXAMPLE
 
@@ -763,7 +778,7 @@
 
 
 
- :: 
+ ::
 ** Hideshow
    - C-c @ ESC C-s :: show all
    - C-c @ ESC C-h :: hide all
@@ -784,7 +799,7 @@
 *** Stuttering
     Double striking of keys inserts cumbersome VHDL syntax elements.
     Enable by enabling 'vhdl-stutter-mode
-    - ;;  ::  " : " 
+    - ;;  ::  " : "
     - ;;; ::  " := "
     - ..  ::  "  => "
     - ==  ::  " = = "
@@ -818,7 +833,7 @@
     - C-c C-f C-i :: block withs ame indent
     - C-c C-f M-f :: entire region
 *** Code beautification
-    vhdl-beautify-buffer. Can be run non-interactively as 
+    vhdl-beautify-buffer. Can be run non-interactively as
     emacs -batch -I ~/.emacs filename.vhd -f vhdl-beautify-buffer
 *** Port translation
     Generic and Port clauses can be copied and then pasted as:
@@ -873,7 +888,7 @@
 
 *** Bibtex
     - C-c C-e C-a :: Journal
-    - C-c C-e :: 
+    - C-c C-e ::
     - C-c C-e ::
 ** Auctex
    - C-c _ :: Prompt for master file
@@ -884,7 +899,7 @@
    - C-c ; :: toggle commenting of region
 ** Reftex
    - C-c [ :: Insert reference
-   
+
 ** UTF8 symbols
    Can get name of a character using describe-char
    In general can be inserted using insert-char SYMBOL_NAME
@@ -929,8 +944,8 @@
    - k :: Drop stash
 *** Branch
    - b/B :: Switch to branch / Create and switch
-          
-        
+
+
 
 ** Buffer  read status
    - C-x C-q :: toggle read status
@@ -943,7 +958,7 @@
 
     Follow this procedure to hide zero values in selected cells. If the
     value in one of these cells changes to a nonzero value, the format
-    of the value will be similar to the general number format. 
+    of the value will be similar to the general number format.
 
     1. Select the cells that contain the zero (0) values that you want to hide.
     2. On the Format menu, click Cells, and then click the Number tab.
@@ -959,7 +974,7 @@
     4. Copy preview to clipboard
     5. Paste into Wordpad
     6. Copy from Wordpad
-    7. Paste into powerpoint: Don't use Paste, Don't use Paste Special. 
+    7. Paste into powerpoint: Don't use Paste, Don't use Paste Special.
     8. Right click on slide:  Under context menu, Paste there are four icon options:
       1) Use Destination Theme
       2) Use Source formatting
@@ -977,11 +992,11 @@
     Copy to powerpoint.
 
 *** Use emacs
-    M-x htmlfontify-buffer 
+    M-x htmlfontify-buffer
     Then write to html file
     Open in word or copy into word
     Then copy into powerpoint.
-    
+
 
 ** Minimal Debian Install
 *** wajig
@@ -995,7 +1010,7 @@
 *** fontconfig
 *** git
 *** libc-i386
-*** ia32-libs 
+*** ia32-libs
     First requires multiarch install
     dpkg --add-architecture i386
 *** lsb
@@ -1030,4 +1045,4 @@
 
 
 
-      
+

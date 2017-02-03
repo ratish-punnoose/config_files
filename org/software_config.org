@@ -1026,7 +1026,9 @@
     permissible, or create symlinks, they actually go into
     VirtualStore.  With Cygwin64, this is not the case.
 ** TCL
-   to unload autoloaded files type command "auto_reset" at interpreter
+   to unload autoloaded files type command "auto_reset" at
+   interpreter.
+   package forget xxx
 ** Windows port forwarding
    #+BEGIN_EXAMPLE
    netsh interface portproxy add v4tov4 listenport=4422 listenaddress=192.168.1.111 connectport=80 connectaddress=192.168.0.33

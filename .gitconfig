@@ -41,5 +41,7 @@
 	default = upstream
 [gc]
 	auto = 256
+[pager]
+        status = true
 [include]
         path = ~/.gitconfig.system

@@ -159,7 +159,7 @@ color-theme-alice-blue, color-theme-andreas
 #+BEGIN_SRC emacs-lisp
   (use-package indent-guide
                :ensure t
-               :defer 2
+               :defer 5
                :config
                (indent-guide-global-mode)
                (setq indent-guide-delay 0.5)
@@ -170,7 +170,7 @@ color-theme-alice-blue, color-theme-andreas
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
                    :ensure t
-                   :defer 2
+                   :defer 7
                    :config
                    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC

@@ -170,7 +170,7 @@ color-theme-alice-blue, color-theme-andreas
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
                    :ensure t
-                   :defer 7
+                   :defer 4
                    :config
                    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
@@ -236,7 +236,7 @@ are useful here.
   (define-key global-map (kbd "\C-xw") 'rjp/copy-word-at-point)
 #+END_SRC
 * Tags
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 ;; Tags search
 (global-set-key "\C-t" 'tags-search)
 #+END_SRC
@@ -701,14 +701,15 @@ keystroke to start it.
 #+END_SRC
 Remove VC for git
 #+BEGIN_SRC emacs-lisp
-(setq vc-handled-backends (delq 'Git vc-handled-backends))
+  (setq magit-refresh-status-buffer nil)
+  (setq vc-handled-backends (delq 'Git vc-handled-backends))
 #+END_SRC
 * Helm and Projectile
 ** Helm for autocompletes
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm
     :ensure t
-    :defer 2
+    :defer 1
     :diminish helm-mode
     :init
     ;; http://tuhdo.github.io/helm-intro.html
@@ -774,7 +775,7 @@ Remove VC for git
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-projectile
     :ensure t
-    :defer 3
+    :defer 1
     :config
     (projectile-global-mode)
     (setq projectile-completion-system 'helm)
@@ -790,7 +791,20 @@ Remove VC for git
   :defer 4
   )
 #+END_SRC
+** Helm Gtags
+#+BEGIN_SRC emacs-lisp
+  (custom-set-variables
+   '(helm-gtags-prefix-key "\C-t")
+   '(helm-gtags-suggested-key-mapping t))
+  (use-package helm-gtags
+     :ensure t
+     :defer 5)
+#+END_SRC
+* Tramp
+#+BEGIN_SRC emacs-lisp
+(setq tramp-default-method "ssh")
+#+END_SRC
 * Testing
 #+BEGIN_SRC emacs-lisp
-(setq initial-scratch-message "dummy message")
+(setq initial-scratch-message "Ratish's emacs init complete")
 #+END_SRC

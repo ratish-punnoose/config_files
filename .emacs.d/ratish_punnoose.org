@@ -792,13 +792,31 @@ Remove VC for git
   )
 #+END_SRC
 ** Helm Gtags
+To setup:
+1. Install gnu global
+2. Install pygments plugin for gnu global.
+   1. autoconf, automake, libtool, pygments
+3. Copy /usr/local/share/gtags/gtags.conf to .globalrc
+4. Edit line default: to be
+   #+BEGIN_VERSE
+   default:\
+        :tc=native:tc=pygments:
+   #+END_VERSE
+
 #+BEGIN_SRC emacs-lisp
-  (custom-set-variables
-   '(helm-gtags-prefix-key "\C-t")
-   '(helm-gtags-suggested-key-mapping t))
   (use-package helm-gtags
-     :ensure t
-     :defer 5)
+    :ensure t
+    :defer 5
+    :config
+    (define-prefix-command 'helm-gtags-mode-map)
+    (global-set-key (kbd "C-t") 'helm-gtags-mode-map)
+    (add-hook 'prog-mode-hook (lambda () (helm-gtags-mode)))
+    :bind (  :map helm-gtags-mode-map
+                  ("f" . helm-gtags-find-tag-other-window)
+                  ("s" . helm-gtags-show-stack)
+                  ("c" . helm-gtags-create-tags)
+                  ("u" . helm-gtags-update-tags))
+         )
 #+END_SRC
 * Tramp
 #+BEGIN_SRC emacs-lisp

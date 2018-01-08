@@ -54,6 +54,9 @@
    - C-d :: Delete char
    - M-d :: Delete word
    - M-Del or M-Bkspc :: Delete word backwards
+   - C-k :: Kill to end of line
+   - M-k :: Kill to end of sentence
+   - M-d :: Kill next word
 ** Navigation
    - C-M n              :: Jump to end of matching paren
    - C-M p              :: Jump to begin of matching paren
@@ -62,6 +65,14 @@
    - Alt-. :: Find tag under cursor
    - C-Spc C-Spc::  Set mark
    - C-u C-Spc :: Jump to previous mark
+   - C-f :: Forward one char (same as right arrow)
+   - C-b :: Backward one char (same as left arrow)
+   - M-f :: Forward a word
+   - M-b :: Backward a word
+   - C-a :: Start of line
+   - C-e :: End of line
+   - M-a :: Start of sentence
+   - M-e :: End of sentence
 ** Lisp
    Also see paredit
 *** Evaluation

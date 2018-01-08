@@ -1,0 +1,181 @@
+#+TITLE: Migration List
+#+STARTUP: indent
+#+STARTUP: hidestars
+
+* Starter kit config to be re-evaluated
+  1. text-hook flyspell(ignore):
+  2. remove C-x C-r binding : it removes rgrep
+
+* Not sure
+  1. ido-use-filena
+
+* To ensure
+  - [X] :: global-auto-revert-mode
+  - [X] ::electric-buffers
+  - [X] :: M-g goto line  M-g g
+  - [X] :: Font full config.
+  - [X] :: Colors
+  - [X] :: tool-bar-mode
+  - [X] :: blink-matching-paren
+  - [X] :: frame-title-format
+  - [ ] :: hide-show
+  - [X] :: indent-guide
+  - [X] :: rainbow delimiters
+  - [X] :: trailing whitespace
+  - [X] :: window navigation
+  - [ ] :: minted options add verilog
+  - [ ] :: org-diff
+  - [ ] :: org-targetrs custom
+  - [ ] :: highlight-symbol
+  - [ ] :: parinfer mode
+  - [ ] :: prog languages configuraitons
+  - [X] :: helm-show-kill-ring
+  - [X] :: helm-buffers-list
+  - [X] :: helm-find-files
+  - [X] :: change tab to run persistent action
+  - [X] :: helm C-z
+  - [ ] :: other heml configuration
+* Spacemacs Packages
+List packages by examining variable configuration-layer--used-packages
+#+BEGIN_SRC lisp
+configuration-layer--protected-packages
+
+(oref (configuration-layer/get-package 'ace-window) :protected)
+(configuration-layer/package-usedp 'whitespace)
+#+END_SRC
+** Base
+- [ ] :: abbrev
+- [ ] :: ace-window
+- [ ] :: archive-mode
+- [ ] :: bookmark
+- [ ] :: centered-buffer-mode : minor mode to center buffer in window
+- [ ] :: conf-mode : mode for configuration files
+- [ ] :: dired : for manipulating directories
+- [ ] :: dired-x : adds features to dired
+- [ ] :: electric-indent-mode : automatic indent next line
+- [ ] :: ediff
+- [ ] :: eldoc
+- [ ] :: evil-escape
+- [ ] :: evil-evilified-state
+- [ ] :: evil-visualstar
+- [ ] :: exec-path-from-shell
+- [ ] :: help-fns+  : addition to help
+- [ ] :: hi-lock : highlights matching lines/phrases/regexps
+- [ ] :: holy-mode
+- [ ] :: hybrid-mode
+- [ ] :: image-mode : load images
+- [ ] :: imenu : create menu to navigate within current buffer
+- [ ] :: linum : linum turns on/off line numbering
+- [ ] :: occur-mode : occur
+- [ ] :: package-menu : packages
+- [ ] :: page-break-lines : displays ^L line-feed as horizontal rulers
+- [ ] :: pcre2el : Convert between PCRE and emacs regexp
+- [ ] :: process-menu : to list emacs processes.
+- [ ] :: projectile
+- [ ] :: recentf
+- [ ] :: savehist : saves minibuffer history and optionally other histories
+- [ ] :: saveplace : opening file takes you to point at which it was last
+- [ ] :: spacemacs-theme
+- [ ] :: subword : recognizes subwords within GtkWindow and allows word operations
+- [ ] :: tar-mode :
+- [ ] :: uniquify : in buffer listings, gives buffers distinct names
+- [ ] :: url : allows reading URLS and posting
+- [ ] :: visual-line-mode  : moves through visual lines rather than logical
+- [ ] :: whitespace : visualize whitespace
+- [ ] :: winner : undo and redo window configuration. needed by layouts? no
+** Completion
+This is an odd one.  It seems to be all configuration and maybe ido
+** Editing
+- [ ] :: aggressive-indent : more aggressive than electric-indent. can be used for lisp and other progmodes.
+- [ ] :: avy : jump to text using char-based decision tree (seems limited to visible page)
+- [ ] :: bracketed-paste : useful in pasting into buffer in terminal mode (narrow use case for me)
+- [ ] :: clean-aindent-mode : auto-indent RET that deletes unused space
+- [ ] :: eval-sexp-fu : for lisp. flashes sexps while evaluating them
+- [ ] :: expand-region : expand/contract selection by semantic units
+- [ ] :: hexl : hex mode edit
+- [ ] :: hungry-delete : minor mode  that causes deletion to also kill whitespace
+- [ ] :: link-hint : uses avy to open /copy links
+- [ ] :: lorem-ipsum : add lorem ipsum filler text
+- [ ] :: move-text : move line/selection up/down like alt in org-mode
+- [ ] :: origami : code folding alternative (looks like it would be used only if evil is not)
+- [ ] :: smartparens :
+- [ ] :: spacemacs-whitespace-cleanup : whitespace cleanup
+- [ ] :: undo-tree :  visualizes tree/branches of undo history
+- [ ] :: uuidgen : generate uuids
+- [ ] :: ws-butler : trims spaces from lines that are changed
+** Editing-Visual
+- [ ] :: adaptive-wrap : wraps lines for visual display at better places. doesn't work well with org
+- [ ] :: auto-highlight-symbol : highlight current symbol
+- [ ] :: column-enforce-mode : highlight text beyond certain column
+- [ ] :: hide-comnt : hide-show comments in code
+- [ ] :: highlight-indentation : show indentation guidelines
+- [ ] :: highlight-numbers :  highlights numbers in source code
+- [ ] :: highlight-parentheses : highlight all external parens that enclose curr loc
+- [ ] :: hl-anything : highlight symbols, sels, enclosing parens (excluded in spacemacs)
+- [ ] :: indent-guide : alternative to highlight-indentation
+- [ ] :: rainbow-delimiters : colors parens
+- [ ] :: volatile-highlights : highlights recent changes to buffer
+** Language
+- [ ] :: google-translate
+- [ ] :: define-word
+** Layouts
+- [ ] :: eyebrowse : save window configurations no buffers
+- [ ] :: helm
+- [ ] :: ivy
+- [ ] :: persp-mode :  save/restore perspectives (window config + buffers)
+- [ ] :: spaceline
+- [ ] :: swiper : alternative to isearch using ivy.  Shows list of matches like occur
+** Misc
+- [ ] :: dumb-jump
+- [ ] :: request
+** UI
+- [ ] :: ace-link : uses avy to do vimium in help and info mode
+- [ ] :: centered-cursor : keeps current line at center of screen
+- [ ] :: desktop : loads at startup the open buffers at last quit
+- [ ] :: doc-view : allows viewing of PDF files
+- [ ] :: flx-ido : allows fuzzy match (works with ido not helm) currently
+- [ ] :: info+ : extends info mode
+- [ ] :: open-junk-file : create new file with name from time
+- [ ] :: paradox : modern packages menu
+- [ ] :: restart-emacs : restart emacs
+- [ ] :: winum : select window by number
+** UI-Visual
+- [ ] :: ansi-colors : translates ansi sequences into colors
+- [ ] :: fancy-battery : display battery status in modeline
+- [ ] :: fill-column-indicator : draw vertical line shows location of fill column
+- [ ] :: golden-ratio : auto resizes windows to golden ratio
+- [ ] :: hl-todo : highlight TODO, FIXME, and similar keywords in comments and strings
+- [ ] :: neotree : show file explorer window to navigate
+- [ ] :: popup : visual popup library. could be used for tooltips
+- [ ] :: popwin : interaction windows (eg completions) show up in a popup window
+         from bottom (like spacemacs) .
+- [ ] :: smooth-scrolling  : make scrolling smoother
+- [ ] :: spaceline
+- [ ] :: zoom-frm : zoom in out text
+** Org
+- [ ] :: flyspell
+- [ ] :: default-org-config
+- [ ] :: org-plus-contrib
+- [ ] :: org-bullets
+- [ ] :: space-doc
+- [ ] :: toc-org
+** Evil
+- [ ] :: evil-anzu
+- [ ] :: evil-args
+- [ ] :: evil-ediff
+- [ ] :: evil-exchange
+- [ ] :: evil-iedit-state
+- [ ] :: evil-indent-plus
+- [ ] :: evil-lisp-state
+- [ ] :: evil-mc
+- [ ] :: evil-nerd-commenter
+- [ ] :: evil-matchit
+- [ ] :: evil-numbers
+- [ ] :: evil-search-highlight-persist
+- [ ] :: evil-surround
+- [ ] :: evil-tutor
+- [ ] :: evil-unimpaired
+- [ ] :: evil-visual-mark-mode
+- [ ] :: hs-minor-mode
+- [ ] :: linum-relative
+- [ ] :: vi-tilde-fringe

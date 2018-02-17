@@ -50,25 +50,29 @@ loaded. Disable.
 Set default font to Consolas.  This is done using
 Options-> Save Options.
 #+begin_src emacs-lisp
-    ;;(set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso8859-1")
-  (cond ((or (eq system-type 'windows-nt)
-             (eq system-type 'cygwin))
-         (custom-set-faces
-          ;; custom-set-faces was added by Custom.
-          ;; If you edit it by hand, you could mess it up, so be careful.
-          ;; Your init file should contain only one such instance.
-          ;; If there is more than one, they won't work right.
-          '(default ((t (:family "Consolas" :foundry "outline" :slant normal
-                                 :weight normal :height 113 :width normal))))))
-        ((eq system-type 'gnu/linux)
-         (custom-set-faces
-          ;; custom-set-faces was added by Custom.
-          ;; If you edit it by hand, you could mess it up, so be careful.
-          ;; Your init file should contain only one such instance.
-          ;; If there is more than one, they won't work right.
-          '(default ((t (:family "Inconsolata" :foundry "outline" :slant normal
-                                 :weight normal :height 113 :width normal)))))))
-  (global-font-lock-mode t)
+      ;;(set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso8859-1")
+    (cond ((or (eq system-type 'windows-nt)
+               (eq system-type 'cygwin))
+           (custom-set-faces
+            ;; custom-set-faces was added by Custom.
+            ;; If you edit it by hand, you could mess it up, so be careful.
+            ;; Your init file should contain only one such instance.
+            ;; If there is more than one, they won't work right.
+            '(default ((t (:family "Consolas" :foundry "outline" :slant normal
+                                   :weight normal :height 113 :width normal))))))
+          ((eq system-type 'gnu/linux)
+           (custom-set-faces
+            ;; custom-set-faces was added by Custom.
+            ;; If you edit it by hand, you could mess it up, so be careful.
+            ;; Your init file should contain only one such instance.
+            ;; If there is more than one, they won't work right.
+            '(default ((t (:family "Source Code Variable" :foundry "adobe" :slant normal
+                                   :weight normal :height 130 :width normal))))
+            ;'(default ((t (:family "Inconsolata" :foundry "outline" :slant normal
+             ;                      :weight normal :height 113 :width normal))))
+
+  )))
+    (global-font-lock-mode t)
 #+end_src
 
 ** Window appearance

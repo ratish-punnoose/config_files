@@ -146,3 +146,7 @@ bindsym $mod+r mode "resize"
 bar {
         status_command i3status
 }
+
+exec_always --no-startup-id feh --randomize --bg-fill ~/wallpapers
+#exec_always --no_startup-id conky -c ~/.config/conky.conf
+

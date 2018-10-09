@@ -1,0 +1,5 @@
+caption always "%?%F%{.R.}%?%3n %t%? [%h]%?"
+logtstamp on
+logfile screenlog-%S.log
+deflog on
+

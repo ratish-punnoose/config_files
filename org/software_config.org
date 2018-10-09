@@ -55,6 +55,9 @@
    - C-d :: Delete char
    - M-d :: Delete word
    - M-Del or M-Bkspc :: Delete word backwards
+   - C-k :: Kill to end of line
+   - M-k :: Kill to end of sentence
+   - M-d :: Kill next word
 ** Navigation
    - C-M n              :: Jump to end of matching paren
    - C-M p              :: Jump to begin of matching paren
@@ -63,6 +66,14 @@
    - Alt-. :: Find tag under cursor
    - C-Spc C-Spc::  Set mark
    - C-u C-Spc :: Jump to previous mark
+   - C-f :: Forward one char (same as right arrow)
+   - C-b :: Backward one char (same as left arrow)
+   - M-f :: Forward a word
+   - M-b :: Backward a word
+   - C-a :: Start of line
+   - C-e :: End of line
+   - M-a :: Start of sentence
+   - M-e :: End of sentence
 ** Lisp
    Also see paredit
 *** Evaluation
@@ -779,184 +790,38 @@
 * Typesetting
   - http://www.cs.sfu.ca/~ggbaker/reference/characters/#dash
   - http://practicaltypography.com/body-text.html
+  - [[https://olivierpieters.be/blog/2017/02/11/designing-a-business-card-in-latex][Business card in latex]]
+* GPG
+  1. Key generation
+     #+BEGIN_SRC
+     gpg --gen-key
+     #+END_SRC
+  2. Share public key
+     #+BEGIN_SRC
+     gpg --armor --output pubkey.txt --export 'Your Name'
+     #+END_SRC
+  3. Import other public key
+     #+BEGIN_SRC
+     gpg --import key.asc
+     #+END_SRC
+  4. Encrypt
+     #+BEGIN_SRC
+     # the long version
+     gpg --encrypt --recipient 'recipient_id' foo.txt
 
+     # using terse options
+     gpg -e -r Name foo.txt
+     #+END_SRC
+  5. Decrypt
+     #+BEGIN_SRC
+     gpg --output foo.txt --decrypt foo.txt.gpg
+     #+END_SRC
+  6. Key list check
+     #+BEGIN_SRC
+     gpg --list-keys
+     gpg --delete-key 'myfriend@his.isp.com'
+     #+END_SRC
 
-
-
-
-
-
- ::
-** Hideshow
-   - C-c @ ESC C-s :: show all
-   - C-c @ ESC C-h :: hide all
-   - C-c @ C-s :: show block
-   - C-c @ C-h :: hide block
-   - C-c @ C-c :: toggle hide/show
-   - C-,  :: toggle for a block (custom)
-   - C-M-, :: toggle for whole buffer
-
-** VHDL mode
-*** Template generation
-    After typing a VHDL keyword and entering 'SPC' youa re prompted
-    for arguments.  'RET' or C-g to cancel. Optional arguments are
-    indicated by square brackets.  Explicit invocation C-c C-i- C-c.
-*** Header insertion
-    C-c C-t C-h :: insert header.  Look for customization
-    `vhdl-header.
-*** Stuttering
-    Double striking of keys inserts cumbersome VHDL syntax elements.
-    Enable by enabling 'vhdl-stutter-mode
-    - ;;  ::  " : "
-    - ;;; ::  " := "
-    - ..  ::  "  => "
-    - ==  ::  " = = "
-    - [ ::  (
-    - ] ::  )
-    - [[ :: [
-    - ]] :: ]
-    - '' :: \"
-    - -- ::  comment
-    - --CR ::  comment out
-    - ---  ::  horizontal line
-    - ---- ::  display comment
-*** Word Completion
-    Typing Tab looks for a VHDL keyword or a word in the
-    buffer. Retyping TAB toggles through alternative completions.
-    Typing Tab after "("  inserts complete parenthesized expressions
-*** Alignment
-    Aligning operators, keywords, to beautify.
-    Prefix is C-c C-aa
-    - C-c C-a C-a :: aligns a group of consecutive lines
-    - C-c C-a C-i :: aligns block withs same indent
-    - C-c C-a C-d :: all lines within declaration
-    - C-c C-a M-a :: region
-    - C-c C-a C-c :: inline comments
-    - C-c C-a M-c :: comemnts for a region
-*** Code filling
-    Condenses code, by removing comments etc.
-    Prefix is C-c C-f
-    - C-c C-f C-f :: fills a list enclosed by paren
-    - C-c C-f C-g :: group of lines
-    - C-c C-f C-i :: block withs ame indent
-    - C-c C-f M-f :: entire region
-*** Code beautification
-    vhdl-beautify-buffer. Can be run non-interactively as
-    emacs -batch -I ~/.emacs filename.vhd -f vhdl-beautify-buffer
-*** Port translation
-    Generic and Port clauses can be copied and then pasted as:
-    - C-c C-p C-w :: Copy
-    - C-c C-p M-w :: Copy
-    - C-c C-p C-f :: Port flatten
-    - C-c C-p C-r  :: Reverse ports
-    - C-c C-p C-c  :: Paste component
-    - C-c C-p C-e :: Paste entity
-    - C-c C-p C-i :: Paste instance
-    - C-p C-p C-s :: Paste signals
-    - C-p C-p C-c :: Paste constants
-    - C-p C-p C-g :: Paste generic map
-    - C-p C-p C-z :: Paste initializations
-    - C-p C-p C-t :: Paste testbench
-*** Speedbar
-    Automatically opened if 'vhdl-speedbar-auto-open is non-nil
-    Check 'vhdl-project-alist
-    - f :: file mode
-    - h :: hierarchy
-    - H :: project hierarcy
-*** Structural composition
-    - C-c C-c C-n :: Create skeleton for new component
-    - C-c C-c C-p :: Place component declaration and instantiation
-    - C-c C-c C-w :: Automatically connect subcomponents using rules.
-*** Hide-show
-    Using vhdl-hs-minor-mode
-    vhdl-hideshow-menu : if non nil then start up with hideshow
-    vhdl-hide-all-init: if non nil then hide all on startup.
-*** Code update
-    - C-c C-u C-s : Update sensitivity list in current process
-    - C-c C-u M-s : Of all processes in buffer.
-*** Code Fixing
-    - C-c C-x C-p : Fixes parenthesis
-
-** Latex mode
-*** Reftex
-    - C-c =  ::  Create a TOC for document
-    - C-c (  ::  Insert a label
-    - C-c )  ::  Insert a reference
-    - C-c [  ::  Insert citation by searching in bibtex database
-    - C-c &  ::  With cursor on a cross-reference, view original
-**** Multi-file documents
-     Add the following at the end of a document.
-     Use TeX-master for AucTex mode and tex-main-file for emacs latex
-
-     %%% Local Variables: ***
-     %%% mode:latex ***
-     %%% tex-main-file: "thesis.tex"  ***
-     %%% End: ***
-
-
-*** Bibtex
-    - C-c C-e C-a :: Journal
-    - C-c C-e ::
-    - C-c C-e ::
-** Auctex
-   - C-c _ :: Prompt for master file
-   - C-c ^ :: Go to master file
-   - C-c C-e :: Insert environment
-   - C-c C-j :: Next item
-   - C-c % :: toggle commenting of paragraph
-   - C-c ; :: toggle commenting of region
-** Reftex
-   - C-c [ :: Insert reference
-
-** UTF8 symbols
-   Can get name of a character using describe-char
-   In general can be inserted using insert-char SYMBOL_NAME
-   - ∈ :: element of
-   - ∧ | ∨ :: logical and | or with many options
-   - ⇒ :: rightwards double arrow
-   - ≔ :: colon equals
-** Magit
-*** Custom
-    - C-x g :: Start magit in buffer (RJP custom), invokes magit-status
-*** General
-    - g :: reload status buffer
-    - Tab :: toggle visibility/expand/contract
-    - S-Tab :: toggle visibility of subtree
-    - s :: Stage. Could be untracked file, modified file, hunk of file
-    - S :: Stage All
-    - u/U :: unstage/ unstage All
-    - k :: Discard/Delete/revert
-    - c :: Commit
-    - i :: Add file to .gitignore
-    - I :: Add file to .git/info/exclude instead of .gitignore
-    - Ctrl+W :: Copy SHA of any commit
-*** History
-   - l/L :: History (show commit log)  / Verbose
-   - Ret or Space :: Expand.  Space is like more.  Keeps your state in
-                     top buffer and can scroll through changes.
-   - x/X :: Delete all commits after specific commit, but keep files in
-          dirty state.  This allows easy rebase.  With capital X, will
-            revert all files to that specific commit (i.e., will lose
-            all changes)
-**** Reflog, Recovering delted commits
-      - h :: See the reflog
-**** Blame
-     - magit-blame-mode :: Annotates lines with author and commit
-**** Rebase
-     - R :: Rebase
-     - E :: Interactive Rebase
-
-*** Stash
-   - z/Z :: Create new stash
-   - a/A ::  Apply/Pop stash
-   - k :: Drop stash
-*** Branch
-   - b/B :: Switch to branch / Create and switch
-
-
-
-** Buffer  read status
-   - C-x C-q :: toggle read status
 * Misc
 ** Bootcamp can break powerpoint
 ** Excel

@@ -72,7 +72,7 @@ Rxvt*loginShell: True
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! xterm (and friends)
 
-XTerm*highlightSelection:  true
+*XTerm*highlightSelection:  true
 ! Uncomment this to use color for the bold attribute
 XTerm*VT100*colorBDMode:  on
 XTerm*colorBDMode:  on
@@ -85,8 +85,9 @@ XTerm.VT100*underLine:  off
 XTerm*underLine:  off
 XTerm*VT100*colorUL:  magenta
 XTerm*colorUL:  magenta
-! Uncomment this to display the scrollbar 
-XTerm*scrollBar:  true
+! Uncomment this to display the scrollbar
+UXTerm*scrollBar:  true
+
 
 ! This resource specifies whether or not to ignore the 'alternate screen'
 ! of applications such as vi.  When it is on, these applications will restore
@@ -109,9 +110,18 @@ XTerm*reverseWrap:	true
 
 XTerm*background: black
 XTerm*foreground: SkyBlue
-XTerm*font: 9x15bold
+!*XTerm*font: 9x15bold
 XTerm*cursorColor: OrangeRed1
-!XTerm*geometry: 80x24
+XTerm*renderFont: true
+XTerm*faceName: Inconsolata
+XTerm*faceSize:12
+UXTerm*foreground: SkyBlue
+UXTerm*renderFont: true
+!UXTerm*faceName: Inconsolata
+UXTerm*faceName: Ubuntu Mono
+UXTerm*faceSize:12
+UXTerm*cursorColor: OrangeRed1
+!!XTerm*geometry: 80x24
 
 *visualBell:		true
 *scrollTtyOutput:	False

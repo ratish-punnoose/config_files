@@ -24,6 +24,7 @@
     - i   R :: Insert text from register R
     - r   R :: Save rectangle to register R
     - i   R :: Insert rectangle from register R
+    - n   R :: Save number to register R (C-u 1000 C-x r n R)
 *** Window config
     - w   R :: Save window config of current frame to register R
     - f   R :: Save window config of all frames to register R
@@ -507,8 +508,13 @@
     - C-c C-c           :: Update dynamic block
 
 ** Beamer
+*** Keystrokes
    - C-c C-e t		:: Insert default org export template
    - C-c C-b            :: Specify type of block
+*** More info
+    - [[https://github.com/matze/mtheme]] : Metropolis theme
+    - [[https://hartwork.org/beamer-theme-matrix/]] : Beamer theme matrix
+    - [[http://orgmode.org/worg/exporters/beamer/tutorial.html]] : Beamer tutorial
 
 
 ** Time Log
@@ -746,6 +752,8 @@
   - Esc/Enter :: Exit resize mode
 
 * Cygwin
+** Directory permissions
+   To fix type  "setfacl -b"
 ** X11
 *** Running
     To run each X app on its own.
@@ -1044,7 +1052,15 @@
          port forwards.
    3. Remember to change any necessary environment variables to point
       at new location
-
-
-
-
+* Doors
+  - Ctrl+N :: addsa new object above
+  - Ctrl+L :: addsa  new object below
+  - Ctrl+H :: creates a heading object
+  - Ctrl+Enter :: fcreate a same object at the same level while editing.
+  - Ctrl+A :: navigate to next editable column
+  - Return :: Move to next ojbect for that enumerated attribute
+  - Shift+Enter :: Move to the next object for non-enumerated attributes
+* Latex/luatex
+  - Passing arguments with underscore into functions will not print
+    correctly.  To allow functions to handle them, within the
+    function, encapsulate argument in \detokenize{ }

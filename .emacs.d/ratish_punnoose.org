@@ -41,6 +41,11 @@ loaded. Disable.
 (define-key global-map "\M-g" 'goto-line)
 
 #+END_SRC
+* Recent files
+#+BEGIN_SRC emacs-lisp
+(recentf-mode 1)
+#+END_SRC
+
 * Package Management
 #+BEGIN_SRC emacs-lisp
   (eval-when-compile (require 'use-package))
@@ -50,25 +55,29 @@ loaded. Disable.
 Set default font to Consolas.  This is done using
 Options-> Save Options.
 #+begin_src emacs-lisp
-    ;;(set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso8859-1")
-  (cond ((or (eq system-type 'windows-nt)
-             (eq system-type 'cygwin))
-         (custom-set-faces
-          ;; custom-set-faces was added by Custom.
-          ;; If you edit it by hand, you could mess it up, so be careful.
-          ;; Your init file should contain only one such instance.
-          ;; If there is more than one, they won't work right.
-          '(default ((t (:family "Consolas" :foundry "outline" :slant normal
-                                 :weight normal :height 113 :width normal))))))
-        ((eq system-type 'gnu/linux)
-         (custom-set-faces
-          ;; custom-set-faces was added by Custom.
-          ;; If you edit it by hand, you could mess it up, so be careful.
-          ;; Your init file should contain only one such instance.
-          ;; If there is more than one, they won't work right.
-          '(default ((t (:family "Inconsolata" :foundry "outline" :slant normal
-                                 :weight normal :height 113 :width normal)))))))
-  (global-font-lock-mode t)
+      ;;(set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso8859-1")
+    (cond ((or (eq system-type 'windows-nt)
+               (eq system-type 'cygwin))
+           (custom-set-faces
+            ;; custom-set-faces was added by Custom.
+            ;; If you edit it by hand, you could mess it up, so be careful.
+            ;; Your init file should contain only one such instance.
+            ;; If there is more than one, they won't work right.
+            '(default ((t (:family "Consolas" :foundry "outline" :slant normal
+                                   :weight normal :height 113 :width normal))))))
+          ((eq system-type 'gnu/linux)
+           (custom-set-faces
+            ;; custom-set-faces was added by Custom.
+            ;; If you edit it by hand, you could mess it up, so be careful.
+            ;; Your init file should contain only one such instance.
+            ;; If there is more than one, they won't work right.
+            '(default ((t (:family "Source Code Variable" :foundry "adobe" :slant normal
+                                   :weight normal :height 130 :width normal))))
+            ;'(default ((t (:family "Inconsolata" :foundry "outline" :slant normal
+             ;                      :weight normal :height 113 :width normal))))
+
+  )))
+    (global-font-lock-mode t)
 #+end_src
 
 ** Window appearance
@@ -723,7 +732,8 @@ Remove VC for git
     (("C-c h"  . helm-command-prefix)
      ("M-x"     . helm-M-x)
      ("M-y"     . helm-show-kill-ring)
-     ("C-x b"   . helm-buffers-list)
+     ;("C-x b"   . helm-buffers-list)
+     ("C-x b"   . helm-mini)
      ("C-x C-f" . helm-find-files)
      ("C-c h o" . helm-occur)
      :map helm-map
@@ -733,6 +743,7 @@ Remove VC for git
     :config
     (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
           helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
+          helm-recentf-fuzzy-match              t ; match recentf
           helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
           helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
           helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
@@ -756,6 +767,7 @@ Remove VC for git
     (global-set-key (kbd "M-x") 'helm-M-x)       ; Even without this, M-x does some helm completeion
     (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
           helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
+          helm-recentf-fuzzy-match              t ; match recentf
           helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
           helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
           helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
@@ -821,6 +833,22 @@ To setup:
 * Tramp
 #+BEGIN_SRC emacs-lisp
 (setq tramp-default-method "ssh")
+#+END_SRC
+* Completion with company-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :config
+    (global-company-mode))
+
+  (use-package company-anaconda
+    :ensure t
+    :after (company)
+    :init
+    (add-to-list 'company-backends 'company-anaconda)
+    (add-hook 'python-mode-hook 'anaconda-mode))
+
+
 #+END_SRC
 * Testing
 #+BEGIN_SRC emacs-lisp

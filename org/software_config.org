@@ -694,6 +694,35 @@
   - Alt+Shift+[plus/minus]   :: Expand/Collapse text under heading
   - Alt+Shift+A              :: Expand/Collapse all text and headings
   - Alt+Shift+n              :: Show all headings up to Heading n
+* MS Excel
+** Keys
+   - Preferences :: To change between column numbering as alphabets/numbers
+   - Ctrl-D :: Auto-fill a selection based on first
+   - Ctrl'` :: Toggle display between formulas and values
+   - F4 :: Within formula switch reference between absolute and relative
+** Entering data
+   - Instead of entering data horizontally.  "Enter" + right arrow +
+     up arrow.  Select the horizontal cells first.
+** Selection
+   - Cmd-A :: Selects range island (range surrounded by white space)
+** Formatting
+   - Use painter and auto-fill rectangle to extend formatting
+** Index and match
+   - match( ) returns index
+   - use index to get something from different column.
+** Table ranges
+   Even though all of excel is a table, select a range and insert
+   table.  This tracks that range as being a table.  A header may be
+   added. A footer may be added.  From last row/col element, Tab will
+   insert a new row with formatting properly fixed.
+   Not only that formulas in one table can refer to a column in
+   different table by just name.
+** Auto solve
+   Goal seek. Provide desired value for one cell and tell the dialog
+   box which cell is to be changed.  Excel will iterate.
+** Pivot table
+   Works well with defined tables.   Allows slicing data based on
+   values in another table.
 
 * Outlook
   - Ctrl+Shift+I	:: Inbox
@@ -929,3 +958,8 @@
   - Passing arguments with underscore into functions will not print
     correctly.  To allow functions to handle them, within the
     function, encapsulate argument in \detokenize{ }
+** To wipe free space in windows
+   To wipe free space on C drive
+   #+BEGIN_EXAMPLE
+   cipher /w:C
+   #+END_EXAMPLE

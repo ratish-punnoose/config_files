@@ -31,6 +31,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     csv
+     python
      spacemacs-editing
      spacemacs-editing-visual
      spacemacs-ui
@@ -45,14 +47,14 @@ values."
      ;; auto-completion
      ;; better-defaults
      emacs-lisp
-     ;; git
+     git
      ;; markdown
-     ;; org
+     org
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      ;; spell-checking
-     ;; syntax-checking
+     syntax-checking
      ;; version-control
      )
    ;; List of additional packages that will be installed without being
@@ -405,6 +407,9 @@ you should place your code here."
   ;;(setq indent-guide-recursive t)
   (indent-guide-global-mode)
 
+  ;; Trailing whitespace
+  (setq-default show-trailing-whitespace t)
+  (add-hook 'before-save-hook 'whitespace-cleanup)
   ;; We don't care so much about frame title
   ;;(setq frame-title-format
   ;;    '(buffer-file-name "%f"
@@ -426,7 +431,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (paradox spaceline powerline restart-emacs popwin spinner neotree info+ hl-todo ace-link volatile-highlights rainbow-delimiters indent-guide auto-highlight-symbol dash s markdown-mode evil helm helm-core ws-butler uuidgen smartparens move-text lorem-ipsum link-hint hungry-delete expand-region eval-sexp-fu highlight clean-aindent-mode aggressive-indent which-key use-package pcre2el mmm-mode markdown-toc macrostep hydra help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag gh-md exec-path-from-shell evil-visualstar evil-escape elisp-slime-nav diminish bind-map auto-compile ace-jump-helm-line)))
+    (csv-mode smeargle orgit org-projectile org-category-capture org-present org-plus-contrib org-pomodoro alert log4e gntp org-download magit-gitflow htmlize helm-gitignore request gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit ghub let-alist with-editor yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode dash-functional helm-pydoc cython-mode anaconda-mode pythonic f paradox spaceline powerline restart-emacs popwin spinner neotree info+ hl-todo ace-link volatile-highlights rainbow-delimiters indent-guide auto-highlight-symbol dash s markdown-mode evil helm helm-core ws-butler uuidgen smartparens move-text lorem-ipsum link-hint hungry-delete expand-region eval-sexp-fu highlight clean-aindent-mode aggressive-indent which-key use-package pcre2el mmm-mode markdown-toc macrostep hydra help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag gh-md exec-path-from-shell evil-visualstar evil-escape elisp-slime-nav diminish bind-map auto-compile ace-jump-helm-line)))
  '(spacemacs-theme-comment-bg nil)
  '(spacemacs-theme-custom-colors
    (quote

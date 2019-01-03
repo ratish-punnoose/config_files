@@ -958,8 +958,40 @@
   - Passing arguments with underscore into functions will not print
     correctly.  To allow functions to handle them, within the
     function, encapsulate argument in \detokenize{ }
-** To wipe free space in windows
-   To wipe free space on C drive
-   #+BEGIN_EXAMPLE
-   cipher /w:C
-   #+END_EXAMPLE
+* To wipe free space in windows
+  To wipe free space on C drive
+  #+BEGIN_EXAMPLE
+  cipher /w:C
+  #+END_EXAMPLE
+* Linux
+** Adding virtual interface
+*** Creating interface
+    Create file such as /etc/modprobe.d/dummy.conf, with contents
+    #+BEGIN_EXAMPLE
+    install dummy /sbin/modprobe --ignore-install dummy; /sbin/ip link set name eth2 dev dummy0 ; /sbin/ifconfig eth2 up; chmod 750 /sys/devices/virtual/net
+    #+END_EXAMPLE
+    This does the following:
+    1. Loads dummy module.
+    2. Sets name of interface.
+    3. Enables interface.
+    4. Some apps may fail with a dummy interface. This makes it look
+       like a real interface.
+*** Set interface parameters
+    In file such as /etc/sysconfig/network-scripts/ifcfg-eth2 where eth2 is
+    name of interface, set parameters.
+    #+BEGIN_EXAMPLE
+      NAME=eth2
+      DEVICE=eth2
+      ONBOOT=yes
+      MACADDR=5C:FE:10:01:0B:35
+      USERCTL=no
+      BOOTPROTO=static
+      NETMASK=255.255.255.0
+      IPADDR=172.16.15.4
+      PEERDNS=no
+      TYPE=Ethernet
+
+      check_link_down() {
+       return 1;
+      }
+    #+END_EXAMPLE

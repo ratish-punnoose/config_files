@@ -1,32 +1,45 @@
 general {
-	colors = true
-	interval = 5
+        colors = true
+        interval = 5
 }
 
 order += "disk /"
 order += "run_watch DHCP"
-order += "ethernet eth0"
+#order += "ethernet eth0"
+order += "ethernet enp0s25"
 order += "load"
+order += "battery 0"
 order += "time"
 
 disk "/" {
-	format = "%free"
+        format = "%free"
 }
 
 load {
-	format = "Load: %5min"
+        format = "Load: %5min"
 }
 
 time {
-	format = "%Y-%m-%d %H:%M:%S"
+        format = "%Y-%m-%d %H:%M:%S"
 }
 
 run_watch DHCP {
-	pidfile = "/var/run/dhclient*.pid"
+        pidfile = "/var/run/dhclient*.pid"
 }
 
-ethernet eth0 {
-	format_up = "E: %ip (%speed)"
-	format_down = "E: down"
+ethernet enp0s25 {
+        format_up = "E: %ip (%speed)"
+        format_down = "E: down"
+}
+
+battery 0 {
+        format = "%status %percentage %remaining %emptytime"
+        format_down = "No battery"
+        status_chr = "⚡ CHR"
+        status_bat = "🔋 BAT"
+        status_unk = "? UNK"
+        status_full = "☻ FULL"
+        path = "/sys/class/power_supply/BAT%d/uevent"
+        low_threshold = 10
 }
 

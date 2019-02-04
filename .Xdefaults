@@ -85,7 +85,7 @@ XTerm.VT100*underLine:  off
 XTerm*underLine:  off
 XTerm*VT100*colorUL:  magenta
 XTerm*colorUL:  magenta
-! Uncomment this to display the scrollbar 
+! Uncomment this to display the scrollbar
 XTerm*scrollBar:  true
 
 ! This resource specifies whether or not to ignore the 'alternate screen'
@@ -113,7 +113,7 @@ XTerm*font: 9x15bold
 XTerm*cursorColor: OrangeRed1
 #XTerm*geometry: 80x24
 
-*visualBell:		true
+*visualBell:		False
 *scrollTtyOutput:	False
 *scrollKey:		True
 Scrollbar.JumpCursor:	True

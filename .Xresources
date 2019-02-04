@@ -123,7 +123,7 @@ UXTerm*faceSize:12
 UXTerm*cursorColor: OrangeRed1
 !!XTerm*geometry: 80x24
 
-*visualBell:		true
+*visualBell:		False
 *scrollTtyOutput:	False
 *scrollKey:		True
 Scrollbar.JumpCursor:	True

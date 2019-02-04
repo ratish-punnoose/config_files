@@ -1,2 +1,2 @@
 #!/bin/sh
-feh  --bg-fill '/home/rjpunno/wallpapers/pexels-photo-635279.jpeg' '/home/rjpunno/wallpapers/sea-bay-waterfront-beach-50594.jpeg' '/home/rjpunno/wallpapers/pexels-photo-149988.jpeg' 
+feh  --bg-fill '/home/rjpunno/wallpapers/pexels-photo-635279.jpeg' '/home/rjpunno/wallpapers/pexels-photo-149988.jpeg' '/home/rjpunno/wallpapers/sea-bay-waterfront-beach-50594.jpeg' 

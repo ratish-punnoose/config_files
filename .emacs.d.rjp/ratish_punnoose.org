@@ -506,7 +506,7 @@ Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cyg
 Set the shell to use cygwin's bash, if Emacs finds it is running
 under Windows and c:\cygwin exists.  Assumes that c:\cygwin\bin is
 not already in the Windows path.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (let* ((cygwin-root "c:/cygwin64")
          (cygwin-bin (concat cygwin-root "/bin")))
     (when (and (eq 'windows-nt system-type)
@@ -529,8 +529,18 @@ not already in the Windows path.
       (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)))
 #+end_src
 
+** Fix auto-revert notify
+In emacs 26.1 'auto-revert-use-notify' is set to t.  This causes
+scrolling pauses.
+[[https://www.masteringemacs.org/article/whats-new-in-emacs-26-1][whats new emacs 26.1]]
+#+BEGIN_SRC emacs-lisp
+  (when (eq 'cygwin system-type)
+    (custom-set-variables
+    '(auto-revert-use-notify nil)))
+#+END_SRC
+
 ** Cygwin paths
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
     ;; Fix windows problems of trying to check file permissions
     ;; Causes emacs to stutter
   (when (eq 'windows-nt system-type)
@@ -550,7 +560,7 @@ On windows emacs uses dos line feeds. Fix this.
 #+END_SRC
 
 ** Changing the executable-find to find files without extension
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (when (eq 'windows-nt system-type)
     (defun executable-find (command)
       "Search for COMMAND in `exec-path' and return the absolute file name.

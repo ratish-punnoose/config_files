@@ -499,6 +499,11 @@ Can use org-all-targets *Automatically added by starter kit.
                         (rjp/org-all-i)
                       )  )))
 #+END_SRC
+** org tempo
+For shortcuts since 9.2
+#+begin_src emacs-lisp
+(require 'org-tempo)
+#+end_src
 * Cygwin and Windows
 Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]
 

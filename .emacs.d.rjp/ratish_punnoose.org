@@ -624,6 +624,11 @@ comment-or-uncomment-region in all progmodes
 #+BEGIN_SRC emacs-lisp
 (global-set-key "\C-c\C-c" 'comment-or-uncomment-region)
 #+END_SRC
+** Unprettify symbol at point
+Remove any symbol prettiness at cursor
+#+BEGIN_SRC emacs-lisp
+(setq prettify-symbols-unprettify-at-point 'right-edge)
+#+END_SRC
 ** Generic Language extensions
 #+BEGIN_SRC emacs-lisp :tangle no
   (setq auto-mode-alist

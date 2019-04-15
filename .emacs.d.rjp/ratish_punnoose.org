@@ -729,6 +729,14 @@ Add reftex mode
 #+BEGIN_SRC emacs-lisp
 (setq ruby-indent-level 4)
 #+END_SRC
+
+** Unicode symbol fallback.
+Normally, if the primary font does not have a unicode code point that
+character will not be displayed.  This provides a fallback font to use
+for such symbols.  The font Symbola is chosen.
+#+begin_src emacs-lisp
+(set-fontset-font "fontset-default" nil (font-spec  :name "Symbola"))
+#+end_src
 * Magit
 Magit mostly just works.  Only thing to add here is to add a simple
 keystroke to start it.

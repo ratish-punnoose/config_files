@@ -352,8 +352,12 @@ anymore.  Don't remember details.
                ("linenos" "")))
     ;; Add language alias
     (add-to-list 'org-latex-minted-langs '(verilog "v"))      )
+(require 'ox-beamer)
 #+END_SRC
-
+** Org markdown
+#+begin_src emacs-lisp
+(require 'ox-md)
+#+end_src
 ** Org diff
 My customization to allow folding and unfolding
 #+BEGIN_SRC emacs-lisp
@@ -734,9 +738,22 @@ Add reftex mode
 Normally, if the primary font does not have a unicode code point that
 character will not be displayed.  This provides a fallback font to use
 for such symbols.  The font Symbola is chosen.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (set-fontset-font "fontset-default" nil (font-spec  :name "Symbola"))
 #+end_src
+#+begin_src emacs-lisp
+(dolist (ft (fontset-list))
+  (set-fontset-font ft 'unicode (font-spec :name "Consolas"))
+  (set-fontset-font ft 'unicode (font-spec :name "Symbola monospacified for Consolas") nil 'append))
+#+end_src
+
+** tla mode
+Tla mode
+#+begin_src emacs-lisp
+  (use-package tla-mode
+  :defer 1)
+#+end_src
+
 * Magit
 Magit mostly just works.  Only thing to add here is to add a simple
 keystroke to start it.
@@ -889,3 +906,8 @@ To setup:
 #+BEGIN_SRC emacs-lisp
 (setq initial-scratch-message "Ratish's emacs init complete")
 #+END_SRC
+* tlamode
+tla mode test
+#+begin_src emacs-lisp
+  ;;(require 'tla-mode)
+#+end_src

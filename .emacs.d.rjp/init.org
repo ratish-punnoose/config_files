@@ -21,7 +21,7 @@ repo in a local branch.  Note that this uses the [[http://eschulte.github.io/ema
        (when (file-accessible-directory-p dirname)
          (setq tmp default-directory)
          (setq default-directory dirname)
-         (append dirname load-path)
+         ;;(setq load-path (append dirname load-path))
          (normal-top-level-add-subdirs-to-load-path)
          (setq default-directory tmp)))
      (rjp/add-to-loadpath (expand-file-name "elpa/" user-emacs-directory))
@@ -135,6 +135,10 @@ repo in a local branch.  Note that this uses the [[http://eschulte.github.io/ema
 (prefer-coding-system 'utf-8)
 #+end_src
 
+** Change Yes/No to y/n
+#+begin_src emacs-lisp
+  (defalias 'yes-or-no-p 'y-or-n-p)
+#+end_src
 
 * Appearance and UI
 ** Font
@@ -1086,6 +1090,21 @@ To setup:
        (add-to-list 'company-backends 'company-anaconda)
        (add-hook 'python-mode-hook 'anaconda-mode))
    #+end_src
+4. pos-tip
+   We don't need this directly but company-quickhelp uses it
+   #+begin_src emacs-lisp
+     (use-package pos-tip
+        :defer 3)
+   #+end_src
+5. company-quickhelp
+   #+begin_src emacs-lisp
+     (use-package company-quickhelp
+                  :defer 5
+                  :after (company pos-tip)
+                  :config (company-quickhelp-mode)
+                  )
+   #+end_src
+
 * Setup custom file
 #+begin_src emacs-lisp
 (setq custom-file "~/.emacs.d/custom.el")

@@ -707,8 +707,16 @@
    - Cmd-A :: Selects range island (range surrounded by white space)
 ** Formatting
    - Use painter and auto-fill rectangle to extend formatting
+** Naming cells, rows, columns
+   - Can just click in menubar item showing row+Col with a name to
+     define new name for that cell.
+   - Can select a whole row or column and give it a name.
+     - Can use row/col names in formulas to make them more descriptive.
+   - Can use arrow keys on menubar item with cell name to see existing names.
 ** Index and match
    - match( ) returns index
+     - Example: can find find an item from current table in different
+       table. i.e. lookup.
    - use index to get something from different column.
 ** Table ranges
    Even though all of excel is a table, select a range and insert

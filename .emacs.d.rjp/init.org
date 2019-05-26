@@ -21,58 +21,63 @@ repo in a local branch.  Note that this uses the [[http://eschulte.github.io/ema
        (when (file-accessible-directory-p dirname)
          (setq tmp default-directory)
          (setq default-directory dirname)
+         (append dirname load-path)
          (normal-top-level-add-subdirs-to-load-path)
          (setq default-directory tmp)))
-
      (rjp/add-to-loadpath (expand-file-name "elpa/" user-emacs-directory))
      (rjp/add-to-loadpath (expand-file-name "lisp/" user-emacs-directory))
    #+end_src
 3. Setup up intitial packages
    #+begin_src emacs-lisp :tangle yes
-   (require 'package)
-   (setq package-load-list
-   '(
-        (cl t)
-        (cl-lib t)
-        (uniquify t)
-        ;;(require 'ansi-color)
-        (recentf t)
-          ;;(auctex  t)
-          ;;(company-anaconda t)
-          ;;(anaconda-mode t)
-          ;;(company t)
-          ;;(esup t)
-          ;;(flycheck t)
-          ;;(helm-ag t)
-          ;;(helm-gtags t)
-          ;;(helm-projectile t)
-          ;;(helm t)
-          ;;(helm-core t)
-          ;;(indent-guide t)
-          ;; (magit t)
-          ;; (git-commit t)
-          ;; (magit-popup t)
-          ;;(popup t)
-          ;;(projectile t)
-          ;;(pkg-info t)
-          ;;(epl t)
-          ;;            (pythonic t)
-          (dash t)
-          (s t)
-          (f t)
-          ;;(rainbow-delimiters t)
-          ;(use-package t)
-          ;;(diminish t)
-          ;;(bind-key t)
-          ;;(with-editor t)
-          (async t)
-          ;;(ffap t)
-          ;;(saveplace t)
-          ;;(ansi-color t)
-          ;all
-          ))
+     (require 'package)
+     (add-to-list
+      'package-archives
+      ;; '("melpa" . "http://stable.melpa.org/packages/") ; many packages won't show if using stable
+      '("melpa" . "http://melpa.milkbox.net/packages/")
+      t)
+     (setq package-load-list
+           '(
+             (cl t)
+             (cl-lib t)
+             (uniquify t)
+             ;;(require 'ansi-color)
+             (recentf t)
+             ;;(auctex  t)
+             ;;(company-anaconda t)
+             ;;(anaconda-mode t)
+             ;;(company t)
+             ;;(esup t)
+             ;;(flycheck t)
+             ;;(helm-ag t)
+             ;;(helm-gtags t)
+             ;;(helm-projectile t)
+             ;;(helm t)
+             ;;(helm-core t)
+             ;;(indent-guide t)
+             ;; (magit t)
+             ;; (git-commit t)
+             ;; (magit-popup t)
+             ;;(popup t)
+             ;;(projectile t)
+             ;;(pkg-info t)
+             ;;(epl t)
+             ;;            (pythonic t)
+             (dash t)
+             (s t)
+             (f t)
+             ;;(rainbow-delimiters t)
+                                             ;(use-package t)
+             ;;(diminish t)
+             ;;(bind-key t)
+             ;;(with-editor t)
+             (async t)
+             ;;(ffap t)
+             ;;(saveplace t)
+             ;;(ansi-color t)
+                                             ;all
+             ))
 
-  (package-initialize)
+     (package-initialize)
    #+end_src
 
 4. Prevent packages from being loaded twice
@@ -208,10 +213,10 @@ color-theme-alice-blue, color-theme-andreas
     (tool-bar-mode -1)
 )
 #+end_src
-*** Disable menu and add key to renable
+*** Disable menu
 #+begin_src emacs-lisp
-(menu-bar-mode -1)
-(global-set-key [f1] 'menu-bar-mode)
+  (menu-bar-mode -1)
+  ;(global-set-key [f1] 'menu-bar-mode)
 #+end_src
 *** Title and Status [[http://mnemonikk.org/][mnemonikk]]
 #+begin_src emacs-lisp
@@ -574,21 +579,21 @@ format.
        (quote rjp/org-latex-drawer-format))       )
     ;;
 #+END_SRC
-** Org-present
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'org-mode-hook
-              '(lambda()
-                 (autoload 'org-present "org-present" nil t)))
-  (add-hook 'org-present-mode-hook
-             (lambda ()
-               (org-present-big)
-               (org-display-inline-images)))
+** Epresent
+#+begin_src emacs-lisp
+   (defun rjp/epresentfix ()
+     "Fix some epresent settings "
+     (interactive)
+     (setq epresent-page-number 1)
+     (rjp/set-line-spacing 0.25)
+     )
+   (use-package epresent
+     :after (org)
+     :custom
+     (epresent-start-presentation-hook #'rjp/epresentfix)
+   )
 
-  (add-hook 'org-present-mode-quit-hook
-             (lambda ()
-               (org-present-small)
-               (org-remove-inline-images)))
-#+END_SRC
+#+end_src
 ** List of targets
 Can use org-all-targets *Automatically added by starter kit.
 - Use org-in-regexp
@@ -1006,9 +1011,10 @@ Remove VC for git
     :bind
     (("C-c p p"  . helm-projectile-switch-project)
      ("C-c p f"  . helm-projectile-find-file))
+    :custom
+    (projectile-completion-system 'helm)
     :config
-    (projectile-global-mode)
-    (setq projectile-completion-system 'helm)
+    (projectile-mode)
     (helm-projectile-on)
     ;; On windows native indexing is slow
     ;;(setq projectile-indexing-method 'alien)
@@ -1053,23 +1059,33 @@ To setup:
 (setq tramp-default-method "ssh")
 #+END_SRC
 * Completion with company-mode
-#+BEGIN_SRC emacs-lisp
-  (use-package company
-    :ensure t
-    :defer 1
-    :config
-    (global-company-mode))
-
-  (use-package company-anaconda
-    :ensure t
-    :after (company)
-    :config
-    (add-to-list 'company-backends 'company-anaconda)
-    (add-hook 'python-mode-hook 'anaconda-mode)
-)
-
-
-#+END_SRC
+1. Add company mode
+   #+BEGIN_SRC emacs-lisp
+     (use-package company
+       :defer 2
+       :diminish
+       :custom
+       (company-show-numbers t)
+       :config
+       (global-company-mode))
+   #+END_SRC
+2. Add anaconda mode when python is used
+   #+begin_src emacs-lisp
+     (use-package anaconda-mode
+       :commands anaconda-mode
+       :diminish anaconda-mode
+       :init
+       (add-hook 'python-mode-hook #'anaconda-mode)
+       (add-hook 'python-mode-hook #'eldoc-mode))
+   #+end_src
+3. And then company anaconda
+   #+begin_src emacs-lisp
+     (use-package company-anaconda
+       :after (company anaconda-mode)
+       :config
+       (add-to-list 'company-backends 'company-anaconda)
+       (add-hook 'python-mode-hook 'anaconda-mode))
+   #+end_src
 * Setup custom file
 #+begin_src emacs-lisp
 (setq custom-file "~/.emacs.d/custom.el")

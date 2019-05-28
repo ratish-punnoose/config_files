@@ -23,7 +23,12 @@
     nil))
 (setq load-path (append load-path
 			(rjp/get-dir-and-subdirs
-			 (expand-file-name "elpa/" user-emacs-directory))))
+			 (expand-file-name "elpa/"
+					   user-emacs-directory))
+			 (rjp/get-dir-and-subdirs
+			  (expand-file-name "lisp/"
+					    user-emacs-directory))
+			))
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 (setq package-load-list '(all

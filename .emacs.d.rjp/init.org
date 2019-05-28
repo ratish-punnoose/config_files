@@ -19,8 +19,27 @@ Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]].
    #+end_src
 3. Set load path two
    1. Setup function
-
       #+begin_src emacs-lisp
+        (setq load-path
+              (append load-path
+                      (eval-when-compile
+                        (require 'seq)
+                        (defun rjp/get-dir-and-subdirs (dirname)
+                          "Provide list of directory and its direct subdirectories."
+                          (if (file-accessible-directory-p dirname)
+                              (append (list dirname) (seq-filter  'file-directory-p
+                                                                  (nthcdr 2 ;; Remove ".", ".."
+                                                                          (directory-files dirname t))))
+                            nil))
+                        (append
+                         (rjp/get-dir-and-subdirs
+                          (expand-file-name "elpa/" user-emacs-directory))
+                         (rjp/get-dir-and-subdirs
+                          (expand-file-name "lisp/" user-emacs-directory))))))
+
+      #+end_src
+
+      #+begin_src emacs-lisp :tangle no
         (require 'seq)
         (defun rjp/get-dir-and-subdirs (dirname)
           "Provide list of directory and its direct subdirectories."
@@ -32,7 +51,7 @@ Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]].
             nil))
       #+end_src
    2. Add to path
-      #+begin_src  emacs-lisp
+      #+begin_src  emacs-lisp :tangle no
         (setq load-path (append load-path
                                 (rjp/get-dir-and-subdirs
                                  (expand-file-name "elpa/" user-emacs-directory))
@@ -42,11 +61,14 @@ Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]].
       #+end_src
 4. Setup up package reppos for melpa
    #+begin_src emacs-lisp
+     (setq package-archives
+           '(("gnu" . "https://elpa.gnu.org/packages/")
+             ("melpa" . "http://melpa.milkbox.net/packages/")))
 
    #+end_src
 
 5. Setup up intitial packages
-   #+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle no
      (require 'package)
      (add-to-list
       'package-archives
@@ -107,12 +129,7 @@ Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]].
 
 
 * Package Management
-1. Enable use-package-always-ensure if you wish this behavior to be global for all packages.
-   #+begin_src emacs-lisp :tangle no
-   (require 'use-package-ensure)
-   (setq use-package-always-ensure t)
-   #+end_src
-2. use-package is needed to load packages but not needed at run time.
+use-package is needed to load packages but not needed at run time.
    #+begin_src emacs-lisp
    (eval-when-compile (require 'use-package))
    (require 'diminish)
@@ -134,7 +151,9 @@ Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]].
 #+END_SRC
 ** Recent files
 #+BEGIN_SRC emacs-lisp
-(recentf-mode 1)
+(use-package recentf
+:config
+(recentf-mode 1))
 #+END_SRC
 
 
@@ -358,6 +377,10 @@ color-theme-alice-blue, color-theme-andreas
 (setq-default show-trailing-whitespace t)
 (add-hook 'before-save-hook 'whitespace-cleanup)
 #+END_SRC
+** Uniquify buffers
+#+begin_src emacs-lisp
+(use-package uniquify :defer 4)
+#+end_src
 * Navigation
 Easier keys for switching windows
 

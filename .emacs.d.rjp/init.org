@@ -3,31 +3,49 @@
 #+STARTUP: hidestars
 #+PROPERTY: header-args :tangle yes
 * Introduction
-Inspired by Sasha Chua's org mode base emacs configuration using
-org-babel. This is called from init.el. This is stored in a git
-repo in a local branch.  Note that this uses the [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]].
+Originally inspired by Sasha Chua's org mode base emacs configuration
+using org-babel. For years, I used, the the starter kit by Eric
+Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]]. Now this is a custom configuration.
 * Pre-setup before loading packages
-1. Increase the GC
-   #+begin_src emacs-lisp
-   (setq gc-cons-threshold (* 40 1000 1000 ))
-   (setq gc-cons-percentage 1.0)
+1. Add a comment for package-initialize.  Emacs may add this
+   automatically if such a comment is not seen.
+   #+begin_src  emacs-lisp
+   ;; (package-initialize)
    #+end_src
-2. Set the load path
+2. Increase the GC
    #+begin_src emacs-lisp
-     (defun rjp/add-to-loadpath (dirname)
-       "Add given directory and subdirectories to load path."
-       (interactive)
-       ;; Use the function that works with the default directory
-       (when (file-accessible-directory-p dirname)
-         (setq tmp default-directory)
-         (setq default-directory dirname)
-         ;;(setq load-path (append dirname load-path))
-         (normal-top-level-add-subdirs-to-load-path)
-         (setq default-directory tmp)))
-     (rjp/add-to-loadpath (expand-file-name "elpa/" user-emacs-directory))
-     (rjp/add-to-loadpath (expand-file-name "lisp/" user-emacs-directory))
+     (setq gc-cons-threshold (* 40 1000 1000 ))
+     (setq gc-cons-percentage 1.0)
    #+end_src
-3. Setup up intitial packages
+3. Set load path two
+   1. Setup function
+
+      #+begin_src emacs-lisp
+        (require 'seq)
+        (defun rjp/get-dir-and-subdirs (dirname)
+          "Provide list of directory and its direct subdirectories."
+          (interactive)
+          (if (file-accessible-directory-p dirname)
+              (append (list dirname) (seq-filter  'file-directory-p
+                                                  (nthcdr 2 ;; Remove ".", ".."
+                                                          (directory-files dirname t))))
+            nil))
+      #+end_src
+   2. Add to path
+      #+begin_src  emacs-lisp
+        (setq load-path (append load-path
+                                (rjp/get-dir-and-subdirs
+                                 (expand-file-name "elpa/" user-emacs-directory))
+                                (rjp/get-dir-and-subdirs
+                                 (expand-file-name "lisp/" user-emacs-directory))
+                                ))
+      #+end_src
+4. Setup up package reppos for melpa
+   #+begin_src emacs-lisp
+
+   #+end_src
+
+5. Setup up intitial packages
    #+begin_src emacs-lisp :tangle yes
      (require 'package)
      (add-to-list
@@ -35,54 +53,56 @@ repo in a local branch.  Note that this uses the [[http://eschulte.github.io/ema
       ;; '("melpa" . "http://stable.melpa.org/packages/") ; many packages won't show if using stable
       '("melpa" . "http://melpa.milkbox.net/packages/")
       t)
-     (setq package-load-list
-           '(
-             (cl t)
-             (cl-lib t)
-             (uniquify t)
-             ;;(require 'ansi-color)
-             (recentf t)
-             ;;(auctex  t)
-             ;;(company-anaconda t)
-             ;;(anaconda-mode t)
-             ;;(company t)
-             ;;(esup t)
-             ;;(flycheck t)
-             ;;(helm-ag t)
-             ;;(helm-gtags t)
-             ;;(helm-projectile t)
-             ;;(helm t)
-             ;;(helm-core t)
-             ;;(indent-guide t)
-             ;; (magit t)
-             ;; (git-commit t)
-             ;; (magit-popup t)
-             ;;(popup t)
-             ;;(projectile t)
-             ;;(pkg-info t)
-             ;;(epl t)
-             ;;            (pythonic t)
-             (dash t)
-             (s t)
-             (f t)
-             ;;(rainbow-delimiters t)
+     (unless (boundp 'rjp/emacs-in-update)
+       (setq package-load-list
+             '(
+               (cl t)
+               (cl-lib t)
+               (uniquify t)
+               ;;(require 'ansi-color)
+               (recentf t)
+               ;;(auctex  t)
+               ;;(company-anaconda t)
+               ;;(anaconda-mode t)
+               ;;(company t)
+               ;;(esup t)
+               ;;(flycheck t)
+               ;;(helm-ag t)
+               ;;(helm-gtags t)
+               ;;(helm-projectile t)
+               ;;(helm t)
+               ;;(helm-core t)
+               ;;(indent-guide t)
+               ;; (magit t)
+               ;; (git-commit t)
+               ;; (magit-popup t)
+               ;;(popup t)
+               ;;(projectile t)
+               ;;(pkg-info t)
+               ;;(epl t)
+               ;;            (pythonic t)
+               (dash t)
+               (s t)
+               (f t)
+               ;;(rainbow-delimiters t)
                                              ;(use-package t)
-             ;;(diminish t)
-             ;;(bind-key t)
-             ;;(with-editor t)
-             (async t)
-             ;;(ffap t)
-             ;;(saveplace t)
-             ;;(ansi-color t)
+               ;;(diminish t)
+               ;;(bind-key t)
+               ;;(with-editor t)
+               (async t)
+               ;;(ffap t)
+               ;;(saveplace t)
+               ;;(ansi-color t)
                                              ;all
-             ))
+               )))
 
      (package-initialize)
    #+end_src
 
-4. Prevent packages from being loaded twice
+6. Prevent packages from being loaded twice
    #+begin_src emacs-lisp :tangle yes
-   (setq package-enable-at-startup nil)
+     (unless (boundp 'rjp/emacs-in-update)
+                     (setq package-enable-at-startup nil))
    #+end_src
 
 
@@ -318,7 +338,6 @@ color-theme-alice-blue, color-theme-andreas
 ** Indent guide
 #+BEGIN_SRC emacs-lisp
   (use-package indent-guide
-               :ensure t
                :defer 5
                :config
                (indent-guide-global-mode)
@@ -329,7 +348,6 @@ color-theme-alice-blue, color-theme-andreas
 ** Rainbow Delimiters
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
-                   :ensure t
                    :defer 4
                    :config
                    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
@@ -787,7 +805,6 @@ the two lines below.
 Syntax check
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
-    :ensure t
     :defer 2
     :config
     (global-flycheck-mode)
@@ -833,7 +850,6 @@ Remove any symbol prettiness at cursor
 ** Paredit mode
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package paredit
-    :ensure t
     :defer 2
     :init
     (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
@@ -1027,7 +1043,6 @@ Remove VC for git
 ** Helm-AG
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package helm-ag
-  :ensure t
   :defer 4
   )
 #+END_SRC
@@ -1045,7 +1060,6 @@ To setup:
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package helm-gtags
-    :ensure t
     :defer 5
     :config
     (define-prefix-command 'helm-gtags-mode-map)
@@ -1098,6 +1112,7 @@ To setup:
    #+end_src
 5. company-quickhelp
    #+begin_src emacs-lisp
+     (use-package pos-tip :defer t)
      (use-package company-quickhelp
                   :defer 5
                   :after (company pos-tip)

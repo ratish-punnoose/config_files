@@ -17,57 +17,51 @@ Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]].
      (setq gc-cons-threshold (* 40 1000 1000 ))
      (setq gc-cons-percentage 1.0)
    #+end_src
-3. Set load path two
-   1. Setup function
-      #+begin_src emacs-lisp
-        (setq load-path
-              (append load-path
-                      (eval-when-compile
-                        (require 'seq)
-                        (defun rjp/get-dir-and-subdirs (dirname)
-                          "Provide list of directory and its direct subdirectories."
-                          (if (file-accessible-directory-p dirname)
-                              (append (list dirname) (seq-filter  'file-directory-p
-                                                                  (nthcdr 2 ;; Remove ".", ".."
-                                                                          (directory-files dirname t))))
-                            nil))
-                        (append
-                         (rjp/get-dir-and-subdirs
-                          (expand-file-name "elpa/" user-emacs-directory))
-                         (rjp/get-dir-and-subdirs
-                          (expand-file-name "lisp/" user-emacs-directory))))))
+3. Utility functions used within this file
+   #+begin_src emacs-lisp
+     (require 'seq)
+     (defun rjp/get-dir-and-subdirs (dirname)
+       "Provide list of directory and its direct subdirectories."
+       (if (file-accessible-directory-p dirname)
+           (append (list dirname)
+                   (seq-filter
+                    'file-directory-p
+                    (nthcdr 2 ;; Remove ".", ".."
+                            (directory-files dirname t))))
+         nil))
 
-      #+end_src
+     (defun rjp/get-info-subdirs (dirname)
+       "Provide list of subdirectories with info files"
+       (if (file-accessible-directory-p dirname)
+           (seq-filter
+            (lambda (x)
+              "Predicate true if directory is a Info directory"
+              (and (file-directory-p x)
+                   (file-exists-p  (expand-file-name "dir" x))))
+            (nthcdr 2 ;; Remove ".", ".."
+                    (directory-files dirname t)))
+         nil))
+   #+end_src
+4. Set load path two
+   #+begin_src emacs-lisp
+     (setq load-path
+           (append load-path
+                   (eval-when-compile
+                     (append
+                      (rjp/get-dir-and-subdirs
+                       (expand-file-name "elpa/" user-emacs-directory))
+                      (rjp/get-dir-and-subdirs
+                       (expand-file-name "lisp/" user-emacs-directory))))))
 
-      #+begin_src emacs-lisp :tangle no
-        (require 'seq)
-        (defun rjp/get-dir-and-subdirs (dirname)
-          "Provide list of directory and its direct subdirectories."
-          (interactive)
-          (if (file-accessible-directory-p dirname)
-              (append (list dirname) (seq-filter  'file-directory-p
-                                                  (nthcdr 2 ;; Remove ".", ".."
-                                                          (directory-files dirname t))))
-            nil))
-      #+end_src
-   2. Add to path
-      #+begin_src  emacs-lisp :tangle no
-        (setq load-path (append load-path
-                                (rjp/get-dir-and-subdirs
-                                 (expand-file-name "elpa/" user-emacs-directory))
-                                (rjp/get-dir-and-subdirs
-                                 (expand-file-name "lisp/" user-emacs-directory))
-                                ))
-      #+end_src
-4. Setup up package reppos for melpa
+   #+end_src
+5. Setup up package repos for melpa
    #+begin_src emacs-lisp
      (setq package-archives
            '(("gnu" . "https://elpa.gnu.org/packages/")
              ("melpa" . "http://melpa.milkbox.net/packages/")))
-
    #+end_src
 
-5. Setup up intitial packages
+6. Setup up intitial packages
    #+begin_src emacs-lisp :tangle no
      (require 'package)
      (add-to-list
@@ -121,7 +115,7 @@ Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]].
      (package-initialize)
    #+end_src
 
-6. Prevent packages from being loaded twice
+7. Prevent packages from being loaded twice
    #+begin_src emacs-lisp :tangle yes
      (unless (boundp 'rjp/emacs-in-update)
                      (setq package-enable-at-startup nil))
@@ -1142,7 +1136,21 @@ To setup:
                   :config (company-quickhelp-mode)
                   )
    #+end_src
-
+* Adding paths for info files
+#+begin_src emacs-lisp
+  (setq rjp/info-path
+        (eval-when-compile
+          (rjp/get-info-subdirs (expand-file-name "elpa/" user-emacs-directory))))
+  (use-package info
+  :commands info
+  :config
+  (info-initialize)
+  (setq Info-directory-list
+        (append
+         Info-directory-list
+         rjp/info-path))
+  )
+#+end_src
 * Setup custom file
 #+begin_src emacs-lisp
 (setq custom-file "~/.emacs.d/custom.el")

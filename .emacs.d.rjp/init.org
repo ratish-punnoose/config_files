@@ -714,7 +714,7 @@ Can use org-all-targets *Automatically added by starter kit.
                         (rjp/org-all-i)
                       )  )))
 #+END_SRC
-** org tempo
+** org modules
 For shortcuts since 9.2
 #+begin_src emacs-lisp
 ;;(require 'org-tempo)
@@ -724,7 +724,7 @@ For shortcuts since 9.2
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(org-modules
-   (quote (org-tempo ))))
+   (quote (org-tempo ox-md))))
 #+end_src
 * Cygwin and Windows
 Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]
@@ -807,7 +807,6 @@ the two lines below.
 #+END_SRC
 
 * Language Support
-
 ** Programming language hooks
 #+begin_src emacs-lisp
   (defun rjp/prog-lang-common-hook ()
@@ -852,6 +851,7 @@ comment-or-uncomment-region in all progmodes
 Remove any symbol prettiness at cursor
 #+BEGIN_SRC emacs-lisp
 (setq prettify-symbols-unprettify-at-point 'right-edge)
+(global-prettify-symbols-mode t)
 #+END_SRC
 ** Generic Language extensions
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -1105,33 +1105,41 @@ To setup:
        (global-company-mode))
    #+END_SRC
 2. Add anaconda mode when python is used
+   |---------+---------------------------------------------|
+   | C-M-i   | anaconda-mode-complete                      |
+   | M-.     | anaconda-mode-find-definitions              |
+   | C-x 4 . | anaconda-mode-find-definitions-other-window |
+   | C-x 5 . | anaconda-mode-find-definitions-other-frame  |
+   | M-=     | anaconda-mode-find-assignments              |
+   | C-x 4 = | anaconda-mode-find-assignments-other-window |
+   | C-x 5 = | anaconda-mode-find-assignments-other-frame  |
+   | M-r     | anaconda-mode-find-references               |
+   | C-x 4 r | anaconda-mode-find-references-other-window  |
+   | C-x 5 r | anaconda-mode-find-references-other-frame   |
+   | M-,     | xref-pop-marker-stack                       |
+   | M-?     | anaconda-mode-show-doc                      |
+   |---------+---------------------------------------------|
    #+begin_src emacs-lisp
      (use-package anaconda-mode
-       :commands anaconda-mode
-       :diminish anaconda-mode
-       :init
-       (add-hook 'python-mode-hook #'anaconda-mode)
-       (add-hook 'python-mode-hook #'eldoc-mode))
+                  :hook python-mode
+                  :config
+                  (add-hook 'python-mode-hook #'anaconda-eldoc-mode))
    #+end_src
 3. And then company anaconda
    #+begin_src emacs-lisp
      (use-package company-anaconda
        :after (company anaconda-mode)
        :config
-       (add-to-list 'company-backends 'company-anaconda)
-       (add-hook 'python-mode-hook 'anaconda-mode))
+       (add-to-list 'company-backends 'company-anaconda))
    #+end_src
 4. pos-tip
    We don't need this directly but company-quickhelp uses it
    #+begin_src emacs-lisp
-     (use-package pos-tip
-        :defer 3)
+     (use-package pos-tip :defer 3)
    #+end_src
 5. company-quickhelp
    #+begin_src emacs-lisp
-     (use-package pos-tip :defer t)
      (use-package company-quickhelp
-                  :defer 5
                   :after (company pos-tip)
                   :config (company-quickhelp-mode)
                   )

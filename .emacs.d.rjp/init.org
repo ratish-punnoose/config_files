@@ -125,7 +125,8 @@ Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]].
 * Package Management
 use-package is needed to load packages but not needed at run time.
    #+begin_src emacs-lisp
-   (eval-when-compile (require 'use-package))
+   (eval-and-compile (require 'use-package))
+   (require 'use-package)
    (require 'diminish)
    (require 'bind-key)
    #+end_src
@@ -627,7 +628,7 @@ format.
      (rjp/set-line-spacing 0.25)
      )
    (use-package epresent
-     :after (org)
+     :commands (epresent-run)
      :custom
      (epresent-start-presentation-hook #'rjp/epresentfix)
    )
@@ -828,6 +829,13 @@ Syntax check
     (setq flycheck-idle-change-delay   5)
     )
 #+END_SRC
+
+** Flyspell
+On the fly spelling
+#+begin_src emacs-lisp
+  (use-package flyspell
+               :hook ((text-mode org-mode prog-mode) . flyspell-mode))
+#+end_src
 ** Highlight symbol
 Highlight symbols
 Doesn't currently work properly with hideshow
@@ -1045,11 +1053,14 @@ Remove VC for git
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-projectile
     :commands (helm-projectile-find-file helm-projectile-switch-project)
-    :bind
-    (("C-c p p"  . helm-projectile-switch-project)
-     ("C-c p f"  . helm-projectile-find-file))
+    ;:bind
+    ;(("C-c p p"  . helm-projectile-switch-project)
+    ; ("C-c p f"  . helm-projectile-find-file))
+    :bind-keymap
+    (("C-c p" .  projectile-command-map))
     :custom
     (projectile-completion-system 'helm)
+    (projectile-use-git-grep t)
     :config
     (projectile-mode)
     (helm-projectile-on)

@@ -1093,6 +1093,25 @@ To setup:
 #+BEGIN_SRC emacs-lisp
 (setq tramp-default-method "ssh")
 #+END_SRC
+* Eshell
+- Add tramp to eshell it is not set by default
+  #+begin_src emacs-lisp
+    (custom-set-variables
+     '(eshell-modules-list
+       (quote
+        (eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs
+                      eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt
+                      eshell-script eshell-term eshell-tramp eshell-unix))))
+  #+end_src
+- To use ssh with eshell
+  #+begin_verse
+  cd /ssh:hostname:~
+  #+end_verse
+- Aliases
+  #+begin_src emacs-lisp
+    (defun eshell/ff (file)
+      (find-file file))
+  #+end_src
 * Completion with company-mode
 1. Add company mode
    #+BEGIN_SRC emacs-lisp

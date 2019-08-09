@@ -25,16 +25,16 @@ parse_git_branch() {
     #git_branch=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/' -e 's/(\(.*\))/\1/'`
     git_branch=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
     if [ -n "$git_branch" ]; then
-        echo ".$git_branch"
+	echo ".$git_branch"
     fi
 }
 
 
 prompt_command () {
     if [ $? -eq 0 ]; then # set an error string for the prompt, if applicable
-        ERRPROMPT=""
+	ERRPROMPT=""
     else
-        ERRPROMPT='ERR->($?) \n'
+	ERRPROMPT='ERR->($?) \n'
     fi
     #if [ "\$(type -t __git_ps1)" ]; then # if we're in a Git repo, show current branch
     #    BRANCH="\$(__git_ps1 '[ %s ] ')"
@@ -60,7 +60,7 @@ prompt_command () {
 ${WHITE}\w\
 ${BCYAN}$(parse_git_branch)\
 ${RESET}}\
-\!: "
+\!$ "
 }
 export PROMPT_COMMAND=prompt_command
 
@@ -107,7 +107,7 @@ export PATH EDITOR
 # Set http_proxy in /etc/profile.d/http_proxy.sh if needed
 
 if [ -f ~/.config/.DIR_COLORS ]; then
-    	eval `dircolors -b ~/.config/.DIR_COLORS`
+	eval `dircolors -b ~/.config/.DIR_COLORS`
 fi
 
 
@@ -126,7 +126,7 @@ fi
 
 if [ -f ~/.config/bashmarks.sh ]; then
     source ~/.config/bashmarks.sh
-fi 
+fi
 #s <bookmark_name> - Saves the current directory as "bookmark_name"
 #g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"
 #p <bookmark_name> - Prints the directory associated with "bookmark_name"
@@ -156,7 +156,7 @@ fi
 #            -t preserve modification times
 #            -g preserve group
 #            -o preserve owner
-#            -D preserve device files 
+#            -D preserve device files
 #            --progress show progress
 #            -i itemize changes
 alias bkup='rsync --modify-window=3 --delete -rlt  --no-perms -n -i'

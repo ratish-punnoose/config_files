@@ -834,7 +834,7 @@ Syntax check
 On the fly spelling
 #+begin_src emacs-lisp
   (use-package flyspell
-               :hook ((text-mode org-mode prog-mode) . flyspell-mode))
+               :hook ((text-mode org-mode) . flyspell-mode))
 #+end_src
 ** Highlight symbol
 Highlight symbols
@@ -1103,7 +1103,11 @@ To setup:
 * Wgrep
 #+begin_src emacs-lisp
   (use-package wgrep
-    :hook ((grep-mode) . wgrep-setup))
+    :hook ((grep-mode . wgrep-setup)
+           (helm-grep-mode . wgrep-setup)))
+  (use-package wgrep-helm
+    :after (wgrep)
+    :hook (helm-grep-mode . wgrep-helm-setup))
 #+end_src
 * Tramp
 #+BEGIN_SRC emacs-lisp

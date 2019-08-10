@@ -1100,6 +1100,11 @@ To setup:
                   ("u" . helm-gtags-update-tags))
          )
 #+END_SRC
+* Wgrep
+#+begin_src emacs-lisp
+  (use-package wgrep
+    :hook ((grep-mode) . wgrep-setup))
+#+end_src
 * Tramp
 #+BEGIN_SRC emacs-lisp
 (setq tramp-default-method "ssh")

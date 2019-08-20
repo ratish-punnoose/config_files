@@ -886,8 +886,8 @@ Remove any symbol prettiness at cursor
 #+END_SRC
 ** Matlab
 #+BEGIN_SRC emacs-lisp
-  (use-package matlab-mode
-    :mode "\\.m$"
+  (use-package matlab
+    :mode ("\\.m\\'" . matlab-mode)
     :config
     (setq matlab-indent-function t)
     (custom-set-variables
@@ -1115,6 +1115,7 @@ To setup:
 #+END_SRC
 * Eshell
 - Add tramp to eshell it is not set by default
+- Remove up/down arrow from eshell-mode-map
   #+begin_src emacs-lisp
     (custom-set-variables
      '(eshell-modules-list
@@ -1122,6 +1123,10 @@ To setup:
         (eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs
                       eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt
                       eshell-script eshell-term eshell-tramp eshell-unix))))
+ (add-hook 'eshell-mode-hook
+           '(lambda () (progn
+                    (define-key eshell-mode-map [up] nil)
+                    (define-key eshell-mode-map [down] nil))))
   #+end_src
 - To use ssh with eshell
   #+begin_verse

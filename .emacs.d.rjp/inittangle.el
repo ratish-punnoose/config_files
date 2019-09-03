@@ -4,6 +4,7 @@
 ;;; Code:
 (package-initialize)
 (require 'ob-tangle)
+(setq org-element-use-cache nil)
 (org-babel-tangle-file "init.org")
 ;;; inittangle.el ends here
 

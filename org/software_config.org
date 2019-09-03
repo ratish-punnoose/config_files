@@ -386,6 +386,145 @@
    - C-c ! c :: Check current buffer
    - C-c ! C :: Clear errors in buffer
    - C-c ! l :: List errors
+** Eshell
+*** Basics
+    - eshell-print, eshell-echo instead of ls.
+    - **/*  recursive listing
+*** Globs
+    Globs work like that in zsh.  Globs also have predicate filters.
+**** Examples
+     - ;;   echo a*       ; anything starting with 'a'
+     - ;;   echo a#b      ; zero or more 'a's, then 'b'
+     - ;;   echo a##b     ; one or more 'a's, then 'b'
+     - ;;   echo a?       ; a followed by any character
+     - ;;   echo a*~ab    ; 'a', then anything, but not 'ab'
+     - ;;   echo c*~*~    ; all files beginning with 'c', except backups (*~)
+     - ;; Recursive globbing is also supported:
+     - ;;   echo **/*.c   ; all '.c' files at or under current directory
+     - ;;   echo ***/*.c  ; same as above, but traverse symbolic links
+**** Predicate filter
+     - Predicate filter are added with ([predicate]).
+       - Example:  *sh(.), *sh(/)
+     - Predicate filters can be stacked.
+       - Example: *sh(.L)
+     - Predicate filters
+***** File Type
+      - / :: directories
+      - . :: regular files
+      - * :: executable files
+      - s :: sockets
+      - p :: pipes
+      - @ :: sym links
+***** Permission bits
+       - r/A/R :: readable (owner/group/world
+       - w/I/W :: writable
+       - x/E/X :: executable
+       - s/S :: setuid/setgid
+       - t :: sticky bit
+***** Ownership
+      - U :: owned by effective uid
+      - u(UID|'user') :: owned by user
+      - g(GID|'group') :: owned by group
+***** File Attributes
+       - L[kmp]+-N :: filter based on size N Kb/Mb/blocks
+	 - *(L-1) : files less than 1 byte
+	 - *(L+50) : files greater than 50
+       - a[Mwhms]+-(N|'FILE') :: access time (months/weeks/hours/mins/secs)
+       - c[Mwhms]+-(N|'FILE') :: change time
+       - m[Mwhms]+-(N|'FILE') :: modification time
+	 - *(.ms-40) :: Files modified less than 40s ago
+	 - *(.ms-'goo.py') :: Files modified before goo.py
+***** Filter negation
+      - Filters can be negated
+	- Example: *sh(^/)  : containing *sh but not directories.
+**** Replacing find
+     Using argument predication, the recursive globbing syntax is
+     sufficient to replace the use of 'find <expr> | xargs <cmd>' in
+     most cases.  For example, to change the readership of all files
+     belonging to 'johnw' in the '/tmp' directory or lower, use:
+     #+begin_src
+     chmod go-r /tmp/**/*(u'johnw')
+     #+end_src
+
+
+
+*** Modifiers
+    - Modifiers and predicates can be stacked
+      - Example:  *sh(.:U)
+    - Multiple modifiers can be stacked
+      - Example: *sh(.:U:O)
+**** FOR SINGLE ARGUMENTS, or each argument of a list of strings:
+     - E  :: evaluate again
+     - L  :: lowercase
+     - U  :: uppercase
+     - C  :: capitalize
+     - h  :: dirname
+     - t  :: basename
+     - e  :: file extension
+     - r  :: strip file extension
+     - q  :: escape special characters
+     - S  ::      split string at any whitespace character
+     - S/PAT/ :: split string at each occurrence of PAT
+**** FOR LISTS OF ARGUMENTS:
+     - o :: sort alphabetically
+     - O :: reverse sort alphabetically
+     - u :: uniq list (typically used after :o or :O)
+     - R :: reverse list
+     - j ::      join list members, separated by a space
+     - j/PAT/ ::  join list members, separated by PAT
+     - i/PAT/ :: exclude all members not matching PAT
+     - x/PAT/  :: exclude all members matching PAT
+     - s/pat/match/ ::  substitute PAT with MATCH
+     - g/pat/match/  :: substitute PAT with MATCH for all occurrences
+**** EXAMPLES:
+     - *.c(:o)  sorted list of .c files
+
+
+*** Parsers
+    - Lisp parser:
+      - ( ... )
+      - $( ... ) … useful for string evaluation
+    - Shell parser:
+      - no parens … in other words, the default
+      - { ... }
+      - ${ ... } … useful for string evaluation
+      - In shell parser, reference variables with $
+
+*** Command History
+    - !! :: last command
+    - !ls :: last command starting with ls
+    - !?ls :: last command containing ls
+    - !ls<tab> :: completion showing commands
+*** Directory history
+    - cd = :: List history
+    - cd -<NUMBER> :: go to previous dir
+    - cd =<REGEXP> :: go to first dir matching regexp
+    - cd str1 str2 :: Take current pwd, replace str1 with str2 (regexp supported) and change to new dir
+      - Example:  If current dir is /some/path/to/target/curr/direct, cd target* . will change to directory "target" in hierarchy
+*** Directory Variables
+    - $- :: Previous working directory
+    - $+ :: Current working directory (doesn't work correctly).
+    - $_ :: Last argument of last command
+*** Iteration
+    for VAR in TOKENS {command}
+    Examples
+    #+begin_verse
+    for f in v1 v2 {scp info.php $f/tst.x}
+    for f in {ls -ld} { echo $f; echo $f}
+    #+end_verse
+*** Redirection
+**** Commands
+     - > :: Overwrite
+     - >> :: Append
+     - >>> :: Insert
+**** Buffer targets
+     Are refered to as #<buffername>  eg.  #<*scratch*>
+**** Lisp variables
+     Are referred to as #'var
+     Avoid clobbering existing vars.
+**** Special devs
+     - /dev/clip :: Clipboard
+     - /dev/kill :: Kill ring
 * Org Mode
 ** Visibility
    - <TAB>              :: Show/hide

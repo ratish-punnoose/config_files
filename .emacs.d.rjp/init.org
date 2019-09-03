@@ -1128,6 +1128,18 @@ To setup:
                     (define-key eshell-mode-map [up] nil)
                     (define-key eshell-mode-map [down] nil))))
   #+end_src
+- Use CD history into a command for expansion
+  #+BEGIN_SRC emacs-lisp
+    (defun rdir (index)
+        "Return the directory from eshell-last-dir-ring with index"
+      (interactive "Return directory with index in eshell")
+      (if (and (numberp index)
+               (< index (ring-length eshell-last-dir-ring)))
+          (ring-ref eshell-last-dir-ring index)
+        ""))
+  #+END_SRC
+
+
 - To use ssh with eshell
   #+begin_verse
   cd /ssh:hostname:~
@@ -1135,7 +1147,7 @@ To setup:
 - Aliases
   #+begin_src emacs-lisp
     (defun eshell/ff (file)
-      (find-file file))
+      (find-file-other-window file))
   #+end_src
 * Completion with company-mode
 1. Add company mode

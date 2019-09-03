@@ -525,6 +525,52 @@
 **** Special devs
      - /dev/clip :: Clipboard
      - /dev/kill :: Kill ring
+** Info files
+*** Using info
+**** Basics
+     - l :: go to previous node/ backward history
+     - r :: go in forward history direction
+     - Page up / Page down
+     - SPC :: Like Page down but will move to next item
+     - Backspace/Del :: Like Page Up but will also move to previous item
+     - ] :: next item in tree
+     - [ :: previous item in tree
+     - b :: beginning of node
+     - n :: next at current level
+     - p :: previous at current level
+**** Menu and crossreferences
+     - m  :: Pick menu item
+     - f :: Pick cross reference
+     - tab :: Next menu item or cross-reference
+     - Shift-tab :: Previous menu item or cross-reference
+     - Ret :: Visit content of menu item or Cross reference
+     - f? :: List all cross references.
+     - i :: Short-cut to main index.
+     - L :: creates a virtual node with list of visited nodes
+     - d :: Get to main directory.
+**** Search
+     - s :: serach info file for string
+
+
+*** Creating documentation
+    See [[https://www.emacswiki.org/emacs/ExternalDocumentation]].
+**** Creating python documentation
+     1. Install python3-sphinx.
+	#+begin_src
+	pip install sphinx
+	#+end_src
+     2. Generate documentation from cpython docs.
+	#+begin_src
+	 wget https://github.com/python/cpython/archive/master.tar.gz
+	 tar xf master.tar.gz
+	 cd cpython-master/Doc
+	 sphinx-build -b texinfo -d build/doctrees . build/texinfo
+	 cd build/texinfo && make
+	 mv python.info ~/.local/share/info
+	 cd ~/.local/share/info
+	 install-info python.info dir
+	#+end_src
+
 * Org Mode
 ** Visibility
    - <TAB>              :: Show/hide

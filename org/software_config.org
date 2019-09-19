@@ -400,6 +400,7 @@
      - ;;   echo a*~ab    ; 'a', then anything, but not 'ab'
      - ;;   echo c*~*~    ; all files beginning with 'c', except backups (*~)
      - ;; Recursive globbing is also supported:
+     - ;;   echo */*.c    ; all .c files at current or one level down.
      - ;;   echo **/*.c   ; all '.c' files at or under current directory
      - ;;   echo ***/*.c  ; same as above, but traverse symbolic links
 **** Predicate filter
@@ -409,7 +410,7 @@
        - Example: *sh(.L)
      - Predicate filters
 ***** File Type
-      - / :: directories
+      - / :: directories. Example ls -ld *(/) lists all directories
       - . :: regular files
       - * :: executable files
       - s :: sockets
@@ -426,14 +427,23 @@
       - u(UID|'user') :: owned by user
       - g(GID|'group') :: owned by group
 ***** File Attributes
-       - L[kmp]+-N :: filter based on size N Kb/Mb/blocks
+       - Size attribute: L[kmp]+-N :: filter based on size N Kb/Mb/blocks
 	 - *(L-1) : files less than 1 byte
 	 - *(L+50) : files greater than 50
-       - a[Mwhms]+-(N|'FILE') :: access time (months/weeks/hours/mins/secs)
-       - c[Mwhms]+-(N|'FILE') :: change time
-       - m[Mwhms]+-(N|'FILE') :: modification time
-	 - *(.ms-40) :: Files modified less than 40s ago
-	 - *(.ms-'goo.py') :: Files modified before goo.py
+       - Time attribute :: attr_type + qualifier, where
+	 - attr_type is one of:
+	   - a :: access time .  Eg a+30
+	   - c :: change time
+	   - m :: modification time
+	 - qualifer is:
+	   - [Mwhms]+-(N|'FILE') :: (months/weeks/hours/mins/secs). Default : days
+	     - If filename is given, then it is relative to that file.
+	 - Examples
+	   - bzip2 -9v **/*(a+30); compress everything that hasn't been accessed in 30 days
+	   - *(.ms-40) :: Files modified less than 40s ago
+	   - *(.ms-'goo.py') :: Files modified before goo.py
+
+
 ***** Filter negation
       - Filters can be negated
 	- Example: *sh(^/)  : containing *sh but not directories.
@@ -478,6 +488,7 @@
      - g/pat/match/  :: substitute PAT with MATCH for all occurrences
 **** EXAMPLES:
      - *.c(:o)  sorted list of .c files
+     - *.c(:o:R) reverse sorted list
 
 
 *** Parsers

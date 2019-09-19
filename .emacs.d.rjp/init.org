@@ -810,6 +810,10 @@ the two lines below.
 #+END_SRC
 
 * Language Support
+** Auto fill mode
+#+begin_src emacs-lisp
+(add-hook 'text-mode-hook 'auto-fill-mode)
+#+end_src
 ** Programming language hooks
 #+begin_src emacs-lisp
   (defun rjp/prog-lang-common-hook ()

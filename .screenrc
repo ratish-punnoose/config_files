@@ -1,5 +1,31 @@
+# Comments
+
+hardstatus alwayslastline '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{+b M}%n%f* %t%{-}%+LW %= ][%h]'
+#caption always '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{+b M}%n%f* %t%{-}%+LW %= ]'
+#caption always '%{= kw} [%t][%{-}[ %= %-Lw%{+b M}%n%f %t%{-}%+LW %=]'
 caption always "%?%F%{.R.}%?%3n %t%? [%h]%?"
+# % escape char
+# %?[cond] s1 : s2  %?  - encloses a conditional,
+#  %F sets %? to true if window has focus
+#  %{.R.} attribute color modifier string
+#  %3n
+#  %t window title
+#  %h hard status of window if it is set.
+
 logtstamp on
 logfile screenlog-%S.log
-deflog on
+# deflog on
 
+layout new x2
+split -v
+focus
+focus
+layout save
+
+layout new x3
+split -v
+split -v
+focus
+focus
+focus
+layout save

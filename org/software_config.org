@@ -1054,6 +1054,49 @@
      gpg --list-keys
      gpg --delete-key 'myfriend@his.isp.com'
      #+END_SRC
+* GNU Screen
+** Overview
+   Screen has windows and regions.
+   - Regions are rectangular areas on the screen
+   - Windows are individual screen sessions.
+
+** Command line options
+   - -d pid :: Detach running screen session
+   - -ls  :: List session ids
+   - -L :: turn on output logging
+   - -r  :: resume detached session
+   - -R  :: resume (if only one session) or list available sessions
+   - -S sessionmae :: session name
+   - -t title  ::
+
+
+** Basic keys
+  - C-a :: Default escape
+  - C-a c :: Create new screen
+  - C-a ?:: Help
+  - C-a : :: (Colon) Enter configuration command
+  - C-a a ::  Send C-a to window
+  - C-a A :: Enter title for wndow
+  - C-a C :: Clear screen
+  - C-a d :: Detach
+  - C-a h :: Hardcopy/snapshot to file
+   - C-a H ::  Toggle logging
+** Window selection
+  - C-a C-a :: toggle between screens/windows
+  - C-a ' :: Prompt for window identifier and switch
+  - C-a w :: List active windows
+  - C-a " :: List of all windows to switch
+  - C-a n, C-a SPC :: Next window
+  - C-a p :: Previous window
+** Window groups
+** REgion
+   - C-a Tab :: Focus next region
+   - C-a F :: Resize window to current region
+   - C-a | :: split verrtical
+   - C-a X :: kill current region
+** Layout
+   Layout is a configuration for the breakup of regions
+
 
 * Misc
 ** Bootcamp can break powerpoint

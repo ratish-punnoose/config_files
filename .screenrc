@@ -12,9 +12,14 @@ caption always "%?%F%{.R.}%?%3n %t%? [%h]%?"
 #  %t window title
 #  %h hard status of window if it is set.
 
+defscrollback 1000
+term screen-256color
+
 logtstamp on
 logfile screenlog-%S.log
 # deflog on
+
+shelltitle "$ |bash"
 
 layout new x2
 split -v

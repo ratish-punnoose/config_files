@@ -1,0 +1,9 @@
+SwitchShortcuts=no
+Columns=85
+Rows=27
+Term=xterm-256color
+BackgroundColour=0,22,45
+Scrollbar=none
+Transparency=low
+OpaqueWhenFocused=yes
+ScrollMod=off

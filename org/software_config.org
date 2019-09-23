@@ -1080,7 +1080,13 @@
   - C-a C :: Clear screen
   - C-a d :: Detach
   - C-a h :: Hardcopy/snapshot to file
-   - C-a H ::  Toggle logging
+  - C-a H ::  Toggle logging
+  - C-a \ :: Quit, kill all windows.
+  - C-a Q :: Delete all regions, except current.
+  - C-a q ::  Send Ctrl-q to current window
+  - C-a [ :: Enter copy/scrollback mode
+  - C-a ] :: Paste
+
 ** Window selection
   - C-a C-a :: toggle between screens/windows
   - C-a ' :: Prompt for window identifier and switch

@@ -1,9 +1,29 @@
 # Comments
 
-hardstatus alwayslastline '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{+b M}%n%f* %t%{-}%+LW %= ][%h]'
+escape ^@@
+#bindkey "^@N" focus right
+bind ^n focus right
+bind ^p focus left
+
+#hardstatus alwayslastline '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{+b M}%n%f* %t%{-}%+LW %= ][%h]'
+hardstatus alwayslastline '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{.by}%n%f* %t%{-}%+LW %= ][%h]'
+# {= kw} : white on black
+# [%{y}%H%{-}]  : Hostname in yellow
+# [  %= Set attribute
+#    %- remove set
+#    Lw - all windows with flags up to current
+#    +b M  : add bold magenta
+#    %n    : window number
+#    %f    : flags of current window
+#    %t    : window title
+#    +Lw   : all windows with flags after current
+#    %=    : padd string to displays width
+#    %h    : hardstatus of the window
+
+
 #caption always '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{+b M}%n%f* %t%{-}%+LW %= ]'
 #caption always '%{= kw} [%t][%{-}[ %= %-Lw%{+b M}%n%f %t%{-}%+LW %=]'
-caption always "%?%F%{.R.}%?%3n %t%? [%h]%?"
+caption always "%?%F%{.by}%?%3n %t%? [%h]%?"
 # % escape char
 # %?[cond] s1 : s2  %?  - encloses a conditional,
 #  %F sets %? to true if window has focus

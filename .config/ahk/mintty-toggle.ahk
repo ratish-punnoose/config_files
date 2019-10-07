@@ -44,6 +44,7 @@ Menu, Tray, Add, Reload, ReloadSub
 Menu, Tray, Add, Exit, ExitSub
 
 global mintty_pid
+global mintty_win_width
 init(mintty_cmd)
 
 WinWaitClose, ahk_pid %mintty_pid%
@@ -52,7 +53,7 @@ return
 
 init(cmd)
 {
-	global mintty_pid, mintty_exe, mintty_cmd
+	global mintty_pid, mintty_exe, mintty_cmd, mintty_win_width
 	if !WinExist("ahk_class mintty") {
 	      ;  cmd , startdir, initstate, output.pid
 	      Run %mintty_cmd%, , , mintty_pid
@@ -80,11 +81,11 @@ init(cmd)
 	WinSet, Style, -0xC00000, ahk_pid %mintty_pid%
 	SysGet, mon_dim, MonitorWorkArea
 
-	width := (mon_dimRight - mon_dimLeft)
+	mintty_win_width := (mon_dimRight - mon_dimLeft)
 	height := (mon_dimBottom - mon_dimTop)/3
 
 	WinSet, Redraw, , ahk_pid %mintty_pid%
-	WinMove, ahk_pid %mintty_pid%, , mon_dimLeft, mon_dimTop, width, height
+	WinMove, ahk_pid %mintty_pid%, , mon_dimLeft, mon_dimTop, mintty_win_width, height
 }
 
 
@@ -94,6 +95,15 @@ ConsoleHotkey:
 		 WinMinimize, ahk_pid %mintty_pid%
 	      } else {
 		 WinRestore, ahk_pid %mintty_pid%
+		 SysGet, mon_dim, MonitorWorkArea
+		 curr_win_width := (mon_dimRight - mon_dimLeft)
+		 if (mintty_win_width != curr_win_width) {
+		    ; Resize to new desktip size.
+		    mintty_win_width := curr_win_width
+		    WinSet, Redraw, , ahk_pid %mintty_pid%
+		    WinMove, ahk_pid %mintty_pid%, , mon_dimLeft, mon_dimTop, mintty_win_width,
+		 }
+
 		 WinActivate, ahk_pid %mintty_pid%
 	      }
 	}

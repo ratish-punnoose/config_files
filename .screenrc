@@ -5,6 +5,23 @@ escape ^@@
 bind ^n focus right
 bind ^p focus left
 
+
+
+# From https://www.linuxquestions.org/questions/linux-general-1/screen-screenrc-how-to-use-the-right-ctrl-arrow-to-go-left-and-right-in-windows-764511/
+# for shift UP and DOWN arrows
+#bindkey ^[[1;5A prev
+#bindkey ^[[1;5B next
+
+# for ctrl right and left arrows
+bindkey ^[[1;5D focus left
+bindkey ^[[1;5C focus right
+
+
+# for shift right and left arrows
+bindkey ^[[1;2D prev
+bindkey ^[[1;2C next
+
+
 #hardstatus alwayslastline '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{+b M}%n%f* %t%{-}%+LW %= ][%h]'
 hardstatus alwayslastline '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{.by}%n%f* %t%{-}%+LW %= ][%h]'
 # {= kw} : white on black

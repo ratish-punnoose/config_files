@@ -1,5 +1,6 @@
 # .bash_profile
 
+export SCREENRC=~/.config/screen/screenrc
 
 
 # Get the aliases and functions

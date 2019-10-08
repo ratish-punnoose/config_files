@@ -1,0 +1,7 @@
+layout new x3
+split -v
+split -v
+focus
+focus
+focus
+layout save

@@ -1086,6 +1086,9 @@
   - C-a q ::  Send Ctrl-q to current window
   - C-a [ :: Enter copy/scrollback mode
   - C-a ] :: Paste
+** Hardcopy/logging
+   - hardcopy -h filename : write contents of current buffer with scrollback
+
 
 ** Window selection
   - C-a C-a :: toggle between screens/windows

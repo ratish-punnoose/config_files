@@ -58,16 +58,4 @@ logfile screenlog-%S.log
 
 shelltitle "$ |bash"
 
-layout new x2
-split -v
-focus
-focus
-layout save
-
-layout new x3
-split -v
-split -v
-focus
-focus
-focus
-layout save
+source screenrc.local

@@ -60,7 +60,7 @@ init(cmd)
 
 	      ; Wait,  wintitle, , seconds
 	      ;WinWait, ahk_pid %mintty_pid%, , 5
-	      WinWait, ahk_class mintty, , 5
+	      WinWait, ahk_class mintty, , 10
 	      if ErrorLevel {
 		 MsgBox, WinWait timeout for class mintty_pid
 		  ;    WinWait Timed out (WHY?!?)

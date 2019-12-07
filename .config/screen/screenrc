@@ -1,6 +1,9 @@
 # Comments
 
-escape ^@@
+escape ^@^@
+# This allows tunnelling through ssh.
+
+
 #bindkey "^@N" focus right
 bind ^n focus right
 bind ^p focus left

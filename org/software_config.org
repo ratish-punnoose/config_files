@@ -1105,8 +1105,20 @@
    - C-a X :: kill current region
 ** Layout
    Layout is a configuration for the breakup of regions
-
-
+* Video edit
+  * Merge videos in ffmpeg
+    #+begin_src
+    ffmpeg.exe -f concat -safe 0 -i ./filelist.txt -c copy output.mp4
+    #+end_src
+    where filelist.txt contains text such as
+    #+begin_src
+    file ./file1.mp4
+    file ./file2.mp4
+    #+end_src
+    created using something like
+    #+begin_src
+    for f in *.MP4; do echo "file ./$f" >> filelist.txt; done
+    #+end_src
 * Misc
 ** Bootcamp can break powerpoint
 ** Excel

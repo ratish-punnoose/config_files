@@ -913,6 +913,11 @@ Remove any symbol prettiness at cursor
    '(vhdl-index-menu t)
    '(vhdl-speedbar-auto-open nil))
 #+END_SRC
+** Verilog
+#+begin_src emacs-lisp
+  (add-hook 'verilog-mode-hook
+            (lambda () (setq indent-tabs-mode nil)))
+#+end_src
 ** C,C++
 #+BEGIN_SRC emacs-lisp
 (add-hook 'c-mode-hook 'imenu-add-menubar-index)

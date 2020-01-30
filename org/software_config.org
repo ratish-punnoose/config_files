@@ -533,9 +533,16 @@
 **** Lisp variables
      Are referred to as #'var
      Avoid clobbering existing vars.
+     - echo foo bar baz > #'myvar
 **** Special devs
      - /dev/clip :: Clipboard
      - /dev/kill :: Kill ring
+** Tramp
+   Syntax for remote access
+   - /ssh:hostname:dir :: ssh to machine
+   - /ssh:[username1@]hostname|ssh:[username2@]hostname2 :: pass through
+   - /ssh:[username@]hostname|sudo:hostname :: Have to keep the
+
 ** Info files
 *** Using info
 **** Basics
@@ -1168,23 +1175,7 @@
     Then copy into powerpoint.
 
 
-** Minimal Debian Install
-*** wajig
-*** less
-*** i3
-    i3, i3status, suckless-tools
-*** openssh-client
-*** rxvt-unicode font xft:Inconsolata
-*** xorg
-*** fonts-inconsolata
-*** fontconfig
-*** git
-*** libc-i386
-*** ia32-libs
-    First requires multiarch install
-    dpkg --add-architecture i386
-*** lsb
-    Try lsb-core
+
 ** Cygwin, Windows7 Quirkiness
 *** Virtualstore
     This is a feature of Windows Vista designed to ensure that old
@@ -1266,3 +1257,23 @@
 ** Systemctl
    - systemctl start unitname
    - systemctl stop unitname
+** CA certificates
+   - Add .crt file to /usr/local/share/certificates
+   - Run update-ca-certificates
+** Minimal Debian Install
+*** wajig
+*** less
+*** i3
+    i3, i3status, suckless-tools
+*** openssh-client
+*** rxvt-unicode font xft:Inconsolata
+*** xorg
+*** fonts-inconsolata
+*** fontconfig
+*** git
+*** libc-i386
+*** ia32-libs
+    First requires multiarch install
+    dpkg --add-architecture i386
+*** lsb
+    Try lsb-core

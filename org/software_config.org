@@ -404,6 +404,7 @@
      - ;;   echo **/*.c   ; all '.c' files at or under current directory
      - ;;   echo ***/*.c  ; same as above, but traverse symbolic links
 **** Predicate filter
+     Predicates select files from a given list that meet a criteria.
      - Predicate filter are added with ([predicate]).
        - Example:  *sh(.), *sh(/)
      - Predicate filters can be stacked.
@@ -459,6 +460,8 @@
 
 
 *** Modifiers
+    Modifiers change the string, file, or list that precede it.
+    For help type: eshell-display-modifier-help
     - Modifiers and predicates can be stacked
       - Example:  *sh(.:U)
     - Multiple modifiers can be stacked

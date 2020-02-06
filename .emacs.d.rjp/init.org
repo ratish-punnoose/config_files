@@ -1165,6 +1165,105 @@ To setup:
     (defun eshell/ff (file)
       (find-file-other-window file))
   #+end_src
+** Bookmarks CD
+Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af280][kkatsuyuki's eshell bookmark]]
+#+begin_src emacs-lisp
+  (defun show-bmk-list ()
+    "Show the registed bookmark list and each corresponding path"
+    (let (output-string bmk-name bmk-path (each-format "%-15s|%-5s|%s
+  "))
+      (setq output-string (concat (format each-format "Bookmarks" "Type"
+                                          "Path") (format "%s
+  " (make-string 80 ?-))))
+      (dolist (tmp bookmark-alist)
+        (setq bmk-name (car tmp))
+        (setq bmk-path (abbreviate-file-name (assoc-default 'filename tmp)))
+        (if (file-directory-p bmk-path)
+            (setq output-string
+                  (concat output-string (format each-format bmk-name "D" bmk-path)))
+          (setq output-string (concat output-string (format each-format bmk-name "F" bmk-path))))
+        )
+      output-string
+      ))
+
+  (defun add-bmk (&optional args)
+    "add the current path to the bookmark as the name of the first args' element"
+    (let ((name (or (car args)
+                    (file-name-nondirectory
+                     (directory-file-name default-directory)))))
+      (if name
+          (progn
+            (bookmark-set name)
+            (bookmark-set-filename name (eshell/pwd))
+            (bookmark-save)
+            (format "Saved current directory in bookmark %s" name))
+        (error "You must enter a bookmark name"))
+      )
+    )
+
+  (defun delete-bmk (args)
+    "delete the elements of args from the bookmark"
+    (let (output-string)
+      (if args
+          (progn (dolist (tmp args)
+                   (bookmark-delete tmp)
+                   (bookmark-save)
+                   (setq output-string
+                         (concat output-string (format "Deleted the bookmark %s
+  " tmp))))
+                 output-string)
+        (error "You must enter a bookmark name"))))
+
+  (defun cd-bmk (args)
+    "cd to the bookmark entry of the args' first element or open its entry"
+    (let ((bookmark (car args)) filename)
+      (if (setq filename (bookmark-get-filename bookmark))
+          ;; If it points to a directory, change to it.
+          (if (file-directory-p filename)
+              (eshell/cd filename)
+            ;; otherwise, just jump to the bookmark
+            (bookmark-jump bookmark))
+        (error "%s is not a bookmark" bookmark)))
+    )
+
+  ;; to add bookmark on eshell
+  (defun bookmark-alternate-buffer-file-name ()
+    "Return the current buffer's file in a way useful for bookmarks."
+    ;; Abbreviate the path, both so it's shorter and so it's more
+    ;; portable.  E.g., the user's home dir might be a different
+    ;; path on different machines, but "~/" will still reach it.
+    (abbreviate-file-name
+     (cond
+      (buffer-file-name buffer-file-name)
+      ((and (boundp 'dired-directory) dired-directory)
+       (if (stringp dired-directory)
+           dired-directory
+         (car dired-directory)))
+      (default-directory)
+      (t (error "Buffer not visiting a file or directory")))))
+
+  (advice-add 'bookmark-buffer-file-name :override
+              #'bookmark-alternate-buffer-file-name)
+
+
+  (defun eshell/s (args)
+    "Save bookmark"
+    (add-bmk (list args)))
+
+
+  (defun eshell/g (args)
+    "CD to bookmark"
+    (cd-bmk (list args)))
+
+
+  (defun eshell/l ()
+    "List bookmarks"
+    (show-bmk-list))
+
+  (defun eshell/d (args)
+    "Remove bookmark"
+    (delete-bmk (list args)))
+#+end_src
 * Completion with company-mode
 1. Add company mode
    #+BEGIN_SRC emacs-lisp

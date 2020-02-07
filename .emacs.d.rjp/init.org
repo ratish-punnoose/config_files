@@ -970,6 +970,22 @@ Add reftex mode
   (use-package tla-mode
     :mode "\\.tla$")
 #+end_src
+
+** Haskell
+#+BEGIN_SRC emacs-lisp
+  (use-package haskell-mode
+    :mode (("\\.hs\\'"    . haskell-mode)
+           ("\\.cabal\\'" . haskell-cabal-mode)
+           ("\\.hcr\\'"   . haskell-core-mode))
+    :interpreter ("haskell" . haskell-mode)
+
+
+    :config
+    (require 'haskell)
+    (require 'haskell-mode)
+    (require 'haskell-interactive-mode)
+    (require 'autoinsert))
+#+END_SRC
 * Magit
 Magit mostly just works.  Only thing to add here is to add a simple
 keystroke to start it.

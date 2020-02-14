@@ -179,30 +179,30 @@ use-package is needed to load packages but not needed at run time.
 Set default font to Consolas.  This is done using
 Options-> Save Options.
 #+begin_src emacs-lisp
-  ;;(set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso8859-1")
-  (cond ((or (eq system-type 'windows-nt)
-             (eq system-type 'cygwin))
-         (custom-set-faces
-          ;; custom-set-faces was added by Custom.
-          ;; If you edit it by hand, you could mess it up, so be careful.
-          ;; Your init file should contain only one such instance.
-          ;; If there is more than one, they won't work right.
-          '(default ((t (:family "Consolas" :foundry "outline" :slant normal
-                                   :weight normal :height 113 :width normal))))))
-        ((eq system-type 'gnu/linux)
-         (cond
-          ((find-font (font-spec :name "Source Code Variable"))
+    ;;(set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso8859-1")
+    (cond ((or (eq system-type 'windows-nt)
+               (eq system-type 'cygwin))
            (custom-set-faces
             ;; custom-set-faces was added by Custom.
             ;; If you edit it by hand, you could mess it up, so be careful.
             ;; Your init file should contain only one such instance.
             ;; If there is more than one, they won't work right.
-            '(default ((t (:family "Source Code Variable" :foundry "adobe" :slant normal
-                                   :weight normal :height 130 :width normal))))
-                                          ;'(default ((t (:family "Inconsolata" :foundry "outline" :slant normal
-                                          ;                      :weight normal :height 113 :width normal))))
-
-          )))))
+            '(default ((t (:family "Consolas" :foundry "outline" :slant normal
+                                     :weight normal :height 113 :width normal))))
+            ))
+          ((eq system-type 'gnu/linux)
+           (cond
+            ((find-font (font-spec :name "Source Code Variable"))
+             (custom-set-faces
+              ;; custom-set-faces was added by Custom.
+              ;; If you edit it by hand, you could mess it up, so be careful.
+              ;; Your init file should contain only one such instance.
+              ;; If there is more than one, they won't work right.
+              '(default ((t (:family "Source Code Variable" :foundry "adobe" :slant normal
+                                     :weight normal :height 130 :width normal))))
+                                            ;'(default ((t (:family "Inconsolata" :foundry "outline" :slant normal
+                                            ;                      :weight normal :height 113 :width normal))))
+              )))))
   (global-font-lock-mode t)
 #+end_src
 
@@ -377,6 +377,51 @@ color-theme-alice-blue, color-theme-andreas
 ** Uniquify buffers
 #+begin_src emacs-lisp
 (use-package uniquify :defer 4)
+#+end_src
+** Ediff
+*** Split side by side
+#+begin_src emacs-lisp
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ediff-split-window-function (quote split-window-horizontally)))
+#+end_src
+*** Colors
+- ediff has the following matrix options
+  |         | A | B | C | ancestor |
+  |---------+---+---+---+----------|
+  | odd     |   |   |   |          |
+  | even    |   |   |   |          |
+  | current |   |   |   |          |
+  | fine    |   |   |   |          |
+- Colors in shades
+|          | Red    | Green  | Blue   | Pink   |
+|----------+--------+--------+--------+--------|
+| Dark     | 371108 | 083711 | 080D37 | 330837 |
+| Lighter  | 4B160A | 0A4B13 | 0A114B | 460A4B |
+| Lighter  | 611302 | 02610F | 021261 | 500261 |
+| Lightest | 841A03 | 038417 | 031C84 | 5F0384 |
+
+#+begin_src emacs-lisp
+    (custom-set-faces
+     '(ediff-even-diff-A ((t (:background "#371108"))))
+     '(ediff-even-diff-B ((t (:background "#083711"))))
+     '(ediff-even-diff-C ((t (:background "#080D37"))))
+     '(ediff-even-diff-Ancestor ((t (:background "#330837"))))
+     '(ediff-odd-diff-A ((t (:background "#4B160A"))))
+     '(ediff-odd-diff-B ((t (:background "#0A4B13"))))
+     '(ediff-odd-diff-C ((t (:background "#0A114B"))))
+     '(ediff-odd-diff-Ancestor ((t (:background "#460A4B"))))
+     '(ediff-current-diff-A ((t (:background "#611302"))))
+     '(ediff-current-diff-B ((t (:background "#02610F"))))
+     '(ediff-current-diff-C ((t (:background "#021261"))))
+     '(ediff-current-diff-Ancestor ((t (:background "#500261"))))
+     '(ediff-fine-diff-A ((t (:background "#841A03"))))
+     '(ediff-fine-diff-B ((t (:background "#038417"))))
+     '(ediff-fine-diff-C ((t (:background "#031C84"))))
+     '(ediff-fine-diff-Ancestor ((t (:background "#5F0384")))) )
 #+end_src
 * Navigation
 Easier keys for switching windows

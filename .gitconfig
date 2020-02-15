@@ -18,6 +18,9 @@
         d = diff --color-words
         nd = diff --no-index --color-words
 
+[merge]
+	conflictstyle = diff3
+
 #[merge]
 #	tool = kdiff3
 #        conflictstyle = diff3

@@ -173,7 +173,10 @@ use-package is needed to load packages but not needed at run time.
 #+begin_src emacs-lisp
   (defalias 'yes-or-no-p 'y-or-n-p)
 #+end_src
-
+** Default to non tabs mode
+#+begin_src emacs-lisp
+(setq-default indent-tabs-mode nil)
+#+end_src
 * Appearance and UI
 ** Font
 Set default font to Consolas.  This is done using

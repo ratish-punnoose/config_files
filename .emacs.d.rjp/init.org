@@ -1245,6 +1245,11 @@ To setup:
 ** Bookmarks CD
 Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af280][kkatsuyuki's eshell bookmark]]
 #+begin_src emacs-lisp
+  (use-package bookmark
+    :hook ((eshell-mode . bookmark-maybe-load-default-file)))
+#+end_src
+
+#+begin_src emacs-lisp
   (defun show-bmk-list ()
     "Show the registed bookmark list and each corresponding path"
     (let (output-string bmk-name bmk-path (each-format "%-15s|%-5s|%s

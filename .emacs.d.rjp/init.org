@@ -790,6 +790,16 @@ For shortcuts since 9.2
  '(org-modules
    (quote (org-tempo ox-md))))
 #+end_src
+** org reveal
+1. Add org-export backend
+   #+begin_src emacs-lisp
+   (custom-set-variables '(org-export-backends (quote (ascii latex reveal))))
+   #+end_src
+2. Download ox-reveal as needed
+   #+begin_src emacs-lisp
+   (use-package ox-reveal :defer t)
+   #+end_src
+
 * Cygwin and Windows
 Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]
 

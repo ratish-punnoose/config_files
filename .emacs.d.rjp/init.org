@@ -1057,6 +1057,16 @@ Add reftex mode
     (require 'haskell-interactive-mode)
     (require 'autoinsert))
 #+END_SRC
+
+** Lisp
+#+begin_src emacs-lisp
+  (use-package lispy
+    :hook ((emacs-lisp-mode . lispy-mode)
+           (lisp-mode . lispy-mode)
+           (ielm-mode . lispy-mode)
+           (lisp-interaction-mode . lispy-mode)
+           (scheme-mode . lispy-mode)))
+#+end_src
 * Magit
 Magit mostly just works.  Only thing to add here is to add a simple
 keystroke to start it.

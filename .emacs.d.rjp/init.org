@@ -1065,7 +1065,11 @@ Add reftex mode
            (lisp-mode . lispy-mode)
            (ielm-mode . lispy-mode)
            (lisp-interaction-mode . lispy-mode)
-           (scheme-mode . lispy-mode)))
+           (scheme-mode . lispy-mode))
+    :bind
+    (:map lispy-mode-map
+          ("C-S-k" . lispy-kill-at-point)
+          ("C-," . hs-toggle-hiding)))
 #+end_src
 * Magit
 Magit mostly just works.  Only thing to add here is to add a simple

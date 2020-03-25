@@ -1285,8 +1285,10 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
         (setq bmk-name (car tmp))
         (setq bmk-path (abbreviate-file-name (assoc-default 'filename tmp)))
         (if (file-directory-p bmk-path)
-            (setq output-string
-                  (concat output-string (format each-format bmk-name "D" bmk-path)))
+            (progn
+              (set (intern bmk-name) bmk-path)
+              (setq output-string
+                    (concat output-string (format each-format bmk-name "D" bmk-path))))
           (setq output-string (concat output-string (format each-format bmk-name "F" bmk-path))))
         )
       output-string

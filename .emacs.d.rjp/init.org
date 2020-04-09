@@ -1261,7 +1261,12 @@ To setup:
   cd /ssh:hostname:~
   #+end_verse
 ** Aliases
-1. Find file other window
+1. Find file this window
+  #+begin_src emacs-lisp
+    (defun eshell/fi (file)
+      (find-file file))
+  #+end_src
+2. Find file other window
   #+begin_src emacs-lisp
     (defun eshell/ff (file)
       (find-file-other-window file))

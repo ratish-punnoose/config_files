@@ -37,11 +37,11 @@
    - C-x r k            :: Kill rectangle
    - C-x r y            :: Yank rectangle
    - C-x r t            :: Insert rectangle.  This is a superb command. To insert
-	the same text on multiple rows, just select the beginning and
-	end, C-x r t and then type in the characters to insert on
-	every row.
+        the same text on multiple rows, just select the beginning and
+        end, C-x r t and then type in the characters to insert on
+        every row.
    - C-x SPC ::  Rectangular selection.  Selection is no different
-		 except that highlighting is rectangular.
+                 except that highlighting is rectangular.
 ** Picture mode
    - C-c C-k :: kill rectangle
    - C-c C-y :: Yank rectangle
@@ -78,7 +78,7 @@
    Also see paredit
 *** Evaluation
     - C-x C-e :: Evaluate Lisp in *scratch* before cursor and print
-		 result in minibuffer
+                 result in minibuffer
     - C-j :: Evalute Lisp but insert result after cursor.
 *** Movement
     - C-M-f/C-M-b :: Move forward/backward dexp
@@ -112,7 +112,7 @@
     under cursor into query-replace arguments (can be done for both
     find and replace arguments)   To search for standalone word use  \bword\b  \b is a boundary marker.
    - rgrep :: Search through multiple files in directory tree through
-	      file pattern.
+              file pattern.
    - C-s :: search forward
    - M-s . ::  Search using symbol at point.  Hooks to isearch-forward-symbol-at-point
    - C-s C-*, C-s DOWN :: Search at point.  Requires Ratish's custom addition
@@ -121,6 +121,32 @@
    - C-M-% :: Searc-Replace Regexp (Use down arrow to select current symbol)
    - C-r  :: search backward
    - M-p :: Start editing previous search term
+** Regexp
+*** Basic syntax
+    Emacs REs precede Perl. Parentheses have to be escaped.
+    - Example: \([a-z]+\) greedy matches for one or more lowercase
+      alphabet strings.
+    - [0-9]\{3\}-[0-9]\{4\} matches a number of form 111-2222.
+    - \(xy\).*\1matches words with xy appearing at least twice.
+*** Newlines
+    - C-q C-j: quoted insert.
+*** Backreferences
+    - Written as \n.
+    - \& grabs the entire string that matched.
+    - \# inserts a decimal count of the number of replacements in
+      current command.
+      - Useful for making numbered lists. First insertion will show 0.
+      - To start at 1, a lisp function can be used.
+*** Lisp in regex
+    Lisp can be inserted using \,
+    - To replace match with 1 indexed numbers.
+      - \,(1+ (string-to-int \1)).
+      - Note: The lisp parens don't have to be escaped.
+    - Any lisp function can be called, even ones with side-effects.
+      - \,(find-file-no-select \&)  on a list of files, opens them in
+        the background.
+
+
 
 ** Copy word at point (doesn't seem to work RJP 1/29/16)
    - C-M-SPC M-w :: Select and copy word without moving cursor
@@ -147,15 +173,15 @@
     - C-c C-i :: insert marked candidates into narrowing buffer
     - C-t ::  Switch between horizontal and verital Helm
     - C-w :: yank word at point, starting from point to end of word
-	 into helm buffer
+         into helm buffer
     - M-n :: yank symbol at point
 **** Helm Mini (Buffers)
      Filter patterns
      - *<major-mode> or !*<major-mode> :: Filter by mode,
-	  eg. *!lisp,!sh,!fun to filter all except for
-	  lisp,sh,fundamendal mode buffers.
+          eg. *!lisp,!sh,!fun to filter all except for
+          lisp,sh,fundamendal mode buffers.
      - /directory/ :: Narrows to buffers that are in
-	  directory. E.g. /.emacs.d/ narrows to buffers in dir.
+          directory. E.g. /.emacs.d/ narrows to buffers in dir.
      - ^pat :: buffer name starts with pat
      - @searchterm :: Narrows to buffers that have searchterm
      - C-s :: helm-moccur whill show matching searchterms
@@ -165,9 +191,9 @@
      - C-u C-s :: recursively grep
      - ~/ / ./  :: at end of pattern to reach home, root, start dir
      - C-u helm-find-files :: Prefix command will list visited
-	  directories, can jump there.
+          directories, can jump there.
      - C-c h :: In find-files session, use this to show visited files
-	  directories. Can jump from there.
+          directories. Can jump from there.
      In this mode, the files can be narrowed by fuzzy matching.  At
      any time with the list of helm selections. use C-s to search
      through the file live.  A recursive file can also be made.
@@ -177,7 +203,7 @@
      3. Do C-s to search.
      4. Do C-z and select save to grep buffer.
      5. In grep buffer, use C-Up, C-Dn to move up/down the grep
-	buffer, while each item is shown in the next window.
+        buffer, while each item is shown in the next window.
      6. Use C-o to edit the grep item in the other window.
 
 
@@ -346,11 +372,11 @@
 *** History
    - l/L :: History (show commit log)  / Verbose
    - Ret or Space :: Expand.  Space is like more.  Keeps your state in
-		     top buffer and can scroll through changes.
+                     top buffer and can scroll through changes.
    - x/X :: Delete all commits after specific commit, but keep files in
-	  dirty state.  This allows easy rebase.  With capital X, will
-	    revert all files to that specific commit (i.e., will lose
-	    all changes)
+          dirty state.  This allows easy rebase.  With capital X, will
+            revert all files to that specific commit (i.e., will lose
+            all changes)
 **** Reflog, Recovering delted commits
       - h :: See the reflog
 **** Blame
@@ -429,25 +455,25 @@
       - g(GID|'group') :: owned by group
 ***** File Attributes
        - Size attribute: L[kmp]+-N :: filter based on size N Kb/Mb/blocks
-	 - *(L-1) : files less than 1 byte
-	 - *(L+50) : files greater than 50
+         - *(L-1) : files less than 1 byte
+         - *(L+50) : files greater than 50
        - Time attribute :: attr_type + qualifier, where
-	 - attr_type is one of:
-	   - a :: access time .  Eg a+30
-	   - c :: change time
-	   - m :: modification time
-	 - qualifer is:
-	   - [Mwhms]+-(N|'FILE') :: (months/weeks/hours/mins/secs). Default : days
-	     - If filename is given, then it is relative to that file.
-	 - Examples
-	   - bzip2 -9v **/*(a+30); compress everything that hasn't been accessed in 30 days
-	   - *(.ms-40) :: Files modified less than 40s ago
-	   - *(.ms-'goo.py') :: Files modified before goo.py
+         - attr_type is one of:
+           - a :: access time .  Eg a+30
+           - c :: change time
+           - m :: modification time
+         - qualifer is:
+           - [Mwhms]+-(N|'FILE') :: (months/weeks/hours/mins/secs). Default : days
+             - If filename is given, then it is relative to that file.
+         - Examples
+           - bzip2 -9v **/*(a+30); compress everything that hasn't been accessed in 30 days
+           - *(.ms-40) :: Files modified less than 40s ago
+           - *(.ms-'goo.py') :: Files modified before goo.py
 
 
 ***** Filter negation
       - Filters can be negated
-	- Example: *sh(^/)  : containing *sh but not directories.
+        - Example: *sh(^/)  : containing *sh but not directories.
 **** Replacing find
      Using argument predication, the recursive globbing syntax is
      sufficient to replace the use of 'find <expr> | xargs <cmd>' in
@@ -577,30 +603,30 @@
     See [[https://www.emacswiki.org/emacs/ExternalDocumentation]].
 **** Creating python documentation
      1. Install python3-sphinx.
-	#+begin_src
-	pip install sphinx
-	#+end_src
+        #+begin_src
+        pip install sphinx
+        #+end_src
      2. Generate documentation from cpython docs.
-	#+begin_src
-	 wget https://github.com/python/cpython/archive/master.tar.gz
-	 tar xf master.tar.gz
-	 cd cpython-master/Doc
-	 sphinx-build -b texinfo -d build/doctrees . build/texinfo
-	 cd build/texinfo && make
-	 mv python.info ~/.local/share/info
-	 cd ~/.local/share/info
-	 install-info python.info dir
-	#+end_src
+        #+begin_src
+         wget https://github.com/python/cpython/archive/master.tar.gz
+         tar xf master.tar.gz
+         cd cpython-master/Doc
+         sphinx-build -b texinfo -d build/doctrees . build/texinfo
+         cd build/texinfo && make
+         mv python.info ~/.local/share/info
+         cd ~/.local/share/info
+         install-info python.info dir
+        #+end_src
 
 * Org Mode
 ** Visibility
    - <TAB>              :: Show/hide
    - Shift + <TAB>      :: Global show/hide. With argument, up to
-	level n.
+        level n.
    - C-u <TAB>          :: Global cycle Overview->Contents->Show All->Overview
    - C-c C-x v          ::  Copy visible text:  (org-copy-visible)
    - C-c <TAB>          :: Expose children of current subtree.  With argument,
-		  to level n
+                  to level n
 
 ** Motion
    - C-c C-n		:: Next visible heading
@@ -685,7 +711,7 @@
    - "[[link][desc]"	:: Create link
    - C-c C-l            :: Edit Link
    - "#local"           :: Local link type.  Without #, does a search
-	for local
+        for local
    - C-c C-o            :: Follow link
    - "<<link_target>>"  :: This is a link target
 *** Custom links target
@@ -710,9 +736,9 @@
    :Value: 1
    :END:
    - ":prop1:"          :: Properties are like tags but with
-	value. They are inserted into a special drawer.
+        value. They are inserted into a special drawer.
    - ":prop2:"          :: Drawer is called "PROPERTIES". Each is on a
-	single line.
+        single line.
    - ":prop3_ALL:"      :: Allowed values for a property
    - C-c C-x p          :: Set property
    - C-c C-c            :: Executes property commands
@@ -773,92 +799,92 @@
     ;; Only return relevant headlines
     ;; Returns either nil or a list
     (let ((t_arr (make-vector 4 nil))
-	  (tstring ["TIMESTAMP" "DEADLINE" "SCHEDULED" "CLOCK"]))
+          (tstring ["TIMESTAMP" "DEADLINE" "SCHEDULED" "CLOCK"]))
       (dolist (entry ;; each entry in
-		(org-entry-properties nil 'special "CLOCK") ;; list of timetags
-		t_arr) ;; temporary var
-	(let* ((propname (car entry))
-	       (pos (position propname tstring :test 'equal)))
-	  (if pos
-	      (aset t_arr pos (append (elt t_arr pos)
-				      (list (cdr entry))   ))
-	    )))
+                (org-entry-properties nil 'special "CLOCK") ;; list of timetags
+                t_arr) ;; temporary var
+        (let* ((propname (car entry))
+               (pos (position propname tstring :test 'equal)))
+          (if pos
+              (aset t_arr pos (append (elt t_arr pos)
+                                      (list (cdr entry))   ))
+            )))
        ;; If any of the timestamps are present, return the headline and timestamps
        ;; else return nil
        (if (position nil t_arr :test-not 'equal)
-	   (cons (nth 4 (org-heading-components)) (copy-sequence t_arr) )
-	 nil)
+           (cons (nth 4 (org-heading-components)) (copy-sequence t_arr) )
+         nil)
        ))
 
 
   (defun org-test-datetree-insert(hding_daylist)
     (let* ((text (car hding_daylist))
-	   (days (cdr hding_daylist)))
+           (days (cdr hding_daylist)))
 
       (mapc (lambda(day)
-	      (org-datetree-find-date-create
-	       (org-date-to-gregorian day) t)
-	      ;;(outline-next-heading)
-	      ;;(org-insert-item)
-	      ;;(insert text)
-	      (org-agenda-insert-diary-make-new-entry text)
-	      )
-	    days)) )
+              (org-datetree-find-date-create
+               (org-date-to-gregorian day) t)
+              ;;(outline-next-heading)
+              ;;(org-insert-item)
+              ;;(insert text)
+              (org-agenda-insert-diary-make-new-entry text)
+              )
+            days)) )
 
   (defun org-heading-date-format (heading_info)
     ;;  heading_info is a cons
     ;;  car: text of heading
     ;;  cdr: vector with time string for different time tags
     (let* ((heading (car heading_info))
-	   (formatted_heading (org-make-link-string (copy-sequence heading)))
-	   (ts (cdr heading_info))
-	   daylist )
+           (formatted_heading (org-make-link-string (copy-sequence heading)))
+           (ts (cdr heading_info))
+           daylist )
       ;; ts is a vector. Each element is a list of strings or nil
       ;; map each list of strings to a date,
       ;; flatten vector
       ;; keep unique dates.
       (setq daylist
-	    (delq nil (delete-dups
-		       (apply 'append
-			      (mapcar
-			       (lambda (tstr_list)
-				 (if tstr_list
-				     (mapcar
-					(lambda (tstr)
-					  (org-time-string-to-absolute tstr))
-				      tstr_list)))
-			       ts)))))
+            (delq nil (delete-dups
+                       (apply 'append
+                              (mapcar
+                               (lambda (tstr_list)
+                                 (if tstr_list
+                                     (mapcar
+                                        (lambda (tstr)
+                                          (org-time-string-to-absolute tstr))
+                                      tstr_list)))
+                               ts)))))
       (cons heading  daylist)))
 
 
   (defun org-dblock-write:myblock (params)
       "Get dates/time/clock and create a datetree"
       (let* ( (mappedvals (org-map-entries 'org-heading-date-info))
-	      (heading_info (remove nil mappedvals))
-	      (hding_daylists (mapcar 'org-heading-date-format  heading_info))    )
+              (heading_info (remove nil mappedvals))
+              (hding_daylists (mapcar 'org-heading-date-format  heading_info))    )
 
 
-	(print "printing hding_daylists")
-	(print hding_daylists)
-	;; Parse date strings
-	;; Format link string
-	(save-restriction
-	  (org-narrow-to-within-dblock)
-	  (mapc 'org-test-datetree-insert hding_daylists)
+        (print "printing hding_daylists")
+        (print hding_daylists)
+        ;; Parse date strings
+        ;; Format link string
+        (save-restriction
+          (org-narrow-to-within-dblock)
+          (mapc 'org-test-datetree-insert hding_daylists)
 
-	  ;;(org-test-datetree-insert "text1")
-	  ;;(org-test-datetree-insert "text2")
-	  ;;(org-test-datetree-insert "text3")
-	  ;;(outline-next-heading)
-	  ;;(org-insert-heading nil t)
-	  ;;(org-do-demote)
-	  ;;(outline-next-heading)
-	  ;;;(org-insert-heading nil t)
-	  ;;(org-do-demote)
-	  ;;(org-agenda-insert-diary-make-new-entry "dummy text2")
-	  ;; remove extra new line added by previous command
-	  )
-	)
+          ;;(org-test-datetree-insert "text1")
+          ;;(org-test-datetree-insert "text2")
+          ;;(org-test-datetree-insert "text3")
+          ;;(outline-next-heading)
+          ;;(org-insert-heading nil t)
+          ;;(org-do-demote)
+          ;;(outline-next-heading)
+          ;;;(org-insert-heading nil t)
+          ;;(org-do-demote)
+          ;;(org-agenda-insert-diary-make-new-entry "dummy text2")
+          ;; remove extra new line added by previous command
+          )
+        )
       )
 #+END_SRC
 #+BEGIN: myblock
@@ -1202,10 +1228,10 @@
    1. Within VirtualBox
       1. Setup daemons within virtual box.
       2. In /etc/hosts alias the name of the host machine as seen on
-	 the network.
+         the network.
    2. VirtualBox Setting
       1. In Network Settings, Port Forwarding, setup all necessary
-	 port forwards.
+         port forwards.
    3. Remember to change any necessary environment variables to point
       at new location
 * Doors

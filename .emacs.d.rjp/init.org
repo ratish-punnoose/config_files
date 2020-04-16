@@ -1281,23 +1281,32 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
 #+begin_src emacs-lisp
   (defun show-bmk-list ()
     "Show the registed bookmark list and each corresponding path"
-    (let (output-string bmk-name bmk-path (each-format "%-15s|%-5s|%s
-  "))
-      (setq output-string (concat (format each-format "Bookmarks" "Type"
-                                          "Path") (format "%s
-  " (make-string 80 ?-))))
+    (let (output-string
+          bmk-name
+          bmk-path
+          (each-format "%-15s|%-5s|%s\n"))
+      (setq output-string (concat
+                           (format each-format
+                                   "Bookmarks" "Type" "Path")
+                           (format "%s\n"
+                                   (make-string 80 ?-))))
       (dolist (tmp bookmark-alist)
         (setq bmk-name (car tmp))
         (setq bmk-path (abbreviate-file-name (assoc-default 'filename tmp)))
-        (if (file-directory-p bmk-path)
+        (if (not (assoc-default 'front-context-string tmp))
+            ;; dir listings
+            ;; in bookmarks have this key set to null
             (progn
               (set (intern bmk-name) bmk-path)
               (setq output-string
-                    (concat output-string (format each-format bmk-name "D" bmk-path))))
-          (setq output-string (concat output-string (format each-format bmk-name "F" bmk-path))))
-        )
-      output-string
-      ))
+                    (concat output-string
+                            (format each-format
+                                    bmk-name "D" bmk-path))))
+          (setq output-string
+                (concat output-string
+                        (format each-format
+                                bmk-name "F" bmk-path)))))
+      output-string))
 
   (defun add-bmk (&optional args)
     "add the current path to the bookmark as the name of the first args' element"

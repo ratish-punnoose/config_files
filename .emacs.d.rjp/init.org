@@ -788,8 +788,9 @@ For shortcuts since 9.2
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ ;; Removing org-tempo
  '(org-modules
-   (quote (org-tempo ox-md))))
+   (quote (ox-md))))
 #+end_src
 ** org reveal
 1. Add org-export backend
@@ -800,7 +801,12 @@ For shortcuts since 9.2
    #+begin_src emacs-lisp
    (use-package ox-reveal :defer t)
    #+end_src
-
+* Yasnippet
+#+begin_src emacs-lisp
+  (use-package yasnippet
+  :hook ((org-mode . yas-minor-mode))
+  )
+#+end_src
 * Cygwin and Windows
 Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]
 

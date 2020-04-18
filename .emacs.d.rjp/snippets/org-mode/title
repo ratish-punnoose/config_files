@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: title
+# key: <ti
+# --
+#+TITLE: $1
+#+AUTHOR: $2
+#+STARTUP: indent
+#+STARTUP: hidestars
+$0

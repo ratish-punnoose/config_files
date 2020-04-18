@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: verilog
+# key: <sv
+# expand-env: ((yas-indent-line 'fixed) )
+# --
+#+begin_src verilog
+  $0
+#+end_src

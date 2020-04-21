@@ -391,7 +391,11 @@
    - k :: Drop stash
 *** Branch
    - b/B :: Switch to branch / Create and switch
-
+** Version control for SVN
+   - C-x v ~, vc-revision-other-window :: Shows different version of
+        file. Prompts for revision.
+   - C-x v l, vc-print-log :: Shows revision log
+   - C-x v g, vc-annotate ::  Like git blame
 ** Buffer  read status
    - C-x C-q :: toggle read status
 ** Diff

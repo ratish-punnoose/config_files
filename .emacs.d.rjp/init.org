@@ -1268,6 +1268,53 @@ To setup:
   #+begin_verse
   cd /ssh:hostname:~
   #+end_verse
+** Prompt
+- Remove ugly coloring
+  #+begin_src emacs-lisp
+    (custom-set-variables
+     '(eshell-highlight-prompt nil))
+  #+end_src
+- Add better prompt
+  #+begin_src emacs-lisp
+    (custom-set-variables
+     '(eshell-prompt-function
+       (function
+        (lambda ()
+          (let* ((curr-dir (eshell/pwd))
+                 (bmk-if-any (rjp/bookmark-rev-search curr-dir)))
+            (concat
+             (propertize
+              (abbreviate-file-name (eshell/pwd))
+              'face
+              `(:foreground "sienna")
+              )
+             (if bmk-if-any
+                 (propertize (concat "["
+                                     bmk-if-any
+                                     "]" )
+                             'face
+                             `(:foreground "DeepSkyBlue")
+                             )
+
+               "")
+             (if (= (user-uid) 0) " # " " $ ")))))))
+  #+end_src
+- Add function to search bookmarks in reverse
+  #+begin_src emacs-lisp
+    (defun rjp/bookmark-rev-search (filename)
+      "Return bookmark name"
+      (interactive)
+      (when (boundp 'bookmark-alist )
+        (dolist (entry bookmark-alist)
+          (when
+              (string=
+               ;; (abbreviate-file-name (cdr assoc-string 'filename
+               ;; entry))
+               (cdr (assoc-string 'filename entry))
+               filename)
+            (return (car entry))) )))
+  #+end_src
+
 ** Aliases
 1. Find file this window
   #+begin_src emacs-lisp

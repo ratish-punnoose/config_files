@@ -1097,7 +1097,8 @@ Remove VC for git
      (("C-x g" . magit-status))
     :config
     (setq magit-refresh-status-buffer nil)
-    (setq vc-handled-backends (delq 'Git vc-handled-backends)))
+    ;; (setq vc-handled-backends (delq 'Git vc-handled-backends))
+    )
 #+end_src
 * Helm and Projectile
 ** Helm for autocompletes

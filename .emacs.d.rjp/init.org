@@ -1079,6 +1079,16 @@ Add reftex mode
           ("C-S-k" . lispy-kill-at-point)
           ("C-," . hs-toggle-hiding)))
 #+end_src
+
+** Coq
+To start coq just do "(require proof-general)".
+And manually switch to coq-mode.
+#+begin_src emacs-lisp
+  (use-package proof-general
+    :defer t)
+  (use-package company-coq
+    :defer t)
+#+end_src
 * Magit
 Magit mostly just works.  Only thing to add here is to add a simple
 keystroke to start it.

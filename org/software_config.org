@@ -75,28 +75,91 @@
    - M-a :: Start of sentence
    - M-e :: End of sentence
 ** Lisp
-   Also see paredit
+   Also see paredit (obsolete).  Now see lispy
 *** Evaluation
     - C-x C-e :: Evaluate Lisp in *scratch* before cursor and print
                  result in minibuffer
     - C-j :: Evalute Lisp but insert result after cursor.
-*** Movement
-    - C-M-f/C-M-b :: Move forward/backward dexp
-    - C-M-@ :: highlight sexp
-    - C-M-u :: expand selection upwards
-    - C-M-d :: next enclosed dexp
-*** Deletion
-    - C-M-k :: Delete
-    - C-M-Backspace :: delete sexp before cursor
-*** Indentation
-    - C-M-q :: indent whole func with cursor on (
-*** Insertion
-    - M-(  :: a pair of parens
-    - C-u 2 M-( :: enclose the next 2 sexps with paren
-*** Code completion
-    - C-c TAB :: automatic completion for (defv to (defvar
-*** Code comment
-    - M-; :: Add line comment
+*** Paredit
+**** Movement
+     - C-M-f/C-M-b :: Move forward/backward dexp
+     - C-M-@ :: highlight sexp
+     - C-M-u :: expand selection upwards
+     - C-M-d :: next enclosed dexp
+**** Deletion
+     - C-M-k :: Delete
+     - C-M-Backspace :: delete sexp before cursor
+**** Indentation
+     - C-M-q :: indent whole func with cursor on (
+**** Insertion
+     - M-(  :: a pair of parens
+     - C-u 2 M-( :: enclose the next 2 sexps with paren
+**** Code completion
+     - C-c TAB :: automatic completion for (defv to (defvar
+**** Code comment
+     - M-; :: Add line comment
+*** Lispy
+**** Works anywhere
+     - [ / ] :: Jump to closest paren backward/forward
+     - Number argument ::
+     - Backspace :: Deletes sexp backward.  If at first char of ",
+                    sexp, jumps to matching end.  Next backspace will
+                    delete whole sexp
+     - C-K :: Deletes sexp
+     - C-M-, :: Select sexp
+     - J ::  Outline next. where outline is marked by ;;
+     - K ::  Outline prev
+     - C-1 ::  Describe inline
+     - C-2 :: Describe arglist inline
+**** Works at sexp
+     - a :: ace jump to symbol
+     - q :: ace jump to paren
+     - b :: move back in history
+     - c  :: clone
+     - i :: indent, hide/show outline, mark car if active
+       - mi : marks fist elem of list
+     - m :: mark list
+     - n ::  copy sexp to kill ring
+     - d :: Switch to opposite brace
+     - e :: eval region or sexp
+     - f :: flow in direction
+     - g :: goto tag (after collecting)
+     - p :: eval the current sexp in context of other window (good for
+            debugging)
+     - u :: undo
+     - r :: raise to parent (remove parent)
+     - s :: move sexp down within parent
+     - w :: move sexp up within parent
+     - t :: teleport.  Move sexp/region to location given by ace paren.
+     - tt :: telport to any sexp in window
+     - v :: Move/scroll window show cursor is at top. Next v restores.
+     - >/< :: Grow/reduce slurp/barf  with numeric arg 0, grow as far
+              as possible
+       - slurp/barf correspond to grow reduce at end of sexp
+       - but watch out on front.
+     - A :: go to beginning of defun, jump back
+     - C :: convolute the two closest outer parents
+     - F ::  jump to definition of symbol or first symbol in sexp
+     - I ::  Outlines like org-mode ;;*, ;;** etc.
+     - Alt-Enter :: New outlin
+     - Alt-Left :: Outline move
+     - J/K :: Move up/down in outline
+     - N/W :: Narrow widen
+     - P ::  Yank/paste
+     - V :: Projectile visit
+     - 2V :: Projectile visit in other window
+     - xb :: Transform to let binding
+     - xc :: IF to COND
+     - xi :: COND to IF
+     - xd :: Transform lambda or selected block to defun
+     - xl :: defun to lambda
+     - xf :: Flatten to see what function/macro does
+     - xe :: edebug
+     - Z :: stop edebug
+     - xB :: Store first region for ediff reference
+     - B :: ediff previously stored region with current
+     - xh :: Get help (describe function or variable. For var it
+             should be selected. 2m,3m, a )
 *** Debugging
     - M-x edebug-defun :: In definition of func, to enable debuging
     - M-x edebug-trace ::

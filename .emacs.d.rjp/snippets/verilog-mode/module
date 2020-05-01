@@ -1,0 +1,12 @@
+# -*- coding: utf-8; mode: snippet -*-
+# name: module
+# key: mod
+# --
+module $1
+  #(parameter x = 1,
+    parameter y = 2)
+  (input clk, rest_n,
+   $2);
+
+endmodule // $1
+

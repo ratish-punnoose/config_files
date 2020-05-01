@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: bind
+# key: bind
+# --
+bind ${1:modname} ${2:svamodname} ${3:sva_inst}(.*);

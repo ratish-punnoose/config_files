@@ -803,10 +803,11 @@ For shortcuts since 9.2
    #+end_src
 * Yasnippet
 #+begin_src emacs-lisp
-  (use-package yasnippet
-    :hook ((org-mode . yas-minor-mode)
-           (verilog-mode . yas-minor-mode))
-    :config (yas-reload-all nil))
+    (use-package yasnippet
+      :hook ((org-mode . yas-minor-mode)
+             (verilog-mode . yas-minor-mode)
+             (coq-mode . yas-minor-mode))
+      :config (yas-reload-all nil))
 #+end_src
 * Cygwin and Windows
 Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]

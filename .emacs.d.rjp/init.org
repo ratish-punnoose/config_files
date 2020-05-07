@@ -1293,20 +1293,28 @@ To setup:
        (function
         (lambda ()
           (let* ((curr-dir (eshell/pwd))
-                 (bmk-if-any (rjp/bookmark-rev-search curr-dir)))
+                 (bmk-if-any (rjp/bookmark-rev-search curr-dir))
+                 (abrv-curr-dir (abbreviate-file-name curr-dir))
+                 (prompt-with-color (propertize abrv-curr-dir
+                                                'face
+                                                `(:foreground "sienna"))))
             (concat
-             (propertize
-              (abbreviate-file-name (eshell/pwd))
-              'face
-              `(:foreground "sienna")
-              )
+             (if (string-match "sudo" prompt-with-color)
+                 ;; Concat pre-match with normal color
+                 ;; sudo with red
+                 ;; post-match with normal color
+                 (progn
+                   (put-text-property (match-beginning 0) (match-end 0)
+                                      'face `(:foreground "yellow")
+                                      prompt-with-color)
+                   prompt-with-color)
+               prompt-with-color)
              (if bmk-if-any
                  (propertize (concat "["
                                      bmk-if-any
-                                     "]" )
+                                     "]")
                              'face
-                             `(:foreground "DeepSkyBlue")
-                             )
+                             `(:foreground "DeepSkyBlue"))
 
                "")
              (if (= (user-uid) 0) " # " " $ ")))))))

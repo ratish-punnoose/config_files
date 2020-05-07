@@ -638,7 +638,7 @@
    - /ssh:hostname:dir :: ssh to machine
    - /ssh:[username1@]hostname|ssh:[username2@]hostname2 :: pass through
    - /ssh:[username@]hostname|sudo:hostname :: Have to keep the
-
+   - From eshell :: Use quotes. otherwise the | looks like a pipe character.
 ** Info files
 *** Using info
 **** Basics

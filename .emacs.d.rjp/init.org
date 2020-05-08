@@ -997,6 +997,7 @@ Remove any symbol prettiness at cursor
 #+begin_src emacs-lisp
   (add-hook 'verilog-mode-hook
             (lambda () (setq indent-tabs-mode nil)))
+  (custom-set-variables '(verilog-cexp-indent 0))
 #+end_src
 ** C,C++
 #+BEGIN_SRC emacs-lisp

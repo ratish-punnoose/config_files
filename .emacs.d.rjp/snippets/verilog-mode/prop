@@ -2,6 +2,7 @@
 # name: property
 # key: prop
 # --
-property $1;
+property ${1:propname}_p;
   $2 |-> $3;
 endproperty
+$1_a : assert property($1_p);

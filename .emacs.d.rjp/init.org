@@ -521,6 +521,10 @@ When cursor is at the beginning of a headline, speed commands can be used. Here 
 #+begin_src emacs-lisp
 (setq org-use-speed-commands t)
 #+end_src
+** Cycle plain list
+#+begin_src emacs-lisp
+  (custom-set-variables '(org-cycle-include-plain-lists (quote integrate)))
+#+end_src
 ** Tab in code block
 #+begin_src emacs-lisp
 (setq org-src-tab-acts-natively t)
@@ -791,6 +795,11 @@ For shortcuts since 9.2
  ;; Removing org-tempo
  '(org-modules
    (quote (ox-md))))
+#+end_src
+** Fade out properties
+#+begin_src emacs-lisp
+  (custom-set-faces
+   '(org-meta-line ((t (:foreground "dim gray")))))
 #+end_src
 ** org reveal
 1. Add org-export backend
@@ -1143,7 +1152,7 @@ Remove VC for git
      ("C-i"  . helm-execute-persistent-action) ; make TAB works in terminal
      ("C-z"  . helm-select-action))            ; list actions using C-z
     :config
-    (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+    (setq helm-split-window-inside-p            t ; open helm buffer inside current window, not occupy whole other window
           helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
           helm-recentf-fuzzy-match              t ; match recentf
           helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.

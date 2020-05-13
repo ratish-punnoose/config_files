@@ -696,10 +696,10 @@
                   to level n
 
 ** Motion
-   - C-c C-n		:: Next visible heading
-   - C-c C-p		:: Previous visible heading
-   - C-c C-f		:: Next heading same level
-   - C-c C-b		:: Previous heading same level
+   - C-c C-n /n		:: Next visible heading
+   - C-c C-p /p		:: Previous visible heading
+   - C-c C-f /f		:: Next heading same level
+   - C-c C-b /b		:: Previous heading same level
    - C-c C-j		:: Jump to any location (org-goto)
 
 ** Editing
@@ -780,6 +780,9 @@
    - "#local"           :: Local link type.  Without #, does a search
         for local
    - C-c C-o            :: Follow link
+
+   - C-c & ::  Jump back to last bookmark
+
    - "<<link_target>>"  :: This is a link target
 *** Custom links target
     - [[+TAB :: Bring up targets in local file

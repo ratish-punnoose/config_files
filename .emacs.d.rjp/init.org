@@ -520,6 +520,55 @@ When cursor is at the beginning of a headline, speed commands can be used. Here 
 
 #+begin_src emacs-lisp
 (setq org-use-speed-commands t)
+
+#+end_src
+*** Function to collapse nearby
+Taken from orgmode hacks [[https://orgmode.org/worg/org-hacks.html#sec-1-3-2][Org Mode hacks]]
+#+begin_src emacs-lisp
+  (defun ded/org-show-next-heading-tidily ()
+    "Show next entry, keeping other entries closed."
+    (interactive)
+    (if (save-excursion (end-of-line) (outline-invisible-p))
+        (progn (org-show-entry) (show-children))
+      (outline-next-heading)
+      (unless (and (bolp) (org-on-heading-p))
+        (org-up-heading-safe)
+        (hide-subtree)
+        (error "Boundary reached"))
+      (org-overview)
+      (org-reveal t)
+      (org-show-entry)
+      (show-children)))
+  (defun ded/org-show-previous-heading-tidily ()
+    "Show previous entry, keeping other entries closed."
+    (interactive)
+    (let ((pos (point)))
+      (outline-previous-heading)
+      (unless (and (< (point) pos) (bolp) (org-on-heading-p))
+        (goto-char pos)
+        (hide-subtree)
+        (error "Boundary reached"))
+      (org-overview)
+      (org-reveal t)
+      (org-show-entry)
+      (show-children)))
+  (defun rjp/org-hide-all-except-curr ()
+    "Outline hide all except current."
+    (interactive)
+    (if (not (org-at-heading-p))
+        (org-previous-visible-heading 1))
+    (org-overview)
+    (org-reveal t))
+#+end_src
+*** Add speed key
+#+begin_src emacs-lisp
+  (add-to-list 'org-speed-commands-user
+               '("N" ded/org-show-next-heading-tidily))
+  (add-to-list 'org-speed-commands-user
+               '("P" ded/org-show-previous-heading-tidily))
+  (define-key org-mode-map (kbd "C-c N") 'ded/org-show-next-heading-tidily)
+  (define-key org-mode-map (kbd "C-c P") 'ded/org-show-previous-heading-tidily)
+  (define-key org-mode-map (kbd "C-c C")  'rjp/org-hide-all-except-curr)
 #+end_src
 ** Cycle plain list
 #+begin_src emacs-lisp

@@ -504,6 +504,63 @@ are useful here.
 ** Setup before loading org
 Loading it in this file does not work since org has to be started to
 evaluate this file itself.
+#+begin_src emacs-lisp
+  (use-package org
+    :defer t
+    :config
+    (defun ded/org-show-next-heading-tidily ()
+      "Show next entry, keeping other entries closed."
+      (interactive)
+      (if (save-excursion (end-of-line) (outline-invisible-p))
+          (progn (org-show-entry) (outline-show-children))
+        (outline-next-heading)
+        (unless (and (bolp) (org-at-heading-p))
+          (org-up-heading-safe)
+          (outline-hide-subtree)
+          (error "Boundary reached"))
+        (org-overview)
+        (org-reveal t)
+        (org-show-entry)
+        (outline-show-children)))
+
+    (defun ded/org-show-previous-heading-tidily ()
+      "Show previous entry, keeping other entries closed."
+      (interactive)
+      (let ((pos (point)))
+        (outline-previous-heading)
+        (unless (and (< (point) pos)
+                     (bolp)
+                     (org-at-heading-p))
+          (goto-char pos)
+          (outline-hide-subtree)
+          (error "Boundary reached"))
+        (org-overview)
+        (org-reveal t)
+        (org-show-entry)
+        (outline-show-children)))
+
+
+    (defun rjp/org-hide-all-except-curr ()
+      "Outline hide all except current."
+      (interactive)
+      (if (not (org-at-heading-p))
+          (org-previous-visible-heading 1))
+      (org-overview)
+      (org-reveal t))
+
+    (add-to-list 'org-speed-commands-user
+                 '("N" ded/org-show-next-heading-tidily))
+
+    (add-to-list 'org-speed-commands-user
+                 '("P" ded/org-show-previous-heading-tidily))
+
+    (add-to-list 'org-speed-commands-user
+                 '("C" rjp/org-hide-all-except-curr))
+
+    (define-key org-mode-map (kbd "C-c N") 'ded/org-show-next-heading-tidily)
+    (define-key org-mode-map (kbd "C-c P") 'ded/org-show-previous-heading-tidily)
+    (define-key org-mode-map (kbd "C-c C") 'rjp/org-hide-all-except-curr))
+#+end_src
 ** org speed keys
 When cursor is at the beginning of a headline, speed commands can be used. Here are some of the useful ones:
 - ? :: Help
@@ -519,39 +576,43 @@ When cursor is at the beginning of a headline, speed commands can be used. Here 
 - ^ :: sort
 
 #+begin_src emacs-lisp
-(setq org-use-speed-commands t)
-
+  (custom-set-variables '(org-use-speed-commands t))
 #+end_src
 *** Function to collapse nearby
 Taken from orgmode hacks [[https://orgmode.org/worg/org-hacks.html#sec-1-3-2][Org Mode hacks]]
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (defun ded/org-show-next-heading-tidily ()
     "Show next entry, keeping other entries closed."
     (interactive)
     (if (save-excursion (end-of-line) (outline-invisible-p))
-        (progn (org-show-entry) (show-children))
+        (progn (org-show-entry) (outline-show-children))
       (outline-next-heading)
-      (unless (and (bolp) (org-on-heading-p))
+      (unless (and (bolp) (org-at-heading-p))
         (org-up-heading-safe)
-        (hide-subtree)
+        (outline-hide-subtree)
         (error "Boundary reached"))
       (org-overview)
       (org-reveal t)
       (org-show-entry)
-      (show-children)))
+      (outline-show-children)))
+
   (defun ded/org-show-previous-heading-tidily ()
     "Show previous entry, keeping other entries closed."
     (interactive)
     (let ((pos (point)))
       (outline-previous-heading)
-      (unless (and (< (point) pos) (bolp) (org-on-heading-p))
+      (unless (and (< (point) pos)
+                   (bolp)
+                   (org-at-heading-p))
         (goto-char pos)
-        (hide-subtree)
+        (outline-hide-subtree)
         (error "Boundary reached"))
       (org-overview)
       (org-reveal t)
       (org-show-entry)
-      (show-children)))
+      (outline-show-children)))
+
+
   (defun rjp/org-hide-all-except-curr ()
     "Outline hide all except current."
     (interactive)
@@ -559,9 +620,10 @@ Taken from orgmode hacks [[https://orgmode.org/worg/org-hacks.html#sec-1-3-2][Or
         (org-previous-visible-heading 1))
     (org-overview)
     (org-reveal t))
+
 #+end_src
 *** Add speed key
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (add-to-list 'org-speed-commands-user
                '("N" ded/org-show-next-heading-tidily))
   (add-to-list 'org-speed-commands-user
@@ -576,59 +638,62 @@ Taken from orgmode hacks [[https://orgmode.org/worg/org-hacks.html#sec-1-3-2][Or
 #+end_src
 ** Tab in code block
 #+begin_src emacs-lisp
-(setq org-src-tab-acts-natively t)
+  (custom-set-variables
+   '(org-src-tab-acts-natively t))
 #+end_src
 ** Org global configuration and shortcuts
 #+begin_src emacs-lisp
-;;(set-time-zone-rule "GMT+8")
-;;(set-time-zone-rule "PST")
-(setq org-directory "~/org")
+  ;;(set-time-zone-rule "GMT+8")
+  ;;(set-time-zone-rule "PST")
+  (custom-set-variables '(org-directory "~/org")
+                        '(org-hide-leading-stars t))
 
 
-(global-set-key "\C-cl" 'org-store-link)
-;; Use C-c C-l to insert link
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
+  (global-set-key "\C-cl" 'org-store-link)
+  ;; Use C-c C-l to insert link
+  (global-set-key "\C-cc" 'org-capture)
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-cb" 'org-iswitchb)
 
-(setq org-hide-leading-stars t)
+
 
 #+end_src
 ** Org capture
 #+begin_src emacs-lisp :tangle yes
-(setq  org-agenda-files (quote ("~/org/jnl.org")))
-(setq  org-refile-targets '((org-agenda-files  :maxlevel . 3)))
-(setq org-default-notes-file (concat org-directory "/jnl.org"))
-(setq org-log-done 'time) ;; Record time of task completion
-(setq org-clock-into-drawer 1)
-;; (setq org-log-done 'note) ;; Record time+note of task completion
+  (custom-set-variables '(org-agenda-files (quote ("~/org/jnl.org")))
+                        '(org-refile-targets '((org-agenda-files  :maxlevel . 3)))
+                        '(org-default-notes-file (concat org-directory "/jnl.org"))
+                        '(org-log-into-drawer t)
+                        '(org-log-done 'time) ;; Record time of task completion
+                        '(org-clock-into-drawer t)
+                        ;; (setq org-log-done 'note) ;; Record time+note of task completion
 
-;; C-c c     (org-capture) Call the command org-capture
-;; C-c C-c     (org-capture-finalize)
-;;      Once you have finished entering information into the capture buffer,
-;; C-c C-w (refile)
-;; C-c C-k abort capture
-;; C-u C-c c visit target of capture template
-;; C-u C-u C-c c Visit last stored capture item in its buffer
-;; C-0 + C-c c  capture at point in an org buffer
-(setq org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/org/jnl.org" "Todolist")
-             "* TODO %?\n  %iAdded: %U")
-              ("d" "Date" entry (file+datetree+prompt "~/org/jnl.org")
-             "* %?")
-        ("j" "Journal" entry (file+datetree "~/org/jnl.org")
-             "* %?\nAdded: %U\n  %i")
-              ("n" "NowAction" entry (file+datetree "~/org/jnl.org")
-             "* %?" :clock-in t :clock-resume t)))
+                        ;; C-c c     (org-capture) Call the command org-capture
+                        ;; C-c C-c     (org-capture-finalize)
+                        ;;      Once you have finished entering information into the capture buffer,
+                        ;; C-c C-w (refile)
+                        ;; C-c C-k abort capture
+                        ;; C-u C-c c visit target of capture template
+                        ;; C-u C-u C-c c Visit last stored capture item in its buffer
+                        ;; C-0 + C-c c  capture at point in an org buffer
+                        '(org-capture-templates
+                              '(("t" "Todo" entry (file+headline "~/org/jnl.org" "Todolist")
+                                 "* TODO %?\n  %iAdded: %U")
+                                ("d" "Date" entry (file+datetree+prompt "~/org/jnl.org")
+                                 "* %?")
+                                ("j" "Journal" entry (file+datetree "~/org/jnl.org")
+                                 "* %?\nAdded: %U\n  %i")
+                                ("n" "NowAction" entry (file+datetree "~/org/jnl.org")
+                                 "* %?" :clock-in t :clock-resume t))))
 
-;; To define special keys to capture to a particular template without going through the interactive template selection, you can create your key binding like this:
+  ;; To define special keys to capture to a particular template without going through the interactive template selection, you can create your key binding like this:
 
-(define-key global-map "\C-ct"
-      (lambda () (interactive) (org-capture nil "t")))
+  (define-key global-map "\C-ct"
+        (lambda () (interactive) (org-capture nil "t")))
 
 #+end_src
 Also log into drawer
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (set 'org-log-into-drawer t)
 #+END_SRC
 ** Org beamer
@@ -656,14 +721,14 @@ anymore.  Don't remember details.
 
 #+end_src
 *** Set code export to minted
-latex  is part of the default export backend. Toc ustomize.
+latex  is part of the default export backend. To customize.
 Wait until ox-latex is loaded and then modify the custom vars.
 #+begin_src emacs-lisp
-  (setq org-latex-listings 'minted)
-  (setq org-latex-minted-options
-        '(("frame" "lines")
-          ("fontsize" "\\scriptsize")
-          ("linenos" "")))
+  (custom-set-variables '(org-latex-listings 'minted)
+                        '(org-latex-minted-options
+                          '(("frame" "lines")
+                            ("fontsize" "\\scriptsize")
+                            ("linenos" ""))))
   (with-eval-after-load "ox-latex"
     (add-to-list 'org-latex-packages-alist '("" "minted"))
       ;; Add language alias
@@ -688,17 +753,12 @@ Wait until ox-latex is loaded and then modify the custom vars.
 ** Org diff
 My customization to allow folding and unfolding
 #+BEGIN_SRC emacs-lisp
-  ;; diff hooks for org mode
-  (add-hook 'ediff-select-hook 'f-ediff-org-unfold-tree-element)
-  (add-hook 'ediff-unselect-hook 'f-ediff-org-fold-tree)
   ;; Check for org mode and existence of buffer
-  (defun f-ediff-org-showhide(buf command &rest cmdargs)
+  (defun f-ediff-org-showhide (buf command &rest cmdargs)
     "If buffer exists and is orgmode then execute command"
     (if buf
         (if (eq (buffer-local-value 'major-mode (get-buffer buf)) 'org-mode)
-            (save-excursion (set-buffer buf) (apply command cmdargs)))
-      )
-    )
+            (with-current-buffer buf (apply command cmdargs)))))
 
   (defun f-ediff-org-unfold-tree-element ()
     "Unfold tree at diff location"
@@ -713,6 +773,9 @@ My customization to allow folding and unfolding
     (f-ediff-org-showhide ediff-buffer-B 'hide-sublevels 1)
     (f-ediff-org-showhide ediff-buffer-C 'hide-sublevels 1)
     )
+  ;; diff hooks for org mode
+  (add-hook 'ediff-select-hook 'f-ediff-org-unfold-tree-element)
+  (add-hook 'ediff-unselect-hook 'f-ediff-org-fold-tree)
 #+END_SRC
 
 ** Export drawers with latex
@@ -737,7 +800,7 @@ format.
     ;;
 #+END_SRC
 ** Epresent
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
    (defun rjp/epresentfix ()
      "Fix some epresent settings "
      (interactive)
@@ -853,7 +916,7 @@ For shortcuts since 9.2
 ** org reveal
 1. Add org-export backend
    #+begin_src emacs-lisp
-   (custom-set-variables '(org-export-backends (quote (ascii latex reveal))))
+   (custom-set-variables '(org-export-backends (quote (ascii html latex reveal))))
    #+end_src
 2. Download ox-reveal as needed
    #+begin_src emacs-lisp

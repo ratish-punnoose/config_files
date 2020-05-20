@@ -1473,6 +1473,12 @@ To setup:
     (defun eshell/ff (file)
       (find-file-other-window file))
   #+end_src
+3. eshell zgrep
+   #+begin_src emacs-lisp
+     (defun eshell/zgrep (&rest args)
+     "Use Emacs grep facility instead of calling external agrep."
+     (eshell-grep "zgrep" args))
+   #+end_src
 ** Bookmarks CD
 Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af280][kkatsuyuki's eshell bookmark]]
 #+begin_src emacs-lisp

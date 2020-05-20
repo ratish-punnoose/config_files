@@ -1604,6 +1604,15 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
           (ring-ref eshell-last-dir-ring index)
         "")))
 #+end_src
+* Artist mode
+- Allow movement beyond end (add additional newlines as needed)
+  Uncomment if needed.  Alternative is to get out of artist mode and
+  make space.
+  #+begin_src emacs-lisp :tangle no
+    (define-advice artist-next-line (:before (orig-func &optional arg))
+    (save-excursion
+      (next-line arg)))
+  #+end_src
 * Completion with company-mode
 1. Add company mode
    #+BEGIN_SRC emacs-lisp

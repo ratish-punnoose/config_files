@@ -1494,7 +1494,7 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
                                    (make-string 80 ?-))))
       (dolist (tmp bookmark-alist)
         (setq bmk-name (car tmp))
-        (setq bmk-path (abbreviate-file-name (assoc-default 'filename tmp)))
+        (setq bmk-path (assoc-default 'filename tmp))
         (if (not (assoc-default 'front-context-string tmp))
             ;; dir listings
             ;; in bookmarks have this key set to null

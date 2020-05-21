@@ -1475,12 +1475,7 @@ To setup:
     (defun eshell/ff (file)
       (find-file-other-window file))
   #+end_src
-3. eshell zgrep
-   #+begin_src emacs-lisp
-     (defun eshell/zgrep (&rest args)
-     "Use Emacs grep facility instead of calling external agrep."
-     (eshell-grep "zgrep" args))
-   #+end_src
+3. eshell grep : See below under em-unix.
 ** Bookmarks CD
 Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af280][kkatsuyuki's eshell bookmark]]
 #+begin_src emacs-lisp
@@ -1597,21 +1592,34 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
     (delete-bmk (list args)))
 #+end_src
 ** eshell usepackage
-#+begin_src emacs-lisp
-  (use-package esh-mode
-    :defer t
-    :config
-    ;; Add remote path for tramp sessions
-    (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-    ;; Use CD history into a command for expansion
-    (defun rdir (index)
-      "Return the directory from eshell-last-dir-ring with index"
-      (interactive "Return directory with index in eshell")
-      (if (and (numberp index)
-               (< index (ring-length eshell-last-dir-ring)))
-          (ring-ref eshell-last-dir-ring index)
-        "")))
-#+end_src
+1. Set esh-mode related
+   #+begin_src emacs-lisp
+     (use-package esh-mode
+       :defer t
+       :config
+       ;; Add remote path for tramp sessions
+       (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+       ;; Use CD history into a command for expansion
+       (defun rdir (index)
+         "Return the directory from eshell-last-dir-ring with index"
+         (interactive "Return directory with index in eshell")
+         (if (and (numberp index)
+                  (< index (ring-length eshell-last-dir-ring)))
+             (ring-ref eshell-last-dir-ring index)
+           "")))
+   #+end_src
+2. Override eshell grep
+   #+begin_src emacs-lisp
+     (use-package em-unix
+       :defer t
+       :config
+       (defun eshell/grep (&rest args)
+         "Use Emacs grep facility instead of calling external grep."
+         (eshell-grep "grep --color -H --null" args))
+       (defun eshell/zgrep (&rest args)
+         "Use Emacs grep facility instead of calling external grep."
+         (eshell-grep "zgrep --color -H --null" args)))
+   #+end_src
 * Artist mode
 - Allow movement beyond end (add additional newlines as needed)
   Uncomment if needed.  Alternative is to get out of artist mode and

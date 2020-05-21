@@ -1232,11 +1232,18 @@ Remove VC for git
   (use-package magit
     :commands (magit-status)
     :bind
-     (("C-x g" . magit-status))
+    ("C-x g" . magit-status)
+    ("C-c M-g" . magit-file-dispatch)
     :config
     (setq magit-refresh-status-buffer nil)
     ;; (setq vc-handled-backends (delq 'Git vc-handled-backends))
     )
+#+end_src
+Add magit blame
+#+begin_src emacs-lisp
+    (use-package magit-blame
+      :defer t
+      :commands (magit-file-dispatch magit-blame))
 #+end_src
 * Helm and Projectile
 ** Helm for autocompletes

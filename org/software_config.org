@@ -161,13 +161,42 @@
      - xh :: Get help (describe function or variable. For var it
              should be selected. 2m,3m, a )
 *** Debugging
-    - M-x edebug-defun :: In definition of func, to enable debuging
-    - M-x edebug-trace ::
-    - M-x eval-defun ::  Stop function instrumentation
-    - i :: Step in
-    - o :: Step out
-    - SPC :: Step by step debug
-    - e ::  Print variables value
+    Use Lispy keys as they are easier.
+**** Lispy debug
+     - xe :: Instrument for debugging
+     - e :: Evaluate for function (remove instrumentation)
+**** Main keys
+     - M-x edebug-defun :: In definition of func, to enable debuging
+     - M-x edebug-trace ::
+     - M-x eval-defun ::  Stop function instrumentation
+     - i :: Step in
+     - o :: Step out
+     - SPC :: Step by step debug
+     - e ::  Print variables value
+     - E :: Open edebug window
+**** Tracing values
+     A custom watch window can be created as follows:
+     - Open Edebug window (E)
+     - Type in expressions in window
+       #+begin_src emacs-lisp
+         (current-buffer)
+         #<buffer *scratch*>
+         ;---------------------------------------------------------------
+         (selected-window)
+         #<window 16 on *scratch*>
+         ;---------------------------------------------------------------
+         (point)
+         196
+         ;---------------------------------------------------------------
+         bad-var
+         "Symbol's value as variable is void: bad-var"
+         ;---------------------------------------------------------------
+         (recursion-depth)
+         0
+         ;---------------------------------------------------------------
+       #+end_src
+     - C-c C-u :: Build a new evaluation list
+
 ** Menu
    - F1 :: show, hide menu.
 ** Search
@@ -421,6 +450,7 @@
 *** Custom
     - C-x g :: Start magit in buffer (RJP custom), invokes magit-status
 *** General
+    - C-c M-g :: To start magit popup for blame etc.
     - g :: reload status buffer
     - Tab :: toggle visibility/expand/contract
     - S-Tab :: toggle visibility of subtree

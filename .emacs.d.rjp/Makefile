@@ -2,6 +2,7 @@
 
 help:
 	@echo "Help: make <target> where target is one of:"
+	@echo "      install:  Installs missing packages"
 	@echo "      update:  Updates packages"
 	@echo "      all:    Generates init.org -> init.el -> init.elc"
 
@@ -13,7 +14,10 @@ init.el: init.org
 init.elc: init.el
 	emacs --batch --eval='(progn (load-file "init.el")(byte-compile-file "init.el"))'
 
-update:
-	rm -f init.elc init.el
-	emacs --script "inittangle.el"
+install: init.el
+	rm -f init.elc
 	emacs --script "update.el"
+
+update: init.el
+	rm -f init.elc
+	emacs --script "update.el" force

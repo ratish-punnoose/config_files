@@ -1087,14 +1087,16 @@ Remove any symbol prettiness at cursor
 #+END_SRC
 ** Matlab
 #+BEGIN_SRC emacs-lisp
-  (use-package matlab-mode
+  (use-package matlab
+    ;:ensure matlab-mode
     :mode ("\\.m\\'" . matlab-mode)
+    :custom
+    (matlab-functions-have-end t)
     :config
     (setq matlab-indent-function t)
-    (custom-set-variables
-     '(matlab-functions-have-end t))
-  )
-  ;;(autoload 'matlab-mode "matlab" "Matlab Mode" t)
+    )
+
+  ;; (autoload 'matlab-mode "matlab" "Matlab Mode" t)
 
   ;;(autoload 'matlab-shell "matlab" "Interactive Matlab mode." t)
   ;;(setq matlab-shell-command "/usr/local/bin/matlabShell")
@@ -1384,46 +1386,69 @@ To setup:
 #+BEGIN_SRC emacs-lisp :tangle no
 (setq tramp-default-method "ssh")
 #+END_SRC
+#+begin_src emacs-lisp
+  (use-package tramp
+    :defer t
+    :config
+    (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+#+end_src
 * Eshell
 - To use ssh with eshell
   #+begin_verse
   cd /ssh:hostname:~
   #+end_verse
-- Add tramp to eshell it is not set by default by adding it to the
-  modules list.
   #+begin_src emacs-lisp
-       (custom-set-variables
-        '(eshell-modules-list
-          (quote
-           (eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs
-                         eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt
-                         eshell-script eshell-term eshell-tramp eshell-unix))))
-  #+end_src
-- Use CD history into a command for expansion
-  #+BEGIN_SRC emacs-lisp :tangle no
-    (defun rdir (index)
+    (use-package eshell
+      :commands eshell
+      :custom
+      ;;  Remove ulgy coloring
+      (eshell-highlight-prompt nil)
+      ;; tramp is not loaded by default. Add it.
+      (eshell-modules-list
+       (quote
+        (eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs
+                      eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt
+                      eshell-script eshell-term eshell-tramp
+                      eshell-unix)))
+      :config
+      ;; Add better grep
+      ;; Fix problem where first eshell grep looks different from
+      ;; following ones.
+      (defun eshell/grep (&rest args)
+        "Use Emacs grep facility instead of calling external grep."
+        (eshell-grep "grep --color -H --null" args))
+      (defun eshell/zgrep (&rest args)
+        "Use Emacs grep facility instead of calling external grep."
+        (eshell-grep "zgrep --color -H --null" args))
+
+      ;; Use CD history into a command for expansion
+      (defun rdir (index)
         "Return the directory from eshell-last-dir-ring with index"
-      (interactive "Return directory with index in eshell")
-      (if (and (numberp index)
-               (< index (ring-length eshell-last-dir-ring)))
-          (ring-ref eshell-last-dir-ring index)
-        ""))
-  #+END_SRC
-- Keyboard hooks:
-  - Remove up/down arrow from eshell-mode-map
-    #+begin_src emacs-lisp
-      (add-hook 'eshell-mode-hook
-                '(lambda () (progn
-                              (define-key eshell-mode-map [M-down] 'eshell-next-input)
-                              (define-key eshell-mode-map [M-up] 'eshell-previous-input)
-                              (define-key eshell-mode-map [C-down] nil)
-                              (define-key eshell-mode-map [C-up] nil)
-                              (define-key eshell-mode-map [up] nil)
-                              (define-key eshell-mode-map [down] nil))))
-    #+end_src
+        (interactive "Return directory with index in eshell")
+        (if (and (numberp index)
+                 (< index (ring-length eshell-last-dir-ring)))
+            (ring-ref eshell-last-dir-ring index)
+          ""))
+      )
+
+
+
+  #+end_src
+
+- Remove up/down arrow from eshell-mode-map
+  #+begin_src emacs-lisp
+    (add-hook 'eshell-mode-hook
+              '(lambda () (progn
+                            (define-key eshell-mode-map [M-down] 'eshell-next-input)
+                            (define-key eshell-mode-map [M-up] 'eshell-previous-input)
+                            (define-key eshell-mode-map [C-down] nil)
+                            (define-key eshell-mode-map [C-up] nil)
+                            (define-key eshell-mode-map [up] nil)
+                            (define-key eshell-mode-map [down] nil))))
+  #+end_src
 ** Prompt
 - Remove ugly coloring
-  #+begin_src emacs-lisp
+  #+begin_src emacs-lisp :tangle no
     (custom-set-variables
      '(eshell-highlight-prompt nil))
   #+end_src
@@ -1605,7 +1630,7 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
 #+end_src
 ** eshell usepackage
 1. Set esh-mode related
-   #+begin_src emacs-lisp
+   #+begin_src emacs-lisp :tangle no
      (use-package esh-mode
        :defer t
        :config
@@ -1621,7 +1646,7 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
            "")))
    #+end_src
 2. Override eshell grep
-   #+begin_src emacs-lisp
+   #+begin_src emacs-lisp :tangle no
      (use-package em-unix
        :defer t
        :config

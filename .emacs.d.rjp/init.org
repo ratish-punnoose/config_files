@@ -1246,9 +1246,12 @@ Remove VC for git
       :bind
       ("C-x g" . magit-status)
       ("C-c M-g" . magit-file-dispatch)
-      :config
-      (setq magit-refresh-status-buffer nil)
-      (magit-file-dispatch magit-blame)
+      :custom
+       (magit-refresh-status-buffer nil)
+      ;;:config
+      ;;(require 'magit-blame)
+      ;;(setq magit-refresh-status-buffer nil)
+      ;(magit-file-dispatch magit-blame)
       ;; (setq vc-handled-backends (delq 'Git vc-handled-backends))
       )
 #+end_src

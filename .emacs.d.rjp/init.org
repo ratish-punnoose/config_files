@@ -1098,7 +1098,7 @@ Remove any symbol prettiness at cursor
 #+END_SRC
 ** Matlab
 #+BEGIN_SRC emacs-lisp
-  (use-package matlab
+  (use-package matlab-mode
     :mode ("\\.m\\'" . matlab-mode)
     :config
     (setq matlab-indent-function t)

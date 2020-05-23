@@ -1230,17 +1230,18 @@ Remove VC for git
 #+END_SRC
 #+begin_src emacs-lisp
   (use-package magit
-    :commands (magit-status)
-    :bind
-    ("C-x g" . magit-status)
-    ("C-c M-g" . magit-file-dispatch)
-    :config
-    (setq magit-refresh-status-buffer nil)
-    ;; (setq vc-handled-backends (delq 'Git vc-handled-backends))
-    )
+      :commands (magit-status)
+      :bind
+      ("C-x g" . magit-status)
+      ("C-c M-g" . magit-file-dispatch)
+      :config
+      (setq magit-refresh-status-buffer nil)
+      (magit-file-dispatch magit-blame)
+      ;; (setq vc-handled-backends (delq 'Git vc-handled-backends))
+      )
 #+end_src
 Add magit blame
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
     (use-package magit-blame
       :defer t
       :commands (magit-file-dispatch magit-blame))

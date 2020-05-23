@@ -3,6 +3,6 @@
 # key: <src
 # expand-env: ((yas-indent-line 'fixed) )
 # --
-#+BEGIN_SRC $1
+#+begin_src $1
   $0
-#+END_SRC
+#+end_src

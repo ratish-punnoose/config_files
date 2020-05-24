@@ -1429,6 +1429,16 @@ To setup:
                  (< index (ring-length eshell-last-dir-ring)))
             (ring-ref eshell-last-dir-ring index)
           ""))
+
+      ;; Fix slow tramp remote connections
+      (defun rjp/eshell-external-command-advice (orig-fn &rest args)
+        "Wrapper around eshell command to redirect ssh commands"
+        (if (string-prefix-p "/ssh:" default-directory)
+            (apply 'eshell-remote-command args)
+          (apply orig-fn args)))
+
+      (advice-add 'eshell-external-command :around #'rjp/eshell-external-command-advice)
+
       )
 
 

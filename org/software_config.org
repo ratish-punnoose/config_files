@@ -714,7 +714,105 @@
          cd ~/.local/share/info
          install-info python.info dir
         #+end_src
+** Dired
+*** Invoking dired
+    - C-x d :: Start
+    - C-x C-f :: With dir name
+    - C-x 4 d :: In other window
+    - C-x 5 d :: In other frame
+*** Motion
+    - n/p :: forward backward
+    - j :: jump to entry
+    - ^ :: Move up dir
+*** View
+    - i :: Insert contents of dir at point into dired buffer
+    - g :: Update dired buffer
+    - l :: Update specific files
+    - s :: toggle sort order between alphabetical, date/time
+*** Editing dired buffer
+    - C-x C-q :: Enter edit mode.
+    - C-c C-c :: Apply changes
+    - C-c C-k :: Abort changes
+*** Selections
+    - m :: Mark
+    - * m :: Mark for line or selection
+    - u :: remove mark
+    - * u :: Unmark line or selection
+    - U :: Unmark all marks
+    - # :: Select all auto-save files
+    - * * :: Mark executables
+    - * @ :: Mark sym links
+    - * / ::  Mark all directories (., .. are excluded).
+      - With argument unmark
+    - * s :: Mark all files in current subdir
+    - * % REGEXP :: mark that match regexp
+    - ~ :: Flag all backups
+    - . :: Flag excess numeric flags
+    - t :: Toggle selection
+    - Del :: Unmark previous line
+    - d :: Mark for deletion
+    - % d REGEXP :: Flag for deletion with regexp
+    - u :: Remove mark for deletion
+    - $ :: Hide subdirec
+    - M-$ :: Hide all subdirs
+**** Mark characters
+     The typical mark characters are * and D. However the files that
+     have been marked with * or D can be marked with a different
+     character temporarily. Using <SPC> removes mark.
+     - * c oldmarkchar newmarkchar :: Change mark for items selected
+          with oldchar to newmarkchar
+     - Example:
+       - Put D flags on all files that have no marks, while unflagging
+         all those have D flags
+         - * c D t  * c <SPC> D  * c t <SPC>
 
+
+
+*** Actions
+    - x  :: Perform action
+    - f/e :: Visit file
+    - o :: Visit inn other window
+    - v :: View file in view mode
+    - k ::  Delete the entry lines in dired (don't delete files).
+    - C :: copy file/files
+    - D :: delete the specified files
+    - R  :: Rename file/files
+    - H :: hard link
+    - S  :: symlink
+    - M modespec :: Change permission
+    - G group :: change group
+    - O owner :: change owner
+    - T :: touch / update timestamp
+    - P  :: print
+    - Z ::  compress/uncompress
+    - c :: compress into archive
+    - L :: Load elips file
+    - B :: Byte compile file
+    - A :: search files for regexp
+    - Q ::  Search replace regexp on selected files
+    - ! :: Shell command on selection
+      - Example: ! tar cf foo.tar
+    - & :: Async shell command
+    - % u :: Rename to uppercase
+    - % l :: Rename to lowercase
+*** Apply Regexp operation
+    - % R :: Regexp rename
+    - % C :: Regexp copy
+    - % H :: Regexp hardlink
+    - % S :: Regexp sym link
+    - % m ::  Mark files that meet regexp
+    - % m REGEXP :: Mark those that meet regexp
+    - % g regexp :: mark files that contain regexp
+**** Example
+     - ‘% R ^.*$ <RET> x-\& <RET>’ renames each selected file by
+       prepending ‘x-’ to its name.
+     - ‘% R ^x-\(.*\)$ <RET> \1 <RET>’ removes x- from name.
+
+*** Crypto actions
+    - :d  :: decrypt
+    - :v :: Verify sig
+    - :s :: Sign
+    - :e :: Encrypt
 * Org Mode
 ** Visibility
    - <TAB>              :: Show/hide

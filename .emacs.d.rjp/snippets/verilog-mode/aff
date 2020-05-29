@@ -1,8 +1,9 @@
 # -*- coding: utf-8; mode: snippet -*-
 # name: always_ff
 # key: aff
+# expand-env: ((yas-indent-line 'fixed) )
 # --
-always_ff @(posedge ${1:clk} or negedge ${2:reset_n}) begin
+always_ff @(posedge ${1:clk} or negedge ${2:rst_n}) begin
   if (!$2) begin
 
   end else begin

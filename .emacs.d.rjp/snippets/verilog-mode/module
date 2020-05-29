@@ -1,12 +1,13 @@
 # -*- coding: utf-8; mode: snippet -*-
 # name: module
 # key: mod
+# expand-env: ((yas-indent-line 'fixed) )
 # --
 module $1
   #(parameter x = 1,
     parameter y = 2)
-  (input clk, rest_n,
-   $2);
-
+  (input ${2:clk}, ${3:rst_n},
+   ${4});
+  $0
 endmodule // $1
 

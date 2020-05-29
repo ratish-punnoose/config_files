@@ -1118,10 +1118,11 @@ Remove any symbol prettiness at cursor
      ("\\.sv\\'" . verilog-mode))
     :custom
     (verilog-cexp-indent 0 "indentation across lines")
+    (verilog-auto-lineup 'all "indent all assignments")
     :config
     ;; This sets a buffer local variable
     (add-hook 'verilog-mode-hook
-            (lambda () (setq indent-tabs-mode nil))))
+              (lambda () (setq indent-tabs-mode nil))))
 #+end_src
 #+begin_src emacs-lisp :tangle no
   (add-hook 'verilog-mode-hook

@@ -1393,6 +1393,15 @@ To setup:
     :config
     (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 #+end_src
+* Dired
+Dired narrow
+#+begin_src emacs-lisp
+  ;;narrow dired to match filter
+  (use-package dired-narrow
+    :after dired
+    :bind (:map dired-mode-map
+                ("/" . dired-narrow)))
+#+end_src
 * Eshell
 - To use ssh with eshell
   #+begin_verse

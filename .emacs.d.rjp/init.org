@@ -341,7 +341,17 @@ color-theme-alice-blue, color-theme-andreas
   ;;(add-to-list 'hs-special-modes-alist '(promela-mode "{" "}" "/[*/]" nil nil))
 
   ;;  Toggle hide/show for a specific block
-  (global-set-key (kbd "C-,") 'hs-toggle-hiding)
+  (defun rjp/hs-toggle ()
+    "Toggle hiding/showing of a block"
+    (interactive)
+    (hs-life-goes-on
+     (if (hs-already-hidden-p)
+         (progn
+           (hs-show-block)
+           (hs-hide-level -1))
+       (hs-hide-block))))
+
+  (global-set-key (kbd "C-,") 'rjp/hs-toggle)
 
   ;; Global toggle
   (defvar rjp/hs-status nil "Current state of hideshow")

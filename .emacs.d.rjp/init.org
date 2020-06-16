@@ -1449,7 +1449,34 @@ Dired narrow
 
       (advice-add 'eshell-external-command :around #'rjp/eshell-external-command-advice)
 
+      ;; Add outline mode
+      (defun rjp/eshell-hook-outline-regexp ()
+        (setq-local outline-regexp eshell-prompt-regexp )
+        (setq-local eshell-outline-status-outlined nil)
+        )
+
+      (add-hook 'eshell-mode-hook 'rjp/eshell-hook-outline-regexp)
+      (add-hook 'eshell-mode-hook 'outline-minor-mode)
+
+
+      ;; Add function to toggle  if next to prompt
+      (defun rjp/eshell-outline-toggle ()
+        (interactive)
+        (if (looking-back eshell-prompt-regexp)
+            (outline-toggle-children)
+          (eshell-pcomplete)
+          )
+        )
+      (defun rjp/eshell-outline-global-toggle ()
+        (interactive)
+
+        (if eshell-outline-status-outlined
+            (outline-show-all)
+            (outline-hide-body))
+        (setq eshell-outline-status-outlined (not eshell-outline-status-outlined)))
+
       )
+
 
 
 
@@ -1464,7 +1491,10 @@ Dired narrow
                             (define-key eshell-mode-map [C-down] nil)
                             (define-key eshell-mode-map [C-up] nil)
                             (define-key eshell-mode-map [up] nil)
-                            (define-key eshell-mode-map [down] nil))))
+                            (define-key eshell-mode-map [down] nil)
+                            (define-key eshell-mode-map [tab]
+                              'rjp/eshell-outline-toggle)
+                            (define-key eshell-mode-map [S-tab] 'rjp/eshell-outline-global-toggle))))
   #+end_src
 ** Prompt
 - Remove ugly coloring

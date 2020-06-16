@@ -3,11 +3,10 @@
 # key: mod
 # expand-env: ((yas-indent-line 'fixed) )
 # --
-module $1
+module ${1:modname}
   #(parameter x = 1,
     parameter y = 2)
   (input ${2:clk}, ${3:rst_n},
-   ${4});
-  $0
+   $0);
 endmodule // $1
 

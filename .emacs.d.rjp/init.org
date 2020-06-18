@@ -1474,7 +1474,7 @@ Dired narrow
         (interactive)
         (if (looking-back eshell-prompt-regexp)
             (outline-toggle-children)
-          (eshell-pcomplete)
+          (call-interactively 'eshell-pcomplete)
           )
         )
       (defun rjp/eshell-outline-global-toggle ()

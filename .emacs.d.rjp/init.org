@@ -826,6 +826,10 @@ format.
    )
 
 #+end_src
+** Relative links
+#+begin_src emacs-lisp
+  (custom-set-variables  '(org-link-file-path-type (quote relative)))
+#+end_src
 ** List of targets
 Can use org-all-targets *Automatically added by starter kit.
 - Use org-in-regexp

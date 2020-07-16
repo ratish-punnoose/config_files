@@ -2,9 +2,16 @@
 ;;; Commentary:
 ;; Tangle script to get init.el from init.org
 ;;; Code:
-(package-initialize)
-(require 'ob-tangle)
-(setq org-element-use-cache nil)
-(org-babel-tangle-file "init.org")
+(progn
+  (require 'org)
+  (require 'ob)
+  (require 'ox)
+  (require 'ob-tangle)
+  (find-file "init.org")
+  (setq org-src-preserve-indentation t)
+  (org-export-expand-include-keyword)
+  (custom-set-variables '(org-babel-pre-tangle-hook nil))
+  (org-babel-tangle nil)
+  )
 ;;; inittangle.el ends here
 

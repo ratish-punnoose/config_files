@@ -1823,6 +1823,9 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
          (setq line-spacing spacing))
        (redraw-frame (selected-frame)))
    #+end_src
+* Include files
+#+INCLUDE: "local_pkgs.org"
+
 * Post setup and Final Scratch Message
 1. Restore GC
    #+begin_src emacs-lisp

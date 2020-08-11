@@ -334,37 +334,58 @@ color-theme-alice-blue, color-theme-andreas
 ;;    * C-c @ C-c toggle hide/show
 ;; http://www.emacswiki.org/cgi-bin/wiki/HideShow
 ;;http://www.gnu.org/software/emacs/manual/html_node/Hideshow.html#Hideshow
-#+BEGIN_SRC emacs-lisp
-  (setq hs-hide-comments-when-hiding-all t)
 
-  ;; Add Promela
-  ;;(add-to-list 'hs-special-modes-alist '(promela-mode "{" "}" "/[*/]" nil nil))
+- Hide comments too when hiding
+- Add Promela
+  #+begin_src emacs-lisp
+    ;; Add Promela
+    ;;(add-to-list 'hs-special-modes-alist '(promela-mode "{" "}" "/[*/]" nil nil))
+  #+end_src
+- When toggling, by default don't expand sub-blocks.  With a prefix
+  argument expand everything.
+- Global shortcut for the custom toggle of a block
+- Global short for Toggle everything
+- Define regexp for nXML
+- Add hs-minor mode to other modes
+  - prog-mode
+  - nxml mode
+- Hs use-package
+  #+begin_src emacs-lisp
+    (use-package hideshow
+      :hook ((prog-mode . hs-minor-mode)
+             (nxml-mode . hs-minor-mode))
+      :custom (hs-hide-comments-when-hiding-all t)
+      :config
+      (add-hook 'hs-minor-mode-hook #'hs-hide-all)
+      (add-to-list 'hs-special-modes-alist
+                   '(nxml-mode
+                      "<!--\\|<[^/>][^>]*>" "-->\\|</[^/>]+>" "<!--"
+                      nxml-forward-element nil))
+      ;;  Toggle hide/show for a specific block
+      (defun rjp/hs-toggle (arg)
+        "Toggle hiding/showing of a block"
+        (interactive "P")
+        (hs-life-goes-on
+         (if (hs-already-hidden-p)
+             (progn
+               (hs-show-block)
+               (if (not  arg)
+                   (hs-hide-level -1)))
+           (hs-hide-block))))
+      ;;  Global toggle
+      (defvar rjp/hs-status nil "Current state of hideshow")
+      (defun rjp/toggle-hs-all() "Toggle hideshow all."
+             (interactive)
+             (setq rjp/hs-status (not rjp/hs-status))
+             (if rjp/hs-status (hs-hide-all) (hs-show-all)))
 
-  ;;  Toggle hide/show for a specific block
-  (defun rjp/hs-toggle ()
-    "Toggle hiding/showing of a block"
-    (interactive)
-    (hs-life-goes-on
-     (if (hs-already-hidden-p)
-         (progn
-           (hs-show-block)
-           (hs-hide-level -1))
-       (hs-hide-block))))
+      :commands (rjp/hs-toggle rjp/toggle-hs-all)
+      :bind
+      ("C-," . 'rjp/hs-toggle)
+      ("C-M-," . 'rjp/toggle-hs-all)
+      )
 
-  (global-set-key (kbd "C-,") 'rjp/hs-toggle)
-
-  ;; Global toggle
-  (defvar rjp/hs-status nil "Current state of hideshow")
-  (defun rjp/toggle-hs-all() "Toggle hideshow all."
-    (interactive)
-    (setq rjp/hs-status (not rjp/hs-status))
-    (if rjp/hs-status (hs-hide-all) (hs-show-all)))
-  (global-set-key (kbd "C-M-,") 'rjp/toggle-hs-all)
-
-  ;; Startup in hs-minor-mode with all hidden
-  (add-hook 'prog-mode-hook #'hs-minor-mode)
-  (add-hook 'hs-minor-mode-hook #'hs-hide-all)
-#+END_SRC
+  #+end_src
 
 ** Indent guide
 #+BEGIN_SRC emacs-lisp

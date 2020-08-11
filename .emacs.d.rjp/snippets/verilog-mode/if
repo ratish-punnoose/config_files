@@ -1,0 +1,12 @@
+# -*- coding: utf-8; mode: snippet -*-
+# name: if
+# key: if
+# expand-env: ((yas-indent-line 'fixed) )
+# --
+if (${1:cond}) begin
+   $0
+end else if (COND2) begin
+
+end else begin
+
+end

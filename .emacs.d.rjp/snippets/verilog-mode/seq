@@ -1,0 +1,8 @@
+# -*- coding: utf-8; mode: snippet -*-
+# name: sequence
+# key: seq
+# expand-env: ((yas-indent-line 'fixed) )
+# --
+sequence ${1:seqname} (${2:arg1}, ${3:arg2});
+  $0
+endsequence: $1

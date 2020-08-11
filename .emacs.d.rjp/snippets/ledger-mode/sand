@@ -1,0 +1,39 @@
+# -*- coding: utf-8; mode: snippet -*-
+# name: sand
+# key: sand
+# expand-env: ((yas-indent-line 'fixed) )
+# --
+
+20${1:20}-${2:03}-${3:05} * "NTESS"
+    Income:Sandia:CASDIPre                    -${4:29.69} USD
+    Expenses:Emplyr:Sandia:CASDIPre            $4 USD
+    Income:Sandia:Regular                   -${5:0000.00} USD
+    ;
+    Expenses:Taxes:Federal                   ${6:0000.00} USD
+    Expenses:Taxes:Medicare                   ${7:000.00} USD
+    Expenses:Taxes:SDI                        ${8:000.00} USD
+    Expenses:Taxes:California                 ${9:000.00} USD
+    Expenses:Taxes:CASDI                       ${10:00.00} USD
+    ;
+    Expenses:Ins:Vision                         ${11:2.20} USD
+    Assets:Sandia401k:Pretax                  ${12:000.00} USD
+    Assets:RSA:Health                           ${13:0.00} USD
+    Assets:RSA:Daycare                        ${14:000.00} USD
+    Expenses:Vacationbuy                      ${15:000.00} USD
+    ;
+    Assets:Sandia401k:Aftertax               ${16:0000.00} USD
+    Expenses:Ins:GroupAccident                  ${17:4.61} USD
+    Expenses:Ins:VoluntaryLife                 ${18:34.56} USD
+    ;
+    Income:Sandia:EmplyrVision                 -${19:6.55} USD
+    Income:Sandia:EmplyrLifeIns               -${20:11.79} USD
+    Income:Sandia:EmplyrLongTermDisability     -${21:5.85} USD
+    Income:Sandia:Emplyr401Kmatch            -${22:309.54} USD
+    Expenses:Ins:Vision                         $19 USD
+    Expenses:Ins:Life                          $20 USD
+    Expenses:Ins:Disability                     $21 USD
+    Assets:Sandia401k:Match                   $22 USD
+    ;
+    Assets:SLFCU:Checking1                   ${23:0000.00} USD
+
+$0

@@ -964,7 +964,8 @@ For shortcuts since 9.2
     (use-package yasnippet
       :hook ((org-mode . yas-minor-mode)
              (verilog-mode . yas-minor-mode)
-             (coq-mode . yas-minor-mode))
+             (coq-mode . yas-minor-mode)
+             (ledger-mode . yas-minor-mode))
      :bind (:map yas-minor-mode-map
                  ("\C-c" . nil))
       :config

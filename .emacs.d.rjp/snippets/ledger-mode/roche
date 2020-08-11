@@ -1,0 +1,43 @@
+# -*- coding: utf-8; mode: snippet -*-
+# name: roche
+# key: ro
+# expand-env: ((yas-indent-line 'fixed) )
+# --
+20${1:20}-${2:MM}-${3:DD} * "Roche"
+    Income:Roche:ImputedIns                   -${4:00.00} USD
+    Expenses:Ins:ImputedIns                    $4 USD
+    Income:Roche:Pay                       -${5:00000.00} USD
+    ;
+    Expenses:Taxes:SDI:EP                     ${6:000.00} USD
+    Expenses:Taxes:Medicare:EP                ${7:000.00} USD
+    Expenses:Taxes:Federal:EP                ${8:0000.00} USD
+    Expenses:Taxes:California:EP             ${9:0000.00} USD
+    Expenses:Taxes:CASDI:EP                   ${10:000.00} USD
+    ;
+    Assets:Roche401k:Pretax                   ${11:000.00} USD
+    Expenses:Ins:Dental:Roche                  ${12:21.19} USD
+    Expenses:Ins:Surcharge                     ${13:90.00} USD
+    Expenses:Ins:Health:Roche                 ${14:141.05} USD
+    Expenses:Ins:Vision:Roche                  ${15:10.01} USD
+    ;
+    Assets:Roche401k:Aftertax                 ${16:000.00} USD
+    Expenses:Ins:ADDKids                        ${17:0.50} USD
+    Expenses:Ins:ADDSpouse                      ${18:1.13} USD
+    Expenses:Ins:ADDSuplemental                 ${19:2.78} USD
+    Expenses:Ins:Legal                          ${20:8.98} USD
+    Expenses:Ins:Life:Children                  ${21:1.92} USD
+    Expenses:Ins:Life:Spouse                    ${22:7.63} USD
+    Expenses:Ins:Life:Supplemental             ${23:37.85} USD
+    ;
+    Income:Roche:Emplyr:401kmatch            -${24:000.00} USD
+    Income:Roche:Emplyr:Dental                -${25:00.00} USD
+    Income:Roche:Emplyr:Medical              -${26:000.00} USD
+    Income:Roche:Emplyr:Vision                -${27:00.00} USD
+    Assets:Roche401k:Match                    $24 USD
+    Expenses:Ins:Emplyr:Roche:Dental           $25 USD
+    Expenses:Ins:Emplyr:Roche:Health          $26 USD
+    Expenses:Ins:Emplyr:Roche:Vision           $27 USD
+    ;
+    Assets:SLFCU:Checking1                   ${28:0000.00} USD
+
+$0

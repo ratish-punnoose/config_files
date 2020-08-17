@@ -1,0 +1,5 @@
+(unless (boundp 'rjp/emacs-in-update)
+  (setq package-enable-at-startup nil)
+  (setq package-load-list nil)
+  (setq package-quickstart t)
+  )

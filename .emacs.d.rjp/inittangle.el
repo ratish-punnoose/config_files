@@ -10,7 +10,8 @@
   (find-file "init.org")
   (setq org-src-preserve-indentation t)
   (org-export-expand-include-keyword)
-  (custom-set-variables '(org-babel-pre-tangle-hook nil))
+  (custom-set-variables '(org-babel-pre-tangle-hook nil)
+                        '(org-use-property-inheritance t))
   (org-babel-tangle nil)
   )
 ;;; inittangle.el ends here

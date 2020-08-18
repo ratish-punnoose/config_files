@@ -125,8 +125,8 @@ Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]].
 * Package Management
 use-package is needed to load packages but not needed at run time.
    #+begin_src emacs-lisp
-   (eval-and-compile (require 'use-package))
-   (require 'use-package)
+   (eval-when-compile (require 'use-package))
+   ;(require 'use-package)
    (require 'diminish)
    (require 'bind-key)
    #+end_src
@@ -1291,7 +1291,7 @@ Add magit blame
 #+end_src
 * Helm and Projectile
 ** Helm for autocompletes
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp
  ;(use-package helm-config)
   (use-package helm
     :defer t
@@ -1360,7 +1360,7 @@ Add magit blame
     )
 #+END_SRC
 ** Projectile
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp
   (use-package helm-projectile
     :commands (helm-projectile-find-file helm-projectile-switch-project)
     ;:bind

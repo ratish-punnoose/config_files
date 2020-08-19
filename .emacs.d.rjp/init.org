@@ -579,7 +579,8 @@ evaluate this file itself.
       (if (not (org-at-heading-p))
           (org-previous-visible-heading 1))
       (org-overview)
-      (org-reveal t))
+      (org-reveal '(4))
+      (org-show-subtree))
 
     (add-to-list 'org-speed-commands-user
                  '("N" ded/org-show-next-heading-tidily))

@@ -5,7 +5,7 @@
 (require 'package)
 (add-to-list
  'package-archives
- '("melpa" . "http://melpa.milkbox.net/packages/")
+ '("melpa" . "http://melpa.org/packages/")
  t)
 (package-initialize)
 (package-refresh-contents)
@@ -40,5 +40,6 @@
       :config
       (setq auto-package-update-delete-old-versions t)
       (auto-package-update-now)))
+(package-quickstart-refresh)
 ;;; update.el ends here
 

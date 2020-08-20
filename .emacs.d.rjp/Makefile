@@ -15,9 +15,9 @@ init.elc: init.el
 	emacs --batch --eval='(progn (load-file "init.el")(byte-compile-file "init.el"))'
 
 install: init.el
-	rm -f init.elc
+	rm -f init.elc  package-quickstart.el
 	emacs --script "update.el"
 
 update: init.el
-	rm -f init.elc
+	rm -f init.elc package-quickstart.el
 	emacs --script "update.el" force

@@ -12,7 +12,7 @@ init.el: init.org
 	emacs --script "inittangle.el"
 
 init.elc: init.el
-	emacs --batch --eval='(progn (load-file "init.el")(byte-compile-file "init.el"))'
+	emacs --batch --eval='(progn (package-initialize)(load-file "init.el")(byte-compile-file "init.el")(package-quickstart-refresh))'
 
 install: init.el
 	rm -f init.elc  package-quickstart.el

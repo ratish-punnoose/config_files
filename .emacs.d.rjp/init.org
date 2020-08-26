@@ -1340,6 +1340,9 @@ Add magit blame
 | helm-themes           | counsel-load-theme | switch themes                                 |
 | helm-descbinds        | counsel-descbinds  | describe keybindings and associated functions |
 | helm-M-x              | counsel-M-x        | enhanced M-x command                          |
+** Wgrep
+- Use C-c C-o to move ivy results into buffer.
+- In there, use C-x C-q that changes it to wgrep mode.
 ** Use-package declaration for ivy
 #+begin_src emacs-lisp
   (use-package ivy
@@ -1516,6 +1519,10 @@ To setup:
 #+END_SRC
 * Wgrep
 #+begin_src emacs-lisp
+  (use-package wgrep
+               :hook ((grep-mode . wgrep-setup)))
+  #+end_src
+#+begin_src emacs-lisp :tangle no
   (use-package wgrep
     :hook ((grep-mode . wgrep-setup)
            (helm-grep-mode . wgrep-setup)))

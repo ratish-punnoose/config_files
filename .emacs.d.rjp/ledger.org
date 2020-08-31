@@ -1,0 +1,51 @@
+#+TITLE: Ledger config
+#+AUTHOR: Ratish Punnoose
+#+STARTUP: entitiespretty indent hidestars
+#+OPTIONS: ^:{}
+
+
+* Ledger CLI
+  #+begin_src emacs-lisp
+    (use-package ledger-mode
+      :mode (("\\.ledger\\'" . ledger-mode))
+      :custom
+       (ledger-clear-whole-transactions t)
+       (safe-local-variable-values (quote ((ledger-master-file . "main.ledger"))))
+      :config
+      (defun ledger-do-reconcile (&optional sort)
+        "SORT the uncleared transactions in the account and display them in the *Reconcile* buffer.
+    Return a count of the uncleared transactions."
+        (let* ((buf ledger-buf)
+               (account ledger-acct)
+               (sort-by (if sort
+                            sort
+                          "(date)"))
+               (xacts
+                (with-temp-buffer
+                  (ledger-exec-ledger buf (current-buffer)
+                                      "--uncleared" "--real" "emacs" "--sort" sort-by account)
+                  (goto-char (point-min))
+                  (unless (eobp)
+                    (if (looking-at "(")
+                        (progn
+                          (while (re-search-forward "\"\"" nil t)
+                            (replace-match "\""))
+                          (goto-char (point-min))
+                          (read (current-buffer)))))))
+               (fmt (ledger-reconcile-compile-format-string ledger-reconcile-buffer-line-format)))
+          (if (> (length xacts) 0)
+              (progn
+                (if ledger-reconcile-buffer-header
+                    (insert (format ledger-reconcile-buffer-header account)))
+                (dolist (xact xacts)
+                  (ledger-reconcile-format-xact xact fmt))
+                (goto-char (point-max))
+                (delete-char -1)) ;gets rid of the extra line feed at the bottom of the list
+            (insert (concat "There are no uncleared entries for " account)))
+          (goto-char (point-min))
+          (set-buffer-modified-p nil)
+          (setq buffer-read-only t)
+
+          (length xacts))))
+  #+end_src
+

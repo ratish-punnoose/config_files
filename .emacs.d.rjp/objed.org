@@ -1,0 +1,16 @@
+#+TITLE: Objed
+#+AUTHOR: Ratish Punnoose
+#+STARTUP: entitiespretty indent hidestars
+#+OPTIONS: ^:{}
+* Objed related
+** Dependent for full function
+- Which key
+- avy
+- edit-indirect
+- eval-in-repl
+- multiple-cursors
+** objed install
+#+begin_src emacs-lisp
+  (use-package objed)
+#+end_src
+

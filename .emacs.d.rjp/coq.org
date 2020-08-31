@@ -1,0 +1,13 @@
+#+TITLE: Coq config
+#+AUTHOR: Ratish Punnoose
+#+STARTUP: entitiespretty indent hidestars
+#+OPTIONS: ^:{}
+* Coq
+To start coq just do "(require proof-general)".
+And manually switch to coq-mode.
+#+begin_src emacs-lisp
+  (use-package proof-general
+    :defer t)
+  (use-package company-coq
+    :defer t)
+#+end_src

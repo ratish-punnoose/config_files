@@ -125,10 +125,11 @@ Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]].
 * Package Management
 use-package is needed to load packages but not needed at run time.
    #+begin_src emacs-lisp
-   (eval-when-compile (require 'use-package))
+   (eval-when-compile (require 'use-package) (require 'use-package-hydra))
    ;(require 'use-package)
    (require 'diminish)
    (require 'bind-key)
+   (require 'hydra)
    #+end_src
 
 
@@ -962,15 +963,37 @@ For shortcuts since 9.2
    #+end_src
 * Yasnippet
 #+begin_src emacs-lisp
-    (use-package yasnippet
-      :hook ((org-mode . yas-minor-mode)
-             (verilog-mode . yas-minor-mode)
-             (coq-mode . yas-minor-mode)
-             (ledger-mode . yas-minor-mode))
-     :bind (:map yas-minor-mode-map
-                 ("\C-c" . nil))
-      :config
-      (yas-reload-all nil))
+  (use-package yasnippet
+    :hook ((org-mode . yas-minor-mode)
+           (verilog-mode . yas-minor-mode)
+           (coq-mode . yas-minor-mode)
+           (ledger-mode . yas-minor-mode))
+    ;; :bind (:map yas-minor-mode-map
+    ;;             ("\C-c" . nil))
+    :bind (:map yas-minor-mode-map ("<f2>" . hydra-yas/body))
+    :hydra (hydra-yas (:color blue :hint nil)
+            "
+                ^YASnippets^
+  --------------------------------------------
+    Modes:    Load/Visit:    Actions:
+
+   _g_lobal  _d_irectory    _i_nsert
+   _m_inor   _f_ile         _t_ryout
+   _e_xtra   _l_ist         _n_ew
+           _a_ll
+  "
+            ("d" yas-load-directory)
+            ("e" yas-activate-extra-mode)
+            ("i" yas-insert-snippet)
+            ("f" yas-visit-snippet-file :color blue)
+            ("n" yas-new-snippet)
+            ("t" yas-tryout-snippet)
+            ("l" yas-describe-tables)
+            ("g" yas-global-mode)
+            ("m" yas-minor-mode)
+            ("a" yas-reload-all))
+    :config
+    (yas-reload-all nil))
 #+end_src
 * Cygwin and Windows
 Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]
@@ -1290,21 +1313,21 @@ Add magit blame
   [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][Description of Ivy, Counsel, Swiper]]
 
 ** Keybindings
-  | Key        | Command                 | Description                                    |
-  | M-n        | ivy-next-line           | Next line                                      |
-  | M-p        | ivy-previous-line       | Previous line                                  |
-  | M-<        | ivy-beginning-of-buffer | Beginning of the Ivy minibuffer                |
-  | M->        | ivy-end-of-buffer       | End of the Ivy minibuffer                      |
-  | C-v        | ivy-scroll-up-command   | Page up by one Ivy buffer size                 |
-  | M-v        | ivy-scroll-down-command | Page down by one Ivy buffer size               |
-  | C-m-or-RET | ivy-done                | Calls the default action                       |
-  | C-M-m      | ivy-call                | Calls the default action, keeps Ivy open       |
-  | M-o        | ivy-dispatching-done    | Displays the available actions                 |
-  | C-M-o      | ivy-dispacthing-call    | Displays available actions, keeps Ivy open     |
-  | C-'        | ivy-avy                 | Uses Avy to select candidates                  |
-  | TAB        | ivy-partial-or-done     | Tab completion, repeated presses may call done |
-  |            | ivy-resume              | Restart Ivy before last action                 |
-
+  | Key               | Command                 | Description                                    |
+  | M-n               | ivy-next-line           | Next line                                      |
+  | M-p               | ivy-previous-line       | Previous line                                  |
+  | M-<               | ivy-beginning-of-buffer | Beginning of the Ivy minibuffer                |
+  | M->               | ivy-end-of-buffer       | End of the Ivy minibuffer                      |
+  | C-v               | ivy-scroll-up-command   | Page up by one Ivy buffer size                 |
+  | M-v               | ivy-scroll-down-command | Page down by one Ivy buffer size               |
+  | C-m-or-RET        | ivy-done                | Calls the default action                       |
+  | C-M-m             | ivy-call                | Calls the default action, keeps Ivy open       |
+  | M-o               | ivy-dispatching-done    | Displays the available actions                 |
+  | C-M-o             | ivy-dispacthing-call    | Displays available actions, keeps Ivy open     |
+  | C-'               | ivy-avy                 | Uses Avy to select candidates                  |
+  | TAB               | ivy-partial-or-done     | Tab completion, repeated presses may call done |
+  | F6: Not assigned  | ivy-resume              | Restart Ivy before last action                 |
+  | C-o: Not assigned |                         | Activates hydra if ivy-hydra installed         |
 ** Actions
   Add custom actions
 ** Commands
@@ -1354,6 +1377,11 @@ Add magit blame
                (ivy-rich-mode 1)
                (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
                )
+#+end_src
+#+begin_src emacs-lisp
+  (use-package ivy-hydra
+    :after (ivy)
+    )
 #+end_src
 ** Use-package declaration for counsel
 #+begin_src emacs-lisp

@@ -11,6 +11,7 @@
 (package-refresh-contents)
 (package-install 'use-package)
 (package-install 'diminish)
+(package-install 'use-package-hydra)
 
 (require 'seq)
 (defun rjp/get-dir-and-subdirs (dirname)

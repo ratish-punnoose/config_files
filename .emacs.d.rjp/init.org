@@ -476,24 +476,6 @@ color-theme-alice-blue, color-theme-andreas
 #+end_src
 * Navigation
 Easier keys for switching windows
-
-** For moving to next/previous window
-#+begin_src emacs-lisp :tangle no
-(defun select-next-window ()
-  "Switch to the next window"
-  (interactive)
-  (select-window (next-window)))
-
-(defun select-previous-window ()
-  "Switch to the previous window"
-  (interactive)
-  (select-window (previous-window)))
-
-(global-set-key (kbd "M-n") 'select-next-window)
-(global-set-key (kbd "M-p")  'select-previous-window)
-
-
-#+end_src
 ** For moving using arrows
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-<left>") 'windmove-left)          ; move to left windnow
@@ -501,6 +483,31 @@ Easier keys for switching windows
 (global-set-key (kbd "C-<up>") 'windmove-up)              ; move to upper window
 (global-set-key (kbd "C-<down>") 'windmove-down)          ; move to downer window
 #+END_SRC
+** Using ace-window
+*** Key bindings
+- x - delete window
+- m - swap windows
+- M - move window
+- c - copy window
+- j - select buffer
+- n - select the previous window
+- u - select buffer in the other window
+- c - split window fairly, either vertically or horizontally
+- v - split window vertically
+- b - split window horizontally
+- o - maximize current window
+- ? - show these command bindings
+*** Declaration
+#+begin_src emacs-lisp
+  (use-package ace-window
+    :bind ("M-o" . 'ace-window)
+    :custom
+    (aw-keys '(?a ?s ?d ?f ?g ?h ?k ?l ?t ?r))
+    (aw-scope 'frame)
+    ;; (aw-background nil)
+
+    )
+#+end_src
 * Search at Point
 To use this, start search with C-s and then type C-*.
 Note: find-tag-default-as-regexp and find-tag-default-as-symbol-regexp
@@ -1269,6 +1276,7 @@ Add reftex mode
     :bind
     (:map lispy-mode-map
           ("C-S-k" . lispy-kill-at-point)
+          ("M-o" . nil)
           ("C-," . hs-toggle-hiding)))
 #+end_src
 

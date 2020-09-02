@@ -1863,6 +1863,7 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
        :diminish
        :custom
        (company-show-numbers t)
+       (company-global-modes '(not eshell-mode))
        :config
        (global-company-mode))
    #+END_SRC

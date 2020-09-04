@@ -504,6 +504,7 @@ Easier keys for switching windows
     :custom
     (aw-keys '(?a ?s ?d ?f ?g ?h ?k ?l ?t ?r))
     (aw-scope 'frame)
+    (aw-dispatch-always t)
     ;; (aw-background nil)
 
     )
@@ -1366,6 +1367,14 @@ Add magit blame
 ** Wgrep
 - Use C-c C-o to move ivy results into buffer.
 - In there, use C-x C-q that changes it to wgrep mode.
+** Swiper
+|-----+------------------------------------------------------|
+| C-s | Search                                               |
+| M-n | In search, this selects the thing at point           |
+| M-q | In search, replace candidate with new                |
+| C-' | In search, use avy to jump                           |
+| C-7 | In search, start multiple cursors around search term |
+
 ** Use-package declaration for ivy
 #+begin_src emacs-lisp
   (use-package ivy
@@ -1394,18 +1403,20 @@ Add magit blame
 ** Use-package declaration for counsel
 #+begin_src emacs-lisp
   (use-package counsel
-             :after (ivy)
-             :demand t
-             :bind
-             ( ("C-x C-f" . counsel-find-file)
-               ("C-x b" . counsel-switch-buffer)
-               ("M-x" . counsel-M-x)
-               ("M-y" . counsel-yank-pop)
-               ("C-h f" . counsel-describe-function)
-               ("C-h v" . counsel-describe-variable)
-               ("C-s" . swiper-isearch)
-               )
-             )
+    :after (ivy)
+    :demand t
+    :bind
+    ( ("C-x C-f" . counsel-find-file)
+      ("C-x b" . counsel-recentf)
+      ("M-x" . counsel-M-x)
+      ("M-y" . counsel-yank-pop)
+      ("C-h f" . counsel-describe-function)
+      ("C-h v" . counsel-describe-variable)
+      ("C-s" . swiper-isearch)
+      )
+    :custom
+    (counsel-find-file-at-point t )
+    )
 #+end_src
 ** Use-package for projectile
 #+begin_src emacs-lisp

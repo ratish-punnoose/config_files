@@ -858,6 +858,13 @@
        - C-c C-c ::  to toggle cleared status
        - C-c C-f :: to enter narrow search.  C-c C-f to exit
        - C-c C-s :: sort region
+**** Custom functions
+     - copy a single transaction to kill ring
+       - C-c M-w :: rjp/ledger-copy-trans
+     - time order a transaction within the file
+       - C-c C-m :: rjp/ledger-timeorder-xact (mnemonic m for move)
+     - In narrow search mode, copy all visible
+       - C-c C-w :: rjp/ledger-occur-copy-all
 **** Reports
      - C-c  C-o C-r : Ledger report prompts for type of report
        bal|reg|payee|account

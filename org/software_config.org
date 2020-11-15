@@ -698,6 +698,9 @@
 
 *** Creating documentation
     See [[https://www.emacswiki.org/emacs/ExternalDocumentation]].
+    - Copy .info file to /usr/share/info or path pointed by INFOPATH.
+    - File can also be kept compressed.
+    - Run install-info myfile.info dir
 **** Creating python documentation
      1. Install python3-sphinx.
         #+begin_src
@@ -813,6 +816,81 @@
     - :v :: Verify sig
     - :s :: Sign
     - :e :: Encrypt
+*** Ledger
+**** From keybindings
+     - C-c           ::  Prefix Command
+     - ESC           ::  Prefix Command
+     - C-TAB         ::  ledger-post-align-xact
+     - ::
+     - M-n           ::  ledger-navigate-next-xact-or-directive
+     - M-p           ::  ledger-navigate-prev-xact-or-directive
+     - M-q           ::  ledger-post-align-dwim
+     - ::
+     - C-c C-a       ::  ledger-add-transaction
+     - C-c C-b       ::  ledger-post-edit-amount
+     - C-c C-c       ::  ledger-toggle-current
+     - C-c C-d       ::  ledger-delete-current-transaction
+     - C-c C-e       ::  ledger-toggle-current-transaction
+     - C-c C-f       ::  ledger-occur
+     - C-c TAB       ::  ledger-fully-complete-xact
+     - C-c C-k       ::  ledger-copy-transaction-at-point
+     - C-c C-l       ::  ledger-display-ledger-stats
+     - C-c C-o       ::  Prefix Command
+     - C-c C-p       ::  ledger-display-balance-at-point
+     - C-c C-q       ::  ledger-post-align-xact
+     - C-c C-r       ::  ledger-reconcile
+     - C-c C-s       ::  ledger-sort-region
+     - C-c C-t       ::  ledger-insert-effective-date
+     - C-c C-u       ::  ledger-schedule-upcoming
+     - ::
+     - C-c C-o C-a   ::  ledger-report-redo
+     - C-c C-o C-e   ::  ledger-report-edit-report
+     - C-c C-o C-g   ::  ledger-report-goto
+     - C-c C-o C-k   ::  ledger-report-quit
+     - C-c C-o C-r   ::  ledger-report
+     - C-c C-o C-s   ::  ledger-report-save
+**** Entering transaction
+     - C-c C-a starts a new transaction and brings up calendar.
+       - To navigate the calendar use:
+         - < / > :: previous/next month
+         - Shift Up|Down|Left|Right arrow :: move cursor in calendar
+           in that direction (forward/back one day or one week).
+       - C-c C-c ::  to toggle cleared status
+       - C-c C-f :: to enter narrow search.  C-c C-f to exit
+       - C-c C-s :: sort region
+**** Reports
+     - C-c  C-o C-r : Ledger report prompts for type of report
+       bal|reg|payee|account
+       - It brings up transactions that may not be in date order. To
+         sort, hit the "e" key for edit.
+       - e : allows editing of the command line arguments.
+         - -C : for only cleared
+         - -U : for only uncleared
+         - --pedantic :
+         - -S d : for sorting by date
+
+*** Calendar
+
+    - C-@             calendar-set-mark
+    - C-a             calendar-beginning-of-week
+    - C-b             calendar-backward-day
+    - C-c             Prefix Command
+    - C-e             calendar-end-of-week
+    - C-f             calendar-forward-day
+    - C-n             calendar-forward-week
+    - C-p             calendar-backward-week
+    - C-v             calendar-scroll-left-three-months
+    - C-x             Prefix Command
+    - ESC             Prefix Command
+    - SPC             scroll-other-window
+    - -               negative-argument
+    - .               calendar-goto-today
+    - <               calendar-scroll-right
+    - >               calendar-scroll-left
+    - ?               calendar-goto-info-node
+    - M-{             calendar previous month
+    - M-}             calendar next month
+
 * Org Mode
 ** Visibility
    - <TAB>              :: Show/hide

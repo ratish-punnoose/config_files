@@ -9,12 +9,13 @@
     (use-package ledger-mode
       :mode (("\\.ledger\\'" . ledger-mode))
       :custom
-       (ledger-clear-whole-transactions t)
-       (safe-local-variable-values (quote ((ledger-master-file . "main.ledger"))))
+      (ledger-clear-whole-transactions t)
+      (safe-local-variable-values (quote ((ledger-master-file . "main.ledger"))))
+      (ledger-default-date-format "%Y-%m-%d")
       :config
       (defun ledger-do-reconcile (&optional sort)
         "SORT the uncleared transactions in the account and display them in the *Reconcile* buffer.
-    Return a count of the uncleared transactions."
+        Return a count of the uncleared transactions."
         (let* ((buf ledger-buf)
                (account ledger-acct)
                (sort-by (if sort
@@ -46,6 +47,60 @@
           (set-buffer-modified-p nil)
           (setq buffer-read-only t)
 
-          (length xacts))))
+          (length xacts)))
+      (defun rjp/ledger-copy-trans (pos)
+        (interactive "d")
+        (let ((bounds (ledger-navigate-find-xact-extents pos)))
+          (copy-region-as-kill (car bounds) (cadr bounds))) )
+      (defun rjp/ledger-timeorder-xact ()
+        "Move the current transaction to the right chronological order"
+        (interactive)
+        (let* ((extents (ledger-navigate-find-xact-extents (point)))
+               (transaction (buffer-substring-no-properties
+                             (car extents)
+                             (cadr extents)))
+               (datestr (ledger-xact-date))
+               (transdate)
+               )
+          (if (not datestr) nil
+          (setq transdate (ledger-parse-iso-date datestr))
+          (delete-region (car extents) (car (cdr extents)))
+          (ledger-xact-find-slot transdate)
+          (insert transaction  "\n\n" )
+          (beginning-of-line -1)
+          (ledger-navigate-beginning-of-xact))
+
+          )
+        )
+
+      (defun rjp/ledger-occur-copy-all ()
+        (interactive)
+        (let ((matches (ledger-occur-compress-matches
+                        (ledger-occur-find-matches
+                         ledger-occur-current-regex)))
+              (tmpbuf (get-buffer-create "*tmpbuf*"))
+              )
+          (with-current-buffer tmpbuf (erase-buffer))
+          (dolist (m matches)
+            ;;  Each match item is a tuple of begin and end
+            ;;  Copy each region
+            (append-to-buffer tmpbuf (car m) (car (cdr m)))
+            (with-current-buffer tmpbuf (insert "\n\n"))
+            )
+          (with-current-buffer tmpbuf
+            (copy-region-as-kill (point-min) (point-max))
+            )
+          )
+        )
+      :commands (rjp/ledger-copy-trans rjp/ledger-occur-copy-all)
+      :bind
+      (:map ledger-mode-map
+            ("C-c M-w" . 'rjp/ledger-copy-trans)
+            ("C-c C-m" . 'rjp/ledger-timeorder-xact)
+            )
+      (:map ledger-occur-mode-map
+            ("C-c C-w" . 'rjp/ledger-occur-copy-all))
+      )
   #+end_src
+
 

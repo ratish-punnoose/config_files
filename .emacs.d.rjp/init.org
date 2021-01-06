@@ -1937,6 +1937,227 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
     (save-excursion
       (next-line arg)))
   #+end_src
+* Which-key
+#+begin_src emacs-lisp
+  (use-package which-key
+    :custom
+    ;; Manual activation setup
+    ;; Allow C-h to trigger which-key before it is done automatically
+    (which-key-show-early-on-C-h t)
+    ;; make sure which-key doesn't show normally but refreshes quickly after it is
+    ;; triggered.
+    (which-key-idle-delay 10000)
+    (which-key-idle-secondary-delay 0.05)
+    ;;
+    :config (which-key-mode)
+    :diminish which-key-mode
+    )
+#+end_src
+* Ryo Modal
+#+begin_src emacs-lisp :tangle no
+  (use-package ryo-modal
+    :commands ryo-modal-mode
+    :bind ("C-c SPC" . ryo-modal-mode)
+    :config
+    (ryo-modal-keys
+     ("," ryo-modal-repeat)
+     ("q" ryo-modal-mode)
+     ("h" backward-char)
+     ("j" next-line)
+     ("k" previous-line)
+     ("l" forward-char))
+
+    (ryo-modal-keys
+     ;; First argument to ryo-modal-keys may be a list of keywords.
+     ;; These keywords will be applied to all keybindings.
+     (:norepeat t)
+     ("0" "M-0")
+     ("1" "M-1")
+     ("2" "M-2")
+     ("3" "M-3")
+     ("4" "M-4")
+     ("5" "M-5")
+     ("6" "M-6")
+     ("7" "M-7")
+     ("8" "M-8")
+     ("9" "M-9")))
+#+end_src
+* Kakoune
+#+begin_src emacs-lisp
+  (use-package kakoune
+    ;; Having a non-chord way to escape is important, since key-chords don't work in macros
+    :bind ("C-z" . ryo-modal-mode)
+                                          ;:hook (after-init . my/kakoune-setup)
+    :config
+    (defun ryo-enter () "Enter normal mode" (interactive) (ryo-modal-mode 1))
+    (defun rjp/kakoune-setup-keybinds ()
+      "Set up default kakoune keybindings for normal mode."
+      ;; (global-subword-mode 1)
+      ;; (ryo-modal-major-mode-keys
+      ;;  'text-mode
+      ;;  ;; Region selectors
+      ;;   (:mc-all t)
+      ;;   ("M-i" (("w" er/mark-word)
+      ;;           ("b" er/mark-inside-pairs)
+      ;;           ("'" er/mark-inside-quotes)
+      ;;           ("s" er/mark-text-sentence)
+      ;;           ("p" er/mark-text-paragraph)))
+      ;;   ("M-a" (("w" er/mark-symbol)
+      ;;           ("b" er/mark-outside-pairs)
+      ;;           ("'" er/mark-outside-quotes)
+      ;;           ("s" er/mark-text-sentence)
+      ;;           ("p" er/mark-text-paragraph))))
+
+      ;; (ryo-modal-major-mode-keys
+      ;;  'prog-mode
+      ;;  ("b" kakoune-backward-same-syntax :first '(kakoune-set-mark-here))
+      ;;  ("B" kakoune-backward-same-syntax :first '(kakoune-set-mark-if-inactive))
+      ;;  ("w" forward-same-syntax :first '(kakoune-set-mark-here))
+      ;;  ("W" forward-same-syntax :first '(kakoune-set-mark-if-inactive)))
+      (ryo-modal-keys
+       ;; Basic keybindings
+       (:mc-all t)
+       ;; Navigation
+       ;; Treat arrow keys the same as "hjkl"
+       ("<down>" next-line)
+       ("<up>" previous-line)
+       ("<right>" forward-char)
+       ("<left>" backward-char)
+       ("w" forward-word)
+       ("M-w" forward-symbol)
+       ("g" (("a" beginning-of-line)
+             ("<down>" end-of-buffer)
+             ("<up>" beginning-of-buffer)
+             ("g" kakoune-gg)
+             ("e" end-of-line)
+             ("i" back-to-indentation)
+             ("[" backward-paragraph)
+             ("]" forward-paragraph)
+             ;; g-0 looks like g-) on keyboard
+             ;; g-9 looks like g-( on keyboard
+             ("0" forward-list)
+             ("9" backward-list)
+             ;; g-6 looks like g-^ on keyboard
+             ("6" up-list)
+             ("v" down-list)))
+       ;; To insert mode
+       ("a" forward-char :exit t)
+       ("A" move-end-of-line :exit t)
+       ("b" backward-word )
+       ("c" kakoune-d :exit t)
+       ("C" kill-line :exit t)
+       ("I" back-to-indentation :exit t)
+       ("o" kakoune-o :exit t)
+       ("O" kakoune-O :exit t)
+       ("i" kakoune-insert-mode)
+       ;; Selection
+       ("f" kakoune-select-to-char)
+       ("t" kakoune-select-up-to-char)
+       ("." kakoune-select-again :first '(kakoune-set-mark-if-inactive))
+       ("M-;" exchange-point-and-mark)
+       ("%" mark-whole-buffer)
+       ("e" er/expand-region)
+       ("E" er/contract-region)
+       ;; Multiple cursors
+       ("s" mc/mark-all-in-region)
+       ("S" mc/split-region)
+       ;; Operation
+       ("d" kakoune-d)
+       ("D" kill-line)
+       ("g f" find-file-at-point)
+       ("g x" kakoune-exchange)
+       ("g X" kakoune-exchange-cancel)
+       ("p" kakoune-p)
+       ("r" kakoune-replace-char)
+       ("R" kakoune-replace-selection)
+       ("x" kakoune-x)
+       ("X" kakoune-X)
+       ("y" kill-ring-save)
+       ("Y" kakoune-Y)
+       ("`" kakoune-downcase)
+       ("~" kakoune-upcase)
+       ("M-j" kakoune-join)
+       ;; Unimpaired-like functionality
+       ("[" (("SPC" kakoune-insert-line-above)
+             ("p" kakoune-paste-above)))
+       ("]" (("SPC" kakoune-insert-line-below)
+             ("p" kakoune-paste-below)))
+
+
+       ;; Numeric arguments
+       ("0" "M-0" :norepeat t)
+       ("1" "M-1" :norepeat t)
+       ("2" "M-2" :norepeat t)
+       ("3" "M-3" :norepeat t)
+       ("4" "M-4" :norepeat t)
+       ("5" "M-5" :norepeat t)
+       ("6" "M-6" :norepeat t)
+       ("7" "M-7" :norepeat t)
+       ("8" "M-8" :norepeat t)
+       ("9" "M-9" :norepeat t)
+       ("-" "M--" :norepeat t)
+
+       ;; Shell commands
+       ("|" kakoune-shell-pipe)
+       ("!" kakoune-shell-command))
+
+      (ryo-modal-keys
+       ("<S-left>" previous-buffer)
+       ("<S-right>" next-buffer)
+       ("#" linum-mode)
+       )
+      )
+    (defun my/kakoune-setup ()
+      "Call kakoune-setup-keybinds and then add some personal config."
+      ;; (kakoune-setup-keybinds)
+      (rjp/kakoune-setup-keybinds)
+      (setq ryo-modal-cursor-type 'box)
+      ;(add-hook 'prog-mode-hook #'ryo-enter)
+      (define-key ryo-modal-mode-map (kbd "SPC h") 'help-command)
+      ;; Access all C-x bindings easily
+      (define-key ryo-modal-mode-map (kbd "z") ctl-x-map)
+      ;; (ryo-modal-keys
+      ;;  ("," save-buffer)
+      ;;  ("P" counsel-yank-pop)
+      ;;  ("m" mc/mark-next-like-this)
+      ;;  ("M" mc/skip-to-next-like-this)
+      ;;  ("n" mc/mark-previous-like-this)
+      ;;  ("N" mc/skip-to-previous-like-this)
+      ;;  ("M-m" mc/edit-lines)
+      ;;  ("*" mc/mark-all-like-this)
+      ;;  ("v" er/expand-region)
+      ;;  ("C-v" set-rectangular-region-anchor)
+      ;;  ("M-s" mc/split-region)
+      ;;  (";" (("q" delete-window)
+      ;;        ("v" split-window-horizontally)
+      ;;        ("s" split-window-vertically)))
+      ;;  ("C-h" windmove-left)
+      ;;  ("C-j" windmove-down)
+      ;;  ("C-k" windmove-up)
+      ;;  ("C-l" windmove-right)
+      ;;  ("C-u" scroll-down-command :first '(deactivate-mark))
+      ;;  ("C-d" scroll-up-command :first '(deactivate-mark)))
+      )
+    (my/kakoune-setup)
+    )
+
+#+end_src
+* Undo-tree
+Undo-tree configuration taken from kakoune site.
+#+begin_src emacs-lisp :tangle no
+  (use-package undo-tree
+    :config
+    (global-undo-tree-mode)
+    :ryo
+    ("u" undo-tree-undo)
+    ("U" undo-tree-redo)
+    ("SPC u" undo-tree-visualize)
+    :bind (:map undo-tree-visualizer-mode-map
+                ("h" . undo-tree-visualize-switch-branch-left)
+                ("j" . undo-tree-visualize-redo)
+                ("k" . undo-tree-visualize-undo)
+                ("l" . undo-tree-visualize-switch-branch-right)))
+#+end_src
 * Completion with company-mode
 1. Add company mode
    #+BEGIN_SRC emacs-lisp

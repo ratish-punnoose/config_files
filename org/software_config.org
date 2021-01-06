@@ -1569,6 +1569,9 @@
 ** Systemctl
    - systemctl start unitname
    - systemctl stop unitname
+   - systemctl enable file.service  to setup a file.
+
+
 ** CA certificates
    - Add .crt file to /usr/local/share/certificates
    - Run update-ca-certificates

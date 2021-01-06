@@ -264,6 +264,10 @@ color-theme-alice-blue, color-theme-andreas
   (menu-bar-mode -1)
   ;(global-set-key [f1] 'menu-bar-mode)
 #+end_src
+*** Disable scroll bar
+#+begin_src emacs-lisp
+  (scroll-bar-mode -1)
+#+end_src
 *** Title and Status [[http://mnemonikk.org/][mnemonikk]]
 #+begin_src emacs-lisp
 (setq frame-title-format
@@ -309,13 +313,6 @@ color-theme-alice-blue, color-theme-andreas
         whitespace-line-column 100
         ediff-window-setup-function 'ediff-setup-windows-plain
         xterm-mouse-mode t)
-#+end_src
-
-** Scroll Bars
-   Add scroll bars
-#+begin_src emacs-lisp
-;;(setq scroll-bar-mode 1)
-;;(toggle-scroll-bar)
 #+end_src
 
 ** HideShow

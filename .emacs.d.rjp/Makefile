@@ -8,7 +8,7 @@ help:
 
 all: init.elc
 
-init.el: init.org
+init.el: init.org ledger.org
 	emacs --script "inittangle.el"
 
 init.elc: init.el

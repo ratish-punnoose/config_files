@@ -12,6 +12,12 @@
       (ledger-clear-whole-transactions t)
       (safe-local-variable-values (quote ((ledger-master-file . "main.ledger"))))
       (ledger-default-date-format "%Y-%m-%d")
+      (ledger-reconcile-default-commodity "USD")
+      (ledger-reconcile-sort-key "(date)")
+      (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal")
+                        ("reg" "%(binary) -f %(ledger-file) reg")
+                        ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+                        ("account" "%(binary) --sort d -f %(ledger-file) reg %(account)")))
       :config
       (defun ledger-do-reconcile (&optional sort)
         "SORT the uncleared transactions in the account and display them in the *Reconcile* buffer.
@@ -52,6 +58,31 @@
         (interactive "d")
         (let ((bounds (ledger-navigate-find-xact-extents pos)))
           (copy-region-as-kill (car bounds) (cadr bounds))) )
+
+      (defun rjp/ledger-move-chronological (arg)
+        "Move the current transaction to the right chronological order. If
+    a prefix argument is provided, then move with the transaction"
+        (interactive "P")
+        (let* ((extents (ledger-navigate-find-xact-extents (point)))
+               (transaction (buffer-substring-no-properties
+                             (car extents)
+                             (cadr extents)))
+               (datestr (ledger-xact-date))
+               (transdate))
+          (when datestr
+            (setq transdate (ledger-parse-iso-date datestr))
+            (delete-region (car extents) (car (cdr extents)))
+            (if (not arg)
+                (progn
+                  (save-excursion
+                    (ledger-xact-find-slot transdate)
+                    (insert transaction "\n\n"))
+                  (ledger-navigate-next-xact))
+              (ledger-xact-find-slot transdate)
+              (insert transaction "\n\n")
+              (beginning-of-line -1)
+              (ledger-navigate-beginning-of-xact)))))
+
       (defun rjp/ledger-timeorder-xact ()
         "Move the current transaction to the right chronological order"
         (interactive)
@@ -63,12 +94,12 @@
                (transdate)
                )
           (if (not datestr) nil
-          (setq transdate (ledger-parse-iso-date datestr))
-          (delete-region (car extents) (car (cdr extents)))
-          (ledger-xact-find-slot transdate)
-          (insert transaction  "\n\n" )
-          (beginning-of-line -1)
-          (ledger-navigate-beginning-of-xact))
+            (setq transdate (ledger-parse-iso-date datestr))
+            (delete-region (car extents) (car (cdr extents)))
+            (ledger-xact-find-slot transdate)
+            (insert transaction  "\n\n" )
+            (beginning-of-line -1)
+            (ledger-navigate-beginning-of-xact))
 
           )
         )
@@ -96,7 +127,7 @@
       :bind
       (:map ledger-mode-map
             ("C-c M-w" . 'rjp/ledger-copy-trans)
-            ("C-c C-m" . 'rjp/ledger-timeorder-xact)
+            ("C-c C-m" . 'rjp/ledger-move-chronological)
             )
       (:map ledger-occur-mode-map
             ("C-c C-w" . 'rjp/ledger-occur-copy-all))

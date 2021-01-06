@@ -237,7 +237,26 @@
     - Any lisp function can be called, even ones with side-effects.
       - \,(find-file-no-select \&)  on a list of files, opens them in
         the background.
-
+    - Example:
+      To replace : see [[https://stackoverflow.com/questions/49519627/emacs-replace-regexp-with-incremental-sequence][example link]]
+      #+begin_example
+      result_A_in_S1-S2.txt
+      result_A_in_S1-S2.txt
+      result_A_in_S1-S2.txt
+      result_A_in_S1-S2.txt
+      #+end_example
+      with
+      #+begin_example
+      result_A_in_1000-1003.txt
+      result_A_in_1004-1007.txt
+      result_A_in_1008-1011.txt
+      result_A_in_1012-1015.txt
+      #+end_example
+      use
+      #+begin_example
+      M-x query-regexp-replace RET S1-S2 RET
+       \,(let ((start (+ 1000 (* 4 \#)))) (format "%d-%d" start (+ start 3))) RET
+      #+end_example
 
 
 ** Copy word at point (doesn't seem to work RJP 1/29/16)
@@ -875,6 +894,32 @@
          - -U : for only uncleared
          - --pedantic :
          - -S d : for sorting by date
+**** Reconciling
+     - C-c             Prefix Command
+     - C-l             ledger-reconcile-refresh
+     - RET             ledger-reconcile-visit
+     - C-x             Prefix Command
+     - ESC             Prefix Command
+     - SPC             ledger-reconcile-toggle
+     - a               ledger-reconcile-add
+     - b               ledger-display-balance
+     - d               ledger-reconcile-delete
+     - g               ledger-reconcile
+     - n               next-line
+     - p               previous-line
+     - q               ledger-reconcile-quit
+     - s               ledger-reconcile-save
+     - t               ledger-reconcile-change-target
+     - <return>        ledger-reconcile-visit
+     -
+     - C-c C-a         sort by amount
+     - C-c C-c         ledger-reconcile-finish
+     - C-c C-d         sort by date
+     - C-c C-o         default sort
+     - C-c C-p         sort by payee
+     -
+     - C-x C-s         ledger-reconcile-save
+     -
 
 *** Calendar
 
@@ -1339,6 +1384,11 @@
    To delete a line in file and pipe output.
    find . -name "*.v" | xargs cat | sed -e '/^$/ d' -e '/^\/\// d' | wc -l
    cat *.vhd | sed -e '/^$/ d' -e '/^--/ d' | wc -l
+** pdftopnm
+   convert pdf to different outputs
+   #+begin_example
+     pdftoppm -[png|jpeg|tiff] -f firstpage -l lastpage  pdffile.pdf  outfileprefix
+   #+end_example
 * Typesetting
   - http://www.cs.sfu.ca/~ggbaker/reference/characters/#dash
   - http://practicaltypography.com/body-text.html

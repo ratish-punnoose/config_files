@@ -362,6 +362,9 @@ color-theme-alice-blue, color-theme-andreas
                    '(nxml-mode
                       "<!--\\|<[^/>][^>]*>" "-->\\|</[^/>]+>" "<!--"
                       nxml-forward-element nil))
+      (add-to-list 'hs-special-modes-alist
+                   '(verilog-mode "\\<begin\\>" "\\<end\\>" "/[*/]"
+                                  verilog-forward-sexp-function))
       ;;  Toggle hide/show for a specific block
       (defun rjp/hs-toggle (arg)
         "Toggle hiding/showing of a block"

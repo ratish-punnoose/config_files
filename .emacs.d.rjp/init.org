@@ -1980,6 +1980,19 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
      ("9" "M-9")))
 #+end_src
 * Kakoune
+** Helper funcs
+*** Toggle line nums
+#+begin_src emacs-lisp
+  (defun rjp/toggle-line-nums ()
+    "Toggle display of line numbers"
+    (interactive)
+    (if (not display-line-numbers)
+        (display-line-numbers-mode)
+      (if (eq display-line-numbers 'relative)
+          (display-line-numbers-mode 0)
+        (setq display-line-numbers 'relative))))
+#+end_src
+** Kakoune setup
 #+begin_src emacs-lisp
   (use-package kakoune
     ;; Having a non-chord way to escape is important, since key-chords don't work in macros
@@ -2101,7 +2114,7 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
       (ryo-modal-keys
        ("<S-left>" previous-buffer)
        ("<S-right>" next-buffer)
-       ("#" linum-mode)
+       ("#" rjp/toggle-line-nums)
        )
       )
     (defun my/kakoune-setup ()

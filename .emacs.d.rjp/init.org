@@ -474,6 +474,11 @@ color-theme-alice-blue, color-theme-andreas
   (add-hook 'ediff-before-setup-hook #'rjp/store-pre-ediff-winconfig)
   (add-hook 'ediff-quit-hook #'rjp/restore-pre-ediff-winconfig)
 #+end_src
+** Line number display
+#+begin_src emacs-lisp
+  (custom-set-faces '(line-number ((t (:foreground "gray15"))))
+                    '(line-number-current-line ((t (:foreground "SeaGreen")))))
+#+end_src
 * Navigation
 Easier keys for switching windows
 ** For moving using arrows

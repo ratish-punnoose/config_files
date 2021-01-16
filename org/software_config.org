@@ -1042,6 +1042,11 @@
    - C-c & ::  Jump back to last bookmark
 
    - "<<link_target>>"  :: This is a link target
+
+   - C-c l :: org-store-link.  copies the current link location (in
+              any file, even non-org).  Then when doing C-c C-l
+              (org-insert-link) using up-arrow will show the stored link
+
 *** Custom links target
     - [[+TAB :: Bring up targets in local file
     - [[+ C-u - TAB :: Bring up targets in all include files

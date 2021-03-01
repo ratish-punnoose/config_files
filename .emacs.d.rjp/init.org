@@ -2282,3 +2282,13 @@ Undo-tree configuration taken from kakoune site.
            (concat "Ratish's emacs init: "
                    (prin1-to-string (emacs-init-time))))
    #+END_SRC
+* Todo items
+** Key selection examples
+- [[https://gist.github.com/LLazarek/d9c226763860c3f53a6d28535e9efb64][nav-mode]] similar to vim's normal mode
+- [[https://www.spacemacs.org/doc/DOCUMENTATION.html#commands][Spacemacs key bindings]]
+- [[https://devhints.io/spacemacs][Spacemacs cheat sheet]]
+- [[https://github.com/jmorag/kakoune.el/blob/master/kakoune.el#L51][Kakoune]]
+- [[https://github.com/mawww/kakoune/blob/master/doc/pages/keys.asciidoc#goto-commands][Kakoune Keys]]
+-
+
+

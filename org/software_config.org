@@ -508,6 +508,22 @@
         file. Prompts for revision.
    - C-x v l, vc-print-log :: Shows revision log
    - C-x v g, vc-annotate ::  Like git blame
+   - C-x v v :: Perform next action, eg. commit
+   - C-x v d ::  vc-dir
+     - m :: Mark
+     - v :: Next action (eg commit)
+     - Ret :: Show file
+     - C-o  :: display file
+     - SPC ::  next line
+     - M :: mark all files
+     - U ::  unmark all files
+     - d ::  dir clean files
+     - i :: register a file
+     - p :: print log
+     - q :: quit
+     - u :: unmark
+     - x :: hide up to date
+     - C-up/down :: prev/next dir
 ** Buffer  read status
    - C-x C-q :: toggle read status
 ** Diff

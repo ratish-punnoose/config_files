@@ -481,6 +481,10 @@
     - i :: Add file to .gitignore
     - I :: Add file to .git/info/exclude instead of .gitignore
     - Ctrl+W :: Copy SHA of any commit
+*** Navigation
+    - n/p :: Move by visible section
+    - M-n/M-p :: Move by sibling
+    - ^ :: Move to parent
 *** History
    - l/L :: History (show commit log)  / Verbose
    - Ret or Space :: Expand.  Space is like more.  Keeps your state in
@@ -503,7 +507,7 @@
    - k :: Drop stash
 *** Branch
    - b/B :: Switch to branch / Create and switch
-** Version control for SVN
+** Version control for all types of VCS
    - C-x v ~, vc-revision-other-window :: Shows different version of
         file. Prompts for revision.
    - C-x v l, vc-print-log :: Shows revision log

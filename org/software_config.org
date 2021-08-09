@@ -1718,3 +1718,16 @@
     dpkg --add-architecture i386
 *** lsb
     Try lsb-core
+
+** add a root certificate (for "SSL interception")
+   see https://askubuntu.com/questions/73287/how-do-i-install-a-root-certificate
+
+*** given a PEM format certificate,
+     =key.pem=1. Put =key.pem= in =/usr/local/share/ca-certificates/=, with the
+     =.crt= extension: =/usr/local/share/ca-certificates/key.crt=.
+    - The command ~openssl x509 -in key.pem -inform PEM -out key.crt~
+       just consumes PEM format and produces PEM format, which amounts
+       to renaming the file.2. Run ~sudo update-ca-certificates~.  It will detect the =.crt= files
+     in =/usr/local/share/ca-certificates/= and "do the right thing"
+     with them.
+

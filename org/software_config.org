@@ -49,6 +49,37 @@
    - C-c C-x X :: Yank from register X
 ** Artist mode
    Use artist mode to help draw free-form diagrams
+   - C-c C-a is the prefix for all commands
+     - C-e :: artist-select-erase-char
+     - C-f :: artist-select-fill-char
+     - C-l :: artist-select-line-char
+     - C-o :: artist-select-operation
+     - C-r :: artist-toggle-rubber-banding
+     - C-t :: artist-toggle-trim-line-endings
+     - C-s :: artist-toggle-borderless-shapes)
+     - l   :: artist-select-op-line
+     - L   :: artist-select-op-straight-line
+     - r   :: artist-select-op-rectangle
+     - R   :: artist-select-op-square
+     - s   :: artist-select-op-square
+     - p   :: artist-select-op-poly-line
+     - P   :: artist-select-op-straight-poly-line
+     - e   :: artist-select-op-ellipse
+     - c   :: artist-select-op-circle
+     - t   :: artist-select-op-text-see-thru
+     - T   :: artist-select-op-text-overwrite
+     - S   :: artist-select-op-spray-can
+     - z   :: artist-select-op-spray-set-size
+     - C-d :: artist-select-op-erase-char
+     - E   :: artist-select-op-erase-rectangle
+     - v   :: artist-select-op-vaporize-line
+     - V   :: artist-select-op-vaporize-lines
+     - C-k :: artist-select-op-cut-rectangle
+     - M-w :: artist-select-op-copy-rectangle
+     - C-y :: artist-select-op-paste
+     - f   :: artist-select-op-flood-fill
+     - C-b :: artist-submit-bug-report
+   - C-c C-c for canceling
 ** Editing
    - M-l/u :: Turn following word to lowercase/uppercase
    - C-x C-l/u ::  downcase/upcase region

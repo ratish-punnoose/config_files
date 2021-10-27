@@ -787,6 +787,11 @@
          cd ~/.local/share/info
          install-info python.info dir
         #+end_src
+**** Python install without proxy
+     #+begin_src
+     pip install --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org oauthlib -vvv
+     #+end_src
+
 ** Dired
 *** Invoking dired
     - C-x d :: Start
@@ -1438,6 +1443,11 @@
 * Cygwin
 ** Directory permissions
    To fix type  "setfacl -b"
+** Packages
+   To check dependencies
+   #+begin_src
+   cygcheck-dep -r
+   #+end_src
 ** X11
 *** Running
     To run each X app on its own.

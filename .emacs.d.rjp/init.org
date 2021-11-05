@@ -984,7 +984,8 @@ For shortcuts since 9.2
     :hook ((org-mode . yas-minor-mode)
            (verilog-mode . yas-minor-mode)
            (coq-mode . yas-minor-mode)
-           (ledger-mode . yas-minor-mode))
+           (ledger-mode . yas-minor-mode)
+           (eshell-mode . yas-minor-mode))
     ;; :bind (:map yas-minor-mode-map
     ;;             ("\C-c" . nil))
     :bind (:map yas-minor-mode-map ("<f2>" . hydra-yas/body))

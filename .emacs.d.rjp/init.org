@@ -988,7 +988,13 @@ For shortcuts since 9.2
            (eshell-mode . yas-minor-mode))
     ;; :bind (:map yas-minor-mode-map
     ;;             ("\C-c" . nil))
-    :bind (:map yas-minor-mode-map ("<f2>" . hydra-yas/body))
+    :bind (:map yas-minor-mode-map
+                ("<f2>" . hydra-yas/body)
+                ("\C-c&\C-s" . nil)
+                ("\C-c&\C-n" . nil)
+                ("\C-c&\C-v" . nil)
+                ("\C-c&" . nil)
+                )
     :hydra (hydra-yas (:color blue :hint nil)
             "
                 ^YASnippets^

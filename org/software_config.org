@@ -791,6 +791,60 @@
      #+begin_src
      pip install --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org oauthlib -vvv
      #+end_src
+*** Python
+    Jupyter-lab: see install
+    [[https://stackoverflow.com/questions/50149562/jupyterlab-interactive-plot]]
+    1. preinstall jupyter-core, zmq, matplotlib, ipython_genutils from
+       cygwin.
+    2. pip install jupyter-lab
+    #+begin_example
+      pip install --upgrade jupyterlab ipympl
+    #+end_example
+    Start by running jupyter-lab.
+    For plots use widget:
+    #+begin_src python
+      import numpy as np
+      import matplotlib.pyplot as plt
+      %matplotlib widget
+      y = np.array(range(100))
+      plt.plot(y)
+      plt.show()
+    #+end_src
+    Use autoreload in jupyter for reloading functions.
+    Thus use the following header in any notebook
+    #+begin_src python
+      %load_ext autoreload
+      %autoreload 2
+      %matplotlib widget
+    #+end_src
+    Run python scripts as follows
+    #+begin_src  python
+      %run progname.py args
+    #+end_src
+**** Python docstring
+     See [[https://numpydoc.readthedocs.io/en/latest/format.html]]
+**** Interactive debugging
+     Add the following
+     #+begin_src python
+       from IPython import embed
+
+
+       # In code
+       embed()
+     #+end_src
+     At the ipython embed prompt: the following can be used:
+     1. %who
+     2. %whos
+     The magic words are defined in [[https://ipython.readthedocs.io/en/stable/interactive/magics.html]]
+
+     OR
+     #+begin_example
+       %run -d  scriptname
+
+       # Or set breakpoint in specific file.
+       %run -d -b myotherfile.py:20 myscript
+     #+end_example
+
 
 ** Dired
 *** Invoking dired
@@ -1741,3 +1795,8 @@
      in =/usr/local/share/ca-certificates/= and "do the right thing"
      with them.
 
+* WSL
+** For increasing stack limit on wsl
+   #+begin_src
+     sudo prlimit --stack=unlimited --pid $$; ulimit -s unlimited
+   #+end_src

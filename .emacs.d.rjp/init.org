@@ -199,6 +199,10 @@ Options-> Save Options.
             ;; If there is more than one, they won't work right.
             '(default ((t (:family "Consolas" :foundry "outline" :slant normal
                                      :weight normal :height 113 :width normal))))
+            '(fixed-pitch ((t (:family "Consolas" :foundry "outline" :slant normal
+                                     :weight normal :height 113 :width normal))))
+            '(fixed-pitch-serif ((t (:family "Consolas" :foundry "outline" :slant normal
+                                     :weight normal :height 113 :width normal))))
             ))
           ((eq system-type 'gnu/linux)
            (cond
@@ -600,13 +604,13 @@ evaluate this file itself.
       (org-reveal '(4))
       (org-show-subtree))
 
-    (add-to-list 'org-speed-commands-user
+    (add-to-list 'org-speed-commands
                  '("N" ded/org-show-next-heading-tidily))
 
-    (add-to-list 'org-speed-commands-user
+    (add-to-list 'org-speed-commands
                  '("P" ded/org-show-previous-heading-tidily))
 
-    (add-to-list 'org-speed-commands-user
+    (add-to-list 'org-speed-commands
                  '("C" rjp/org-hide-all-except-curr))
 
     (define-key org-mode-map (kbd "C-c N") 'ded/org-show-next-heading-tidily)
@@ -1717,7 +1721,7 @@ Dired narrow
   #+end_src
 
 - Remove up/down arrow from eshell-mode-map
-  #+begin_src emacs-lisp
+  #+begin_src emacs-lisp :tangle no
     (add-hook 'eshell-mode-hook
               '(lambda () (progn
                             (define-key eshell-mode-map [M-down] 'eshell-next-input)
@@ -1730,6 +1734,24 @@ Dired narrow
                               'rjp/eshell-outline-toggle)
                             (define-key eshell-mode-map [S-tab] 'rjp/eshell-outline-global-toggle))))
   #+end_src
+  To make working with emacs 28
+  #+begin_src emacs-lisp
+    (use-package em-hist
+      :defer t
+      :config
+          (define-key eshell-hist-mode-map [M-down] 'eshell-next-input)
+          (define-key eshell-hist-mode-map [M-up] 'eshell-previous-input)
+          (define-key eshell-hist-mode-map [C-down] nil)
+          (define-key eshell-hist-mode-map [C-up] nil)
+          (define-key eshell-hist-mode-map [up] nil)
+          (define-key eshell-hist-mode-map [down] nil)
+          (define-key eshell-hist-mode-map [tab]
+            'rjp/eshell-outline-toggle)
+          (define-key eshell-hist-mode-map [S-tab] 'rjp/eshell-outline-global-toggle)
+
+      )
+  #+end_src
+
 ** Prompt
 - Remove ugly coloring
   #+begin_src emacs-lisp :tangle no

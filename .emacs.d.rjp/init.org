@@ -697,6 +697,17 @@ Taken from orgmode hacks [[https://orgmode.org/worg/org-hacks.html#sec-1-3-2][Or
   (custom-set-variables
    '(org-src-tab-acts-natively t))
 #+end_src
+** Org indentation
+- org-indent shows indentation virtually but it is not reflected in
+  the file.
+- To reflect in the file:
+  - turn org-indent off.
+  - set org-adapt-indentation to t:
+  - set electric-indent-mode to t.
+#+begin_src emacs-lisp
+  (custom-set-variables  '(org-adapt-indentation t))
+#+end_src
+
 ** Org global configuration and shortcuts
 #+begin_src emacs-lisp
   ;;(set-time-zone-rule "GMT+8")

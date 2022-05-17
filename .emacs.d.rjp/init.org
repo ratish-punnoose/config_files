@@ -1678,7 +1678,7 @@ Dired narrow
         (eshell-grep "grep --color -H --null" args))
       (defun eshell/zgrep (&rest args)
         "Use Emacs grep facility instead of calling external grep."
-        (eshell-grep "zgrep --color -H --null" args))
+        (eshell-grep "zgrep --color -H" args))
 
       ;; Use CD history into a command for expansion
       (defun rdir (index)

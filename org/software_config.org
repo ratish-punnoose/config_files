@@ -1,7 +1,8 @@
+#+STARTUP: indent
 * Emacs
 ** MS Windows Install
 *** Libraries for images and zlib
-    Available for download at ezwinports
+Available for download at ezwinports
     (http://sourceforge.net/projects/ezwinports)
     - Check value of variable dynamic-library-alist . This contains
       names of dlls.
@@ -733,6 +734,14 @@
 **** Special devs
      - /dev/clip :: Clipboard
      - /dev/kill :: Kill ring
+** Shell, Term
+   See [[https://www.masteringemacs.org/article/running-shells-in-emacs-overview][Mastering Emacs: Shells]]
+   - Use shell for a regular shell.
+   - Use term for a terminal emulator.
+     - In terminal emulator, all keys are send to term in char-mode,
+       but not in line-mode.
+       - C-c C-j :: switch to line mode.
+       - C-c C-k :: switch to char mode.
 ** Tramp
    Syntax for remote access
    - /ssh:hostname:dir :: ssh to machine
@@ -792,11 +801,18 @@
      pip install --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org oauthlib -vvv
      #+end_src
 *** Python
-    Jupyter-lab: see install
+Jupyter-lab: see install
     [[https://stackoverflow.com/questions/50149562/jupyterlab-interactive-plot]]
     1. preinstall jupyter-core, zmq, matplotlib, ipython_genutils from
        cygwin.
-    2. pip install jupyter-lab
+    2. NOTE: Latest version of jupyter-lab fails.
+       - It requires ipykernel which requires psutil which is not
+         supported on cygwin
+       - Install older version of ipykernel
+         #+begin_example
+           pip install ipykernel==6.9.0
+         #+end_example
+    3. pip install jupyter-lab
     #+begin_example
       pip install --upgrade jupyterlab ipympl
     #+end_example
@@ -821,6 +837,14 @@
     #+begin_src  python
       %run progname.py args
     #+end_src
+**** python webbrowser
+this
+#+begin_example
+  export BROWSER=cygstart
+#+end_example
+
+
+
 **** Python docstring
      See [[https://numpydoc.readthedocs.io/en/latest/format.html]]
 **** Interactive debugging
@@ -1781,7 +1805,15 @@
     First requires multiarch install
     dpkg --add-architecture i386
 *** lsb
-    Try lsb-core
+    Try lsb-core.
+    - With buster or higher lsb-compat.
+    - Make symlink from ld-linux-x86-64.so.2 to ld-lsb-x86-64.so.3.
+*** switch csh shell from bsd csh to tcsh
+#+begin_example
+  sudo update-alternatives --set csh /bin/tcsh
+#+end_example
+
+
 
 ** add a root certificate (for "SSL interception")
    see https://askubuntu.com/questions/73287/how-do-i-install-a-root-certificate

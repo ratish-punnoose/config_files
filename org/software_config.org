@@ -81,6 +81,7 @@ Available for download at ezwinports
      - f   :: artist-select-op-flood-fill
      - C-b :: artist-submit-bug-report
    - C-c C-c for canceling
+   - C-o for adding newlines (useful while drawing).
 ** Editing
    - M-l/u :: Turn following word to lowercase/uppercase
    - C-x C-l/u ::  downcase/upcase region
@@ -584,6 +585,10 @@ Available for download at ezwinports
 *** Basics
     - eshell-print, eshell-echo instead of ls.
     - **/*  recursive listing
+*** Navigation
+- C-M-l :: Shift window so top of last command output is at the top.
+  Good for long command outputs to go up and inspect command output.
+- C-c C-n/p :: Jump to previous/next command.
 *** Globs
     Globs work like that in zsh.  Globs also have predicate filters.
 **** Examples
@@ -703,6 +708,7 @@ Available for download at ezwinports
     - !ls :: last command starting with ls
     - !?ls :: last command containing ls
     - !ls<tab> :: completion showing commands
+    - C-c C-l :: How history in split pane
 *** Directory history
     - cd = :: List history
     - cd -<NUMBER> :: go to previous dir
@@ -969,8 +975,8 @@ this
     - :v :: Verify sig
     - :s :: Sign
     - :e :: Encrypt
-*** Ledger
-**** From keybindings
+** Ledger
+*** From keybindings
      - C-c           ::  Prefix Command
      - ESC           ::  Prefix Command
      - C-TAB         ::  ledger-post-align-xact
@@ -1002,7 +1008,7 @@ this
      - C-c C-o C-k   ::  ledger-report-quit
      - C-c C-o C-r   ::  ledger-report
      - C-c C-o C-s   ::  ledger-report-save
-**** Entering transaction
+*** Entering transaction
      - C-c C-a starts a new transaction and brings up calendar.
        - To navigate the calendar use:
          - < / > :: previous/next month
@@ -1011,14 +1017,14 @@ this
        - C-c C-c ::  to toggle cleared status
        - C-c C-f :: to enter narrow search.  C-c C-f to exit
        - C-c C-s :: sort region
-**** Custom functions
+*** Custom functions
      - copy a single transaction to kill ring
        - C-c M-w :: rjp/ledger-copy-trans
      - time order a transaction within the file
        - C-c C-m :: rjp/ledger-timeorder-xact (mnemonic m for move)
      - In narrow search mode, copy all visible
        - C-c C-w :: rjp/ledger-occur-copy-all
-**** Reports
+*** Reports
      - C-c  C-o C-r : Ledger report prompts for type of report
        bal|reg|payee|account
        - It brings up transactions that may not be in date order. To
@@ -1028,7 +1034,7 @@ this
          - -U : for only uncleared
          - --pedantic :
          - -S d : for sorting by date
-**** Reconciling
+*** Reconciling
      - C-c             Prefix Command
      - C-l             ledger-reconcile-refresh
      - RET             ledger-reconcile-visit
@@ -1144,6 +1150,10 @@ this
     #+END:
     - C-c C-x C-u       :: Update dynamic block at point
     - C-u C-c C-x C-u   :: Update all dynamic blocks
+*** Latex attributes for tables
+[[https://tex.stackexchange.com/questions/171193/tabu-and-space-between-columns]]
+Moreover, the right way to specify an X column is (commas can be omitted):
+X[<coef>,<align>,<type>]
 
 
 ** Clocking
@@ -1166,6 +1176,15 @@ this
     - C-c `             :: Edit partially hidden cell
 *** Copy/Paste
     - C-c C-x [M-w/C-w/C-y] :: Copy/Kill/Yank rectangular region of table
+*** Latex export
+# environment options
+# +attr_latex: :environment longtabu :font \small :align |r|r|X[<coef>,<align>,<type>]|
+#+caption[shortcaption]: longcaption
+#+name: tab:tablereferencename
+|column 1 |  column 2 |
+|--------------+----------------|
+|            |                |
+
 ** Links
    - "[[link][desc]"	:: Create link
    - C-c C-l            :: Edit Link
@@ -1743,6 +1762,17 @@ this
   - Passing arguments with underscore into functions will not print
     correctly.  To allow functions to handle them, within the
     function, encapsulate argument in \detokenize{ }
+** Font sizes
+1. \Huge
+2. \huge
+3. \LARGE
+4. \Larg*e
+5. \large
+6. \normalsize
+7. \small
+8. \footnotesize
+9. \scriptsize
+10. \tiny
 * To wipe free space in windows
   To wipe free space on C drive
   #+BEGIN_EXAMPLE

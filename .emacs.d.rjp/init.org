@@ -484,8 +484,8 @@ color-theme-alice-blue, color-theme-andreas
 #+end_src
 ** Line number display
 #+begin_src emacs-lisp
-  (custom-set-faces '(line-number ((t (:foreground "gray15"))))
-                    '(line-number-current-line ((t (:foreground "SeaGreen")))))
+  (custom-set-faces '(line-number ((t (:foreground "DimGray"))))
+                    '(line-number-current-line ((t (:foreground "LimeGreen")))))
 #+end_src
 * Navigation
 Easier keys for switching windows

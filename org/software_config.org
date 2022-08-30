@@ -1862,3 +1862,25 @@ X[<coef>,<align>,<type>]
    #+begin_src
      sudo prlimit --stack=unlimited --pid $$; ulimit -s unlimited
    #+end_src
+* Guix
+** Guix Profiles
+Profiles in practice [[https://guix.gnu.org/en/blog/2019/guix-profiles-in-practice/][guix blog on profiles]]
+1. Difference between .guix-profile and .config/guix/current.
+   - .guix-profile is for packages [[https://unix.stackexchange.com/questions/561093/what-is-the-difference-between-guix-profile-and-config-guix-current][stack overflow]]
+   - guix/current is for guix itself.
+2. Activation and de-activation
+   1. Activated by
+      #+begin_example
+        GUIX_PROFILE="path/to/profile";
+        . $GUIX_PROFILE/etc/profile
+      #+end_example
+** generations
+See [[https://guix.gnu.org/blog/2018/multi-dimensional-transactions-and-rollbacks-oh-my/][Blog on transactions and rollbacks]]
+1. guix generations
+   #+begin_example
+     guix pull -l
+   #+end_example
+2. Package generations
+   #+begin_example
+     guix package --list-generations
+   #+end_example

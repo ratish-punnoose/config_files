@@ -1,8 +1,8 @@
-#+STARTUP: indent
+#+STARTUP:
 * Emacs
 ** MS Windows Install
 *** Libraries for images and zlib
-Available for download at ezwinports
+    Available for download at ezwinports
     (http://sourceforge.net/projects/ezwinports)
     - Check value of variable dynamic-library-alist . This contains
       names of dlls.
@@ -38,11 +38,11 @@ Available for download at ezwinports
    - C-x r k            :: Kill rectangle
    - C-x r y            :: Yank rectangle
    - C-x r t            :: Insert rectangle.  This is a superb command. To insert
-        the same text on multiple rows, just select the beginning and
-        end, C-x r t and then type in the characters to insert on
-        every row.
+     the same text on multiple rows, just select the beginning and
+     end, C-x r t and then type in the characters to insert on
+     every row.
    - C-x SPC ::  Rectangular selection.  Selection is no different
-                 except that highlighting is rectangular.
+     except that highlighting is rectangular.
 ** Picture mode
    - C-c C-k :: kill rectangle
    - C-c C-y :: Yank rectangle
@@ -111,7 +111,7 @@ Available for download at ezwinports
    Also see paredit (obsolete).  Now see lispy
 *** Evaluation
     - C-x C-e :: Evaluate Lisp in *scratch* before cursor and print
-                 result in minibuffer
+      result in minibuffer
     - C-j :: Evalute Lisp but insert result after cursor.
 *** Paredit
 **** Movement
@@ -136,8 +136,8 @@ Available for download at ezwinports
      - [ / ] :: Jump to closest paren backward/forward
      - Number argument ::
      - Backspace :: Deletes sexp backward.  If at first char of ",
-                    sexp, jumps to matching end.  Next backspace will
-                    delete whole sexp
+       sexp, jumps to matching end.  Next backspace will
+       delete whole sexp
      - C-K :: Deletes sexp
      - C-M-, :: Select sexp
      - J ::  Outline next. where outline is marked by ;;
@@ -158,7 +158,7 @@ Available for download at ezwinports
      - f :: flow in direction
      - g :: goto tag (after collecting)
      - p :: eval the current sexp in context of other window (good for
-            debugging)
+       debugging)
      - u :: undo
      - r :: raise to parent (remove parent)
      - s :: move sexp down within parent
@@ -167,7 +167,7 @@ Available for download at ezwinports
      - tt :: telport to any sexp in window
      - v :: Move/scroll window show cursor is at top. Next v restores.
      - >/< :: Grow/reduce slurp/barf  with numeric arg 0, grow as far
-              as possible
+       as possible
        - slurp/barf correspond to grow reduce at end of sexp
        - but watch out on front.
      - A :: go to beginning of defun, jump back
@@ -192,7 +192,7 @@ Available for download at ezwinports
      - xB :: Store first region for ediff reference
      - B :: ediff previously stored region with current
      - xh :: Get help (describe function or variable. For var it
-             should be selected. 2m,3m, a )
+       should be selected. 2m,3m, a )
 *** Debugging
     Use Lispy keys as they are easier.
 **** Lispy debug
@@ -214,30 +214,30 @@ Available for download at ezwinports
        #+begin_src emacs-lisp
          (current-buffer)
          #<buffer *scratch*>
-         ;---------------------------------------------------------------
+                                                 ;---------------------------------------------------------------
          (selected-window)
          #<window 16 on *scratch*>
-         ;---------------------------------------------------------------
+                                                 ;---------------------------------------------------------------
          (point)
          196
-         ;---------------------------------------------------------------
+                                                 ;---------------------------------------------------------------
          bad-var
          "Symbol's value as variable is void: bad-var"
-         ;---------------------------------------------------------------
+                                                 ;---------------------------------------------------------------
          (recursion-depth)
          0
-         ;---------------------------------------------------------------
+                                                 ;---------------------------------------------------------------
        #+end_src
      - C-c C-u :: Build a new evaluation list
 
 ** Menu
    - F1 :: show, hide menu.
 ** Search
-    In query-replace-regexp mode C-M-%, use (DOWN ARROW) to copy the word
-    under cursor into query-replace arguments (can be done for both
-    find and replace arguments)   To search for standalone word use  \bword\b  \b is a boundary marker.
+   In query-replace-regexp mode C-M-%, use (DOWN ARROW) to copy the word
+   under cursor into query-replace arguments (can be done for both
+   find and replace arguments)   To search for standalone word use  \bword\b  \b is a boundary marker.
    - rgrep :: Search through multiple files in directory tree through
-              file pattern.
+     file pattern.
    - C-s :: search forward
    - M-s . ::  Search using symbol at point.  Hooks to isearch-forward-symbol-at-point
    - C-s C-*, C-s DOWN :: Search at point.  Requires Ratish's custom addition
@@ -317,15 +317,15 @@ Available for download at ezwinports
     - C-c C-i :: insert marked candidates into narrowing buffer
     - C-t ::  Switch between horizontal and verital Helm
     - C-w :: yank word at point, starting from point to end of word
-         into helm buffer
+      into helm buffer
     - M-n :: yank symbol at point
 **** Helm Mini (Buffers)
      Filter patterns
      - *<major-mode> or !*<major-mode> :: Filter by mode,
-          eg. *!lisp,!sh,!fun to filter all except for
-          lisp,sh,fundamendal mode buffers.
+       eg. *!lisp,!sh,!fun to filter all except for
+       lisp,sh,fundamendal mode buffers.
      - /directory/ :: Narrows to buffers that are in
-          directory. E.g. /.emacs.d/ narrows to buffers in dir.
+       directory. E.g. /.emacs.d/ narrows to buffers in dir.
      - ^pat :: buffer name starts with pat
      - @searchterm :: Narrows to buffers that have searchterm
      - C-s :: helm-moccur whill show matching searchterms
@@ -335,9 +335,9 @@ Available for download at ezwinports
      - C-u C-s :: recursively grep
      - ~/ / ./  :: at end of pattern to reach home, root, start dir
      - C-u helm-find-files :: Prefix command will list visited
-          directories, can jump there.
+       directories, can jump there.
      - C-c h :: In find-files session, use this to show visited files
-          directories. Can jump from there.
+       directories. Can jump from there.
      In this mode, the files can be narrowed by fuzzy matching.  At
      any time with the list of helm selections. use C-s to search
      through the file live.  A recursive file can also be made.
@@ -519,15 +519,15 @@ Available for download at ezwinports
     - M-n/M-p :: Move by sibling
     - ^ :: Move to parent
 *** History
-   - l/L :: History (show commit log)  / Verbose
-   - Ret or Space :: Expand.  Space is like more.  Keeps your state in
-                     top buffer and can scroll through changes.
-   - x/X :: Delete all commits after specific commit, but keep files in
-          dirty state.  This allows easy rebase.  With capital X, will
-            revert all files to that specific commit (i.e., will lose
-            all changes)
+    - l/L :: History (show commit log)  / Verbose
+    - Ret or Space :: Expand.  Space is like more.  Keeps your state in
+      top buffer and can scroll through changes.
+    - x/X :: Delete all commits after specific commit, but keep files in
+      dirty state.  This allows easy rebase.  With capital X, will
+      revert all files to that specific commit (i.e., will lose
+      all changes)
 **** Reflog, Recovering delted commits
-      - h :: See the reflog
+     - h :: See the reflog
 **** Blame
      - magit-blame-mode :: Annotates lines with author and commit
 **** Rebase
@@ -535,14 +535,14 @@ Available for download at ezwinports
      - E :: Interactive Rebase
 
 *** Stash
-   - z/Z :: Create new stash
-   - a/A ::  Apply/Pop stash
-   - k :: Drop stash
+    - z/Z :: Create new stash
+    - a/A ::  Apply/Pop stash
+    - k :: Drop stash
 *** Branch
-   - b/B :: Switch to branch / Create and switch
+    - b/B :: Switch to branch / Create and switch
 ** Version control for all types of VCS
    - C-x v ~, vc-revision-other-window :: Shows different version of
-        file. Prompts for revision.
+     file. Prompts for revision.
    - C-x v l, vc-print-log :: Shows revision log
    - C-x v g, vc-annotate ::  Like git blame
    - C-x v v :: Perform next action, eg. commit
@@ -586,9 +586,9 @@ Available for download at ezwinports
     - eshell-print, eshell-echo instead of ls.
     - **/*  recursive listing
 *** Navigation
-- C-M-l :: Shift window so top of last command output is at the top.
-  Good for long command outputs to go up and inspect command output.
-- C-c C-n/p :: Jump to previous/next command.
+    - C-M-l :: Shift window so top of last command output is at the top.
+      Good for long command outputs to go up and inspect command output.
+    - C-c C-n/p :: Jump to previous/next command.
 *** Globs
     Globs work like that in zsh.  Globs also have predicate filters.
 **** Examples
@@ -617,31 +617,31 @@ Available for download at ezwinports
       - p :: pipes
       - @ :: sym links
 ***** Permission bits
-       - r/A/R :: readable (owner/group/world
-       - w/I/W :: writable
-       - x/E/X :: executable
-       - s/S :: setuid/setgid
-       - t :: sticky bit
+      - r/A/R :: readable (owner/group/world
+      - w/I/W :: writable
+      - x/E/X :: executable
+      - s/S :: setuid/setgid
+      - t :: sticky bit
 ***** Ownership
       - U :: owned by effective uid
       - u(UID|'user') :: owned by user
       - g(GID|'group') :: owned by group
 ***** File Attributes
-       - Size attribute: L[kmp]+-N :: filter based on size N Kb/Mb/blocks
-         - *(L-1) : files less than 1 byte
-         - *(L+50) : files greater than 50
-       - Time attribute :: attr_type + qualifier, where
-         - attr_type is one of:
-           - a :: access time .  Eg a+30
-           - c :: change time
-           - m :: modification time
-         - qualifer is:
-           - [Mwhms]+-(N|'FILE') :: (months/weeks/hours/mins/secs). Default : days
-             - If filename is given, then it is relative to that file.
-         - Examples
-           - bzip2 -9v **/*(a+30); compress everything that hasn't been accessed in 30 days
-           - *(.ms-40) :: Files modified less than 40s ago
-           - *(.ms-'goo.py') :: Files modified before goo.py
+      - Size attribute: L[kmp]+-N :: filter based on size N Kb/Mb/blocks
+        - *(L-1) : files less than 1 byte
+        - *(L+50) : files greater than 50
+      - Time attribute :: attr_type + qualifier, where
+        - attr_type is one of:
+          - a :: access time .  Eg a+30
+          - c :: change time
+          - m :: modification time
+        - qualifer is:
+          - [Mwhms]+-(N|'FILE') :: (months/weeks/hours/mins/secs). Default : days
+            - If filename is given, then it is relative to that file.
+        - Examples
+          - bzip2 -9v **/*(a+30); compress everything that hasn't been accessed in 30 days
+          - *(.ms-40) :: Files modified less than 40s ago
+          - *(.ms-'goo.py') :: Files modified before goo.py
 
 
 ***** Filter negation
@@ -807,7 +807,7 @@ Available for download at ezwinports
      pip install --trusted-host files.pythonhosted.org --trusted-host pypi.org --trusted-host pypi.python.org oauthlib -vvv
      #+end_src
 *** Python
-Jupyter-lab: see install
+    Jupyter-lab: see install
     [[https://stackoverflow.com/questions/50149562/jupyterlab-interactive-plot]]
     1. preinstall jupyter-core, zmq, matplotlib, ipython_genutils from
        cygwin.
@@ -844,10 +844,10 @@ Jupyter-lab: see install
       %run progname.py args
     #+end_src
 **** python webbrowser
-this
-#+begin_example
-  export BROWSER=cygstart
-#+end_example
+     this
+     #+begin_example
+       export BROWSER=cygstart
+     #+end_example
 
 
 
@@ -922,7 +922,7 @@ this
      have been marked with * or D can be marked with a different
      character temporarily. Using <SPC> removes mark.
      - * c oldmarkchar newmarkchar :: Change mark for items selected
-          with oldchar to newmarkchar
+       with oldchar to newmarkchar
      - Example:
        - Put D flags on all files that have no marks, while unflagging
          all those have D flags
@@ -977,89 +977,89 @@ this
     - :e :: Encrypt
 ** Ledger
 *** From keybindings
-     - C-c           ::  Prefix Command
-     - ESC           ::  Prefix Command
-     - C-TAB         ::  ledger-post-align-xact
-     - ::
-     - M-n           ::  ledger-navigate-next-xact-or-directive
-     - M-p           ::  ledger-navigate-prev-xact-or-directive
-     - M-q           ::  ledger-post-align-dwim
-     - ::
-     - C-c C-a       ::  ledger-add-transaction
-     - C-c C-b       ::  ledger-post-edit-amount
-     - C-c C-c       ::  ledger-toggle-current
-     - C-c C-d       ::  ledger-delete-current-transaction
-     - C-c C-e       ::  ledger-toggle-current-transaction
-     - C-c C-f       ::  ledger-occur
-     - C-c TAB       ::  ledger-fully-complete-xact
-     - C-c C-k       ::  ledger-copy-transaction-at-point
-     - C-c C-l       ::  ledger-display-ledger-stats
-     - C-c C-o       ::  Prefix Command
-     - C-c C-p       ::  ledger-display-balance-at-point
-     - C-c C-q       ::  ledger-post-align-xact
-     - C-c C-r       ::  ledger-reconcile
-     - C-c C-s       ::  ledger-sort-region
-     - C-c C-t       ::  ledger-insert-effective-date
-     - C-c C-u       ::  ledger-schedule-upcoming
-     - ::
-     - C-c C-o C-a   ::  ledger-report-redo
-     - C-c C-o C-e   ::  ledger-report-edit-report
-     - C-c C-o C-g   ::  ledger-report-goto
-     - C-c C-o C-k   ::  ledger-report-quit
-     - C-c C-o C-r   ::  ledger-report
-     - C-c C-o C-s   ::  ledger-report-save
+    - C-c           ::  Prefix Command
+    - ESC           ::  Prefix Command
+    - C-TAB         ::  ledger-post-align-xact
+    - ::
+    - M-n           ::  ledger-navigate-next-xact-or-directive
+    - M-p           ::  ledger-navigate-prev-xact-or-directive
+    - M-q           ::  ledger-post-align-dwim
+    - ::
+    - C-c C-a       ::  ledger-add-transaction
+    - C-c C-b       ::  ledger-post-edit-amount
+    - C-c C-c       ::  ledger-toggle-current
+    - C-c C-d       ::  ledger-delete-current-transaction
+    - C-c C-e       ::  ledger-toggle-current-transaction
+    - C-c C-f       ::  ledger-occur
+    - C-c TAB       ::  ledger-fully-complete-xact
+    - C-c C-k       ::  ledger-copy-transaction-at-point
+    - C-c C-l       ::  ledger-display-ledger-stats
+    - C-c C-o       ::  Prefix Command
+    - C-c C-p       ::  ledger-display-balance-at-point
+    - C-c C-q       ::  ledger-post-align-xact
+    - C-c C-r       ::  ledger-reconcile
+    - C-c C-s       ::  ledger-sort-region
+    - C-c C-t       ::  ledger-insert-effective-date
+    - C-c C-u       ::  ledger-schedule-upcoming
+    - ::
+    - C-c C-o C-a   ::  ledger-report-redo
+    - C-c C-o C-e   ::  ledger-report-edit-report
+    - C-c C-o C-g   ::  ledger-report-goto
+    - C-c C-o C-k   ::  ledger-report-quit
+    - C-c C-o C-r   ::  ledger-report
+    - C-c C-o C-s   ::  ledger-report-save
 *** Entering transaction
-     - C-c C-a starts a new transaction and brings up calendar.
-       - To navigate the calendar use:
-         - < / > :: previous/next month
-         - Shift Up|Down|Left|Right arrow :: move cursor in calendar
-           in that direction (forward/back one day or one week).
-       - C-c C-c ::  to toggle cleared status
-       - C-c C-f :: to enter narrow search.  C-c C-f to exit
-       - C-c C-s :: sort region
+    - C-c C-a starts a new transaction and brings up calendar.
+      - To navigate the calendar use:
+        - < / > :: previous/next month
+        - Shift Up|Down|Left|Right arrow :: move cursor in calendar
+          in that direction (forward/back one day or one week).
+      - C-c C-c ::  to toggle cleared status
+      - C-c C-f :: to enter narrow search.  C-c C-f to exit
+      - C-c C-s :: sort region
 *** Custom functions
-     - copy a single transaction to kill ring
-       - C-c M-w :: rjp/ledger-copy-trans
-     - time order a transaction within the file
-       - C-c C-m :: rjp/ledger-timeorder-xact (mnemonic m for move)
-     - In narrow search mode, copy all visible
-       - C-c C-w :: rjp/ledger-occur-copy-all
+    - copy a single transaction to kill ring
+      - C-c M-w :: rjp/ledger-copy-trans
+    - time order a transaction within the file
+      - C-c C-m :: rjp/ledger-timeorder-xact (mnemonic m for move)
+    - In narrow search mode, copy all visible
+      - C-c C-w :: rjp/ledger-occur-copy-all
 *** Reports
-     - C-c  C-o C-r : Ledger report prompts for type of report
-       bal|reg|payee|account
-       - It brings up transactions that may not be in date order. To
-         sort, hit the "e" key for edit.
-       - e : allows editing of the command line arguments.
-         - -C : for only cleared
-         - -U : for only uncleared
-         - --pedantic :
-         - -S d : for sorting by date
+    - C-c  C-o C-r : Ledger report prompts for type of report
+      bal|reg|payee|account
+      - It brings up transactions that may not be in date order. To
+        sort, hit the "e" key for edit.
+      - e : allows editing of the command line arguments.
+        - -C : for only cleared
+        - -U : for only uncleared
+        - --pedantic :
+        - -S d : for sorting by date
 *** Reconciling
-     - C-c             Prefix Command
-     - C-l             ledger-reconcile-refresh
-     - RET             ledger-reconcile-visit
-     - C-x             Prefix Command
-     - ESC             Prefix Command
-     - SPC             ledger-reconcile-toggle
-     - a               ledger-reconcile-add
-     - b               ledger-display-balance
-     - d               ledger-reconcile-delete
-     - g               ledger-reconcile
-     - n               next-line
-     - p               previous-line
-     - q               ledger-reconcile-quit
-     - s               ledger-reconcile-save
-     - t               ledger-reconcile-change-target
-     - <return>        ledger-reconcile-visit
-     -
-     - C-c C-a         sort by amount
-     - C-c C-c         ledger-reconcile-finish
-     - C-c C-d         sort by date
-     - C-c C-o         default sort
-     - C-c C-p         sort by payee
-     -
-     - C-x C-s         ledger-reconcile-save
-     -
+    - C-c             Prefix Command
+    - C-l             ledger-reconcile-refresh
+    - RET             ledger-reconcile-visit
+    - C-x             Prefix Command
+    - ESC             Prefix Command
+    - SPC             ledger-reconcile-toggle
+    - a               ledger-reconcile-add
+    - b               ledger-display-balance
+    - d               ledger-reconcile-delete
+    - g               ledger-reconcile
+    - n               next-line
+    - p               previous-line
+    - q               ledger-reconcile-quit
+    - s               ledger-reconcile-save
+    - t               ledger-reconcile-change-target
+    - <return>        ledger-reconcile-visit
+    -
+    - C-c C-a         sort by amount
+    - C-c C-c         ledger-reconcile-finish
+    - C-c C-d         sort by date
+    - C-c C-o         default sort
+    - C-c C-p         sort by payee
+    -
+    - C-x C-s         ledger-reconcile-save
+    -
 
 *** Calendar
 
@@ -1087,11 +1087,11 @@ this
 ** Visibility
    - <TAB>              :: Show/hide
    - Shift + <TAB>      :: Global show/hide. With argument, up to
-        level n.
+     level n.
    - C-u <TAB>          :: Global cycle Overview->Contents->Show All->Overview
    - C-c C-x v          ::  Copy visible text:  (org-copy-visible)
    - C-c <TAB>          :: Expose children of current subtree.  With argument,
-                  to level n
+     to level n
 
 ** Motion
    - C-c C-n /n		:: Next visible heading
@@ -1151,9 +1151,9 @@ this
     - C-c C-x C-u       :: Update dynamic block at point
     - C-u C-c C-x C-u   :: Update all dynamic blocks
 *** Latex attributes for tables
-[[https://tex.stackexchange.com/questions/171193/tabu-and-space-between-columns]]
-Moreover, the right way to specify an X column is (commas can be omitted):
-X[<coef>,<align>,<type>]
+    [[https://tex.stackexchange.com/questions/171193/tabu-and-space-between-columns]]
+    Moreover, the right way to specify an X column is (commas can be omitted):
+    X[<coef>,<align>,<type>]
 
 
 ** Clocking
@@ -1177,19 +1177,19 @@ X[<coef>,<align>,<type>]
 *** Copy/Paste
     - C-c C-x [M-w/C-w/C-y] :: Copy/Kill/Yank rectangular region of table
 *** Latex export
-# environment options
-# +attr_latex: :environment longtabu :font \small :align |r|r|X[<coef>,<align>,<type>]|
-#+caption[shortcaption]: longcaption
-#+name: tab:tablereferencename
-|column 1 |  column 2 |
-|--------------+----------------|
-|            |                |
+    # environment options
+    # +attr_latex: :environment longtabu :font \small :align |r|r|X[<coef>,<align>,<type>]|
+    #+caption[shortcaption]: longcaption
+    #+name: tab:tablereferencename
+    |column 1 |  column 2 |
+    |--------------+----------------|
+    |            |                |
 
 ** Links
    - "[[link][desc]"	:: Create link
    - C-c C-l            :: Edit Link
    - "#local"           :: Local link type.  Without #, does a search
-        for local
+     for local
    - C-c C-o            :: Follow link
 
    - C-c & ::  Jump back to last bookmark
@@ -1197,8 +1197,8 @@ X[<coef>,<align>,<type>]
    - "<<link_target>>"  :: This is a link target
 
    - C-c l :: org-store-link.  copies the current link location (in
-              any file, even non-org).  Then when doing C-c C-l
-              (org-insert-link) using up-arrow will show the stored link
+     any file, even non-org).  Then when doing C-c C-l
+     (org-insert-link) using up-arrow will show the stored link
 
 *** Custom links target
     - [[+TAB :: Bring up targets in local file
@@ -1216,15 +1216,15 @@ X[<coef>,<align>,<type>]
 
 ** Properties and Columns
    :PROPERTIES:
-   :COLUMNS: %8ITEM[Which] %Title[TITLE] %Artist[ARTIST]
+   :COLUMNS:  %8ITEM[Which] %Title[TITLE] %Artist[ARTIST]
    :Title:    my title
-   :Artist: Some random artist
-   :Value: 1
+   :Artist:   Some random artist
+   :Value:    1
    :END:
    - ":prop1:"          :: Properties are like tags but with
-        value. They are inserted into a special drawer.
+     value. They are inserted into a special drawer.
    - ":prop2:"          :: Drawer is called "PROPERTIES". Each is on a
-        single line.
+     single line.
    - ":prop3_ALL:"      :: Allowed values for a property
    - C-c C-x p          :: Set property
    - C-c C-c            :: Executes property commands
@@ -1238,8 +1238,8 @@ X[<coef>,<align>,<type>]
 
 ** Beamer
 *** Keystrokes
-   - C-c C-e t		:: Insert default org export template
-   - C-c C-b            :: Specify type of block
+    - C-c C-e t		:: Insert default org export template
+    - C-c C-b            :: Specify type of block
 *** More info
     - [[https://github.com/matze/mtheme]] : Metropolis theme
     - [[https://hartwork.org/beamer-theme-matrix/]] : Beamer theme matrix
@@ -1247,138 +1247,138 @@ X[<coef>,<align>,<type>]
 
 
 ** Time Log
-#+BEGIN_SRC emacs-lisp
-    ;; Technique
-    ;; org-map-entries
-    ;; org-entry-properties with time argument.
-    (org-entry-properties nil 'special "CLOCK") ;; This provides all time tags.
-    ;; time tags are retrieved as an alist.
-    ;;  however time ranges outside of clock only
-    ;; map alist to a date or to a date range.
-    ;; consolidate dates, and date ranges.
-    ;; Date tree with link org-make-link-string
-    ;;
-    ;; org-entry-beginning-position
-    ;; org-entry-end-position
-    ;; org-scanner-tags
-    ;; org-trust-scanner-tags t  locally
-    ;; org-entry-properties with time argument.
-    (org-entry-properties nil 'special "CLOCK") ;; This provides all time tags.
-    ;; Regular expression search for clock
-    ;; ^[ \t]*"  org-clock-string  "[ \t]*\\(?:\\(\\[.*?\\]\\)-+\\(\\[.*?\\]\\)
-    ;; re-search-forward has an optional argument for limit to limit search.
-    ;; Consolidate all time values into day, month, year.
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     ;; Technique
+     ;; org-map-entries
+     ;; org-entry-properties with time argument.
+     (org-entry-properties nil 'special "CLOCK") ;; This provides all time tags.
+     ;; time tags are retrieved as an alist.
+     ;;  however time ranges outside of clock only
+     ;; map alist to a date or to a date range.
+     ;; consolidate dates, and date ranges.
+     ;; Date tree with link org-make-link-string
+     ;;
+     ;; org-entry-beginning-position
+     ;; org-entry-end-position
+     ;; org-scanner-tags
+     ;; org-trust-scanner-tags t  locally
+     ;; org-entry-properties with time argument.
+     (org-entry-properties nil 'special "CLOCK") ;; This provides all time tags.
+     ;; Regular expression search for clock
+     ;; ^[ \t]*"  org-clock-string  "[ \t]*\\(?:\\(\\[.*?\\]\\)-+\\(\\[.*?\\]\\)
+     ;; re-search-forward has an optional argument for limit to limit search.
+     ;; Consolidate all time values into day, month, year.
+   #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :results output silent
-  ;; Just return a list of the following list
-  ;; (formatted_heading date_list)
-  (defun org-narrow-to-within-dblock ()
-    "Narrow buffer to the current dblock."
-    (org-beginning-of-dblock)
-    (forward-line 1)
-    (narrow-to-region (point) (point))
-    )
+   #+BEGIN_SRC emacs-lisp :results output silent
+     ;; Just return a list of the following list
+     ;; (formatted_heading date_list)
+     (defun org-narrow-to-within-dblock ()
+       "Narrow buffer to the current dblock."
+       (org-beginning-of-dblock)
+       (forward-line 1)
+       (narrow-to-region (point) (point))
+       )
 
-  (defun org-heading-date-info ()
-    ;;
-    ;; Only return relevant headlines
-    ;; Returns either nil or a list
-    (let ((t_arr (make-vector 4 nil))
-          (tstring ["TIMESTAMP" "DEADLINE" "SCHEDULED" "CLOCK"]))
-      (dolist (entry ;; each entry in
-                (org-entry-properties nil 'special "CLOCK") ;; list of timetags
-                t_arr) ;; temporary var
-        (let* ((propname (car entry))
-               (pos (position propname tstring :test 'equal)))
-          (if pos
-              (aset t_arr pos (append (elt t_arr pos)
-                                      (list (cdr entry))   ))
-            )))
-       ;; If any of the timestamps are present, return the headline and timestamps
-       ;; else return nil
-       (if (position nil t_arr :test-not 'equal)
-           (cons (nth 4 (org-heading-components)) (copy-sequence t_arr) )
-         nil)
-       ))
-
-
-  (defun org-test-datetree-insert(hding_daylist)
-    (let* ((text (car hding_daylist))
-           (days (cdr hding_daylist)))
-
-      (mapc (lambda(day)
-              (org-datetree-find-date-create
-               (org-date-to-gregorian day) t)
-              ;;(outline-next-heading)
-              ;;(org-insert-item)
-              ;;(insert text)
-              (org-agenda-insert-diary-make-new-entry text)
-              )
-            days)) )
-
-  (defun org-heading-date-format (heading_info)
-    ;;  heading_info is a cons
-    ;;  car: text of heading
-    ;;  cdr: vector with time string for different time tags
-    (let* ((heading (car heading_info))
-           (formatted_heading (org-make-link-string (copy-sequence heading)))
-           (ts (cdr heading_info))
-           daylist )
-      ;; ts is a vector. Each element is a list of strings or nil
-      ;; map each list of strings to a date,
-      ;; flatten vector
-      ;; keep unique dates.
-      (setq daylist
-            (delq nil (delete-dups
-                       (apply 'append
-                              (mapcar
-                               (lambda (tstr_list)
-                                 (if tstr_list
-                                     (mapcar
-                                        (lambda (tstr)
-                                          (org-time-string-to-absolute tstr))
-                                      tstr_list)))
-                               ts)))))
-      (cons heading  daylist)))
+     (defun org-heading-date-info ()
+       ;;
+       ;; Only return relevant headlines
+       ;; Returns either nil or a list
+       (let ((t_arr (make-vector 4 nil))
+             (tstring ["TIMESTAMP" "DEADLINE" "SCHEDULED" "CLOCK"]))
+         (dolist (entry ;; each entry in
+                  (org-entry-properties nil 'special "CLOCK") ;; list of timetags
+                  t_arr) ;; temporary var
+           (let* ((propname (car entry))
+                  (pos (position propname tstring :test 'equal)))
+             (if pos
+                 (aset t_arr pos (append (elt t_arr pos)
+                                         (list (cdr entry))   ))
+               )))
+         ;; If any of the timestamps are present, return the headline and timestamps
+         ;; else return nil
+         (if (position nil t_arr :test-not 'equal)
+             (cons (nth 4 (org-heading-components)) (copy-sequence t_arr) )
+           nil)
+         ))
 
 
-  (defun org-dblock-write:myblock (params)
-      "Get dates/time/clock and create a datetree"
-      (let* ( (mappedvals (org-map-entries 'org-heading-date-info))
-              (heading_info (remove nil mappedvals))
-              (hding_daylists (mapcar 'org-heading-date-format  heading_info))    )
+     (defun org-test-datetree-insert(hding_daylist)
+       (let* ((text (car hding_daylist))
+              (days (cdr hding_daylist)))
+
+         (mapc (lambda(day)
+                 (org-datetree-find-date-create
+                  (org-date-to-gregorian day) t)
+                 ;;(outline-next-heading)
+                 ;;(org-insert-item)
+                 ;;(insert text)
+                 (org-agenda-insert-diary-make-new-entry text)
+                 )
+               days)) )
+
+     (defun org-heading-date-format (heading_info)
+       ;;  heading_info is a cons
+       ;;  car: text of heading
+       ;;  cdr: vector with time string for different time tags
+       (let* ((heading (car heading_info))
+              (formatted_heading (org-make-link-string (copy-sequence heading)))
+              (ts (cdr heading_info))
+              daylist )
+         ;; ts is a vector. Each element is a list of strings or nil
+         ;; map each list of strings to a date,
+         ;; flatten vector
+         ;; keep unique dates.
+         (setq daylist
+               (delq nil (delete-dups
+                          (apply 'append
+                                 (mapcar
+                                  (lambda (tstr_list)
+                                    (if tstr_list
+                                        (mapcar
+                                         (lambda (tstr)
+                                           (org-time-string-to-absolute tstr))
+                                         tstr_list)))
+                                  ts)))))
+         (cons heading  daylist)))
 
 
-        (print "printing hding_daylists")
-        (print hding_daylists)
-        ;; Parse date strings
-        ;; Format link string
-        (save-restriction
-          (org-narrow-to-within-dblock)
-          (mapc 'org-test-datetree-insert hding_daylists)
+     (defun org-dblock-write:myblock (params)
+       "Get dates/time/clock and create a datetree"
+       (let* ( (mappedvals (org-map-entries 'org-heading-date-info))
+               (heading_info (remove nil mappedvals))
+               (hding_daylists (mapcar 'org-heading-date-format  heading_info))    )
 
-          ;;(org-test-datetree-insert "text1")
-          ;;(org-test-datetree-insert "text2")
-          ;;(org-test-datetree-insert "text3")
-          ;;(outline-next-heading)
-          ;;(org-insert-heading nil t)
-          ;;(org-do-demote)
-          ;;(outline-next-heading)
-          ;;;(org-insert-heading nil t)
-          ;;(org-do-demote)
-          ;;(org-agenda-insert-diary-make-new-entry "dummy text2")
-          ;; remove extra new line added by previous command
-          )
-        )
-      )
-#+END_SRC
-#+BEGIN: myblock
+
+         (print "printing hding_daylists")
+         (print hding_daylists)
+         ;; Parse date strings
+         ;; Format link string
+         (save-restriction
+           (org-narrow-to-within-dblock)
+           (mapc 'org-test-datetree-insert hding_daylists)
+
+           ;;(org-test-datetree-insert "text1")
+           ;;(org-test-datetree-insert "text2")
+           ;;(org-test-datetree-insert "text3")
+           ;;(outline-next-heading)
+           ;;(org-insert-heading nil t)
+           ;;(org-do-demote)
+           ;;(outline-next-heading)
+             ;;;(org-insert-heading nil t)
+           ;;(org-do-demote)
+           ;;(org-agenda-insert-diary-make-new-entry "dummy text2")
+           ;; remove extra new line added by previous command
+           )
+         )
+       )
+   #+END_SRC
+   #+BEGIN: myblock
 
 * Windows Shortcuts
   - Win + Tab		:: Aero Flip
   - Ctrl + Win + Tab	:: Aero Flip Hold.  Can release Ctrl+Win and
-       can flip by just using tab.
+    can flip by just using tab.
   - Win + R		:: Run
   - Win + D		:: Minimize everything (show desktop)
   - Win + Pause/Break	:: Open CtrlPanel->System
@@ -1387,7 +1387,7 @@ X[<coef>,<align>,<type>]
   - Win + Q		:: Communicator
   - Win + Home		:: Clear all but the active window
   - Win+Space		:: All windows become transparent so you can
-       see through to the desktop
+    see through to the desktop
   - Win+Up arrow	:: Maximize the active window
   - Win+Down arrow	:: Minimize the window/Restore the window if it's maximized
   - Win+<arrow>		:: Dock the window to each side of the monitor
@@ -1400,7 +1400,7 @@ X[<coef>,<align>,<type>]
   - S+Win+ (1-9)        :: New instance of the application pinned to the taskbar
   - Ctrl+Win+ ( 1-9)	:: Cycles through open windows for the application
   - Alt+Win+(1-9)	:: Opens the Jump List for the application
-       pinned to the taskbar.
+    pinned to the taskbar.
   - Win+T		:: Focus and scroll through items on the taskbar.
   - Win+B               :: Focuses the System Tray icons
   - Ctrl+S+Esc          :: Task Manager
@@ -1449,6 +1449,48 @@ X[<coef>,<align>,<type>]
 ** Pivot table
    Works well with defined tables.   Allows slicing data based on
    values in another table.
+* MS Powerpoint
+** Draw a gaussian curve
+   From directions at : [[https://www.youtube.com/watch?v=dysqb2vEkh0][Youtube powerpoint gaussian]]
+   1. Draw 3 squares of each side being 1x.
+      #+begin_example
+
+
+             +------+------+------+
+             |      |      |      |
+             |      |      |      |
+             +------+------+------+
+      #+end_example
+   2. Draw two equilateral triangles with each side being 2x.
+   3. For one of them:
+      1. decrease its height to  H - x.
+      2. increases its width to 4x.
+   4. Make both triangles share the same base with symmetry
+      #+begin_example
+
+                      X
+                    /- \-
+        +------+---/--+--\---+------+
+        |      |  /   |   \  |      |
+        |      |/-    |    \-|      |
+        +------/------+------\------+
+      #+end_example
+      #+begin_example
+
+
+                                  X
+                                /- \-
+                              /-     \
+        +------------+-------/----+---\-------+-----------+
+        |            |     /-     |     \     |           |
+        |            |    /       |      \-   |           |
+        |            |  /-        |        \  |           |
+        |            |/-          |         \-|           |
+        |------------/------------+-----------\-----------+
+
+      #+end_example
+   5. Use the curve tool and connect the union points
+
 
 * Outlook
   - Ctrl+Shift+I	:: Inbox
@@ -1507,6 +1549,17 @@ X[<coef>,<align>,<type>]
    - git lfs track and untrack only edit the .gitattributes, so best
      to do that manually
    - git lfs fetch, git lfs checkout for populating files
+** Splitting Repos
+   Install filter-repo.  man git-filter-repo for docs.
+   #+begin_example
+     git filter-repo --path x --path-rename  x:y
+   #+end_example
+   will filter the repo with just path x and also rename x to y.
+   Path can be specified in multiple ways:
+   - path
+   - path-glob
+   - path-regex
+   - paths-from-file (combines all of the above)
 
 * SVN
 ** Sparse checkout
@@ -1623,32 +1676,32 @@ X[<coef>,<align>,<type>]
 
 
 ** Basic keys
-  - C-a :: Default escape
-  - C-a c :: Create new screen
-  - C-a ?:: Help
-  - C-a : :: (Colon) Enter configuration command
-  - C-a a ::  Send C-a to window
-  - C-a A :: Enter title for wndow
-  - C-a C :: Clear screen
-  - C-a d :: Detach
-  - C-a h :: Hardcopy/snapshot to file
-  - C-a H ::  Toggle logging
-  - C-a \ :: Quit, kill all windows.
-  - C-a Q :: Delete all regions, except current.
-  - C-a q ::  Send Ctrl-q to current window
-  - C-a [ :: Enter copy/scrollback mode
-  - C-a ] :: Paste
+   - C-a :: Default escape
+   - C-a c :: Create new screen
+   - C-a ?:: Help
+   - C-a : :: (Colon) Enter configuration command
+   - C-a a ::  Send C-a to window
+   - C-a A :: Enter title for wndow
+   - C-a C :: Clear screen
+   - C-a d :: Detach
+   - C-a h :: Hardcopy/snapshot to file
+   - C-a H ::  Toggle logging
+   - C-a \ :: Quit, kill all windows.
+   - C-a Q :: Delete all regions, except current.
+   - C-a q ::  Send Ctrl-q to current window
+   - C-a [ :: Enter copy/scrollback mode
+   - C-a ] :: Paste
 ** Hardcopy/logging
    - hardcopy -h filename : write contents of current buffer with scrollback
 
 
 ** Window selection
-  - C-a C-a :: toggle between screens/windows
-  - C-a ' :: Prompt for window identifier and switch
-  - C-a w :: List active windows
-  - C-a " :: List of all windows to switch
-  - C-a n, C-a SPC :: Next window
-  - C-a p :: Previous window
+   - C-a C-a :: toggle between screens/windows
+   - C-a ' :: Prompt for window identifier and switch
+   - C-a w :: List active windows
+   - C-a " :: List of all windows to switch
+   - C-a n, C-a SPC :: Next window
+   - C-a p :: Previous window
 ** Window groups
 ** REgion
    - C-a Tab :: Focus next region
@@ -1698,11 +1751,11 @@ X[<coef>,<align>,<type>]
     6. Copy from Wordpad
     7. Paste into powerpoint: Don't use Paste, Don't use Paste Special.
     8. Right click on slide:  Under context menu, Paste there are four icon options:
-      1) Use Destination Theme
-      2) Use Source formatting
-      3) As Picture
-      4) Keep Text Only
-      Select "Use Source Formatting".
+       1) Use Destination Theme
+       2) Use Source formatting
+       3) As Picture
+       4) Keep Text Only
+       Select "Use Source Formatting".
 
 *** If GUI is not working then
     highlight.exe -S spn --style=earendel -O rtf -i inputfile.pml -o outputfile.rtf
@@ -1763,16 +1816,16 @@ X[<coef>,<align>,<type>]
     correctly.  To allow functions to handle them, within the
     function, encapsulate argument in \detokenize{ }
 ** Font sizes
-1. \Huge
-2. \huge
-3. \LARGE
-4. \Larg*e
-5. \large
-6. \normalsize
-7. \small
-8. \footnotesize
-9. \scriptsize
-10. \tiny
+   1. \Huge
+   2. \huge
+   3. \LARGE
+   4. \Larg*e
+   5. \large
+   6. \normalsize
+   7. \small
+   8. \footnotesize
+   9. \scriptsize
+   10. \tiny
 * To wipe free space in windows
   To wipe free space on C drive
   #+BEGIN_EXAMPLE
@@ -1839,9 +1892,9 @@ X[<coef>,<align>,<type>]
     - With buster or higher lsb-compat.
     - Make symlink from ld-linux-x86-64.so.2 to ld-lsb-x86-64.so.3.
 *** switch csh shell from bsd csh to tcsh
-#+begin_example
-  sudo update-alternatives --set csh /bin/tcsh
-#+end_example
+    #+begin_example
+      sudo update-alternatives --set csh /bin/tcsh
+    #+end_example
 
 
 
@@ -1849,13 +1902,32 @@ X[<coef>,<align>,<type>]
    see https://askubuntu.com/questions/73287/how-do-i-install-a-root-certificate
 
 *** given a PEM format certificate,
-     =key.pem=1. Put =key.pem= in =/usr/local/share/ca-certificates/=, with the
-     =.crt= extension: =/usr/local/share/ca-certificates/key.crt=.
+    =key.pem=1. Put =key.pem= in =/usr/local/share/ca-certificates/=, with the
+    =.crt= extension: =/usr/local/share/ca-certificates/key.crt=.
     - The command ~openssl x509 -in key.pem -inform PEM -out key.crt~
-       just consumes PEM format and produces PEM format, which amounts
-       to renaming the file.2. Run ~sudo update-ca-certificates~.  It will detect the =.crt= files
-     in =/usr/local/share/ca-certificates/= and "do the right thing"
-     with them.
+      just consumes PEM format and produces PEM format, which amounts
+      to renaming the file.2. Run ~sudo update-ca-certificates~.  It will detect the =.crt= files
+      in =/usr/local/share/ca-certificates/= and "do the right thing"
+      with them.
+** Check support for namespaces
+   Look for existence of file
+   #+begin_example
+     /proc/self/ns/user
+   #+end_example
+** Swap
+   Swap can be added in a file instead of a partition.
+   See [[https://help.ubuntu.com/community/SwapFaq][Ubuntu Swap Help]].  This also provides recommendations for swap
+   size based on memory.
+   1. Use dd to create a file.
+      E.g the following makes a 64 GB swap.
+      #+begin_example
+        dd if=/dev/zero of=filename bs=1048576  count=65536
+      #+end_example
+   2. mkswap on the file
+      #+begin_example
+        mkswap filename
+      #+end_example
+   3. Add using swapon or to fstab
 
 * WSL
 ** For increasing stack limit on wsl
@@ -1864,23 +1936,78 @@ X[<coef>,<align>,<type>]
    #+end_src
 * Guix
 ** Guix Profiles
-Profiles in practice [[https://guix.gnu.org/en/blog/2019/guix-profiles-in-practice/][guix blog on profiles]]
-1. Difference between .guix-profile and .config/guix/current.
-   - .guix-profile is for packages [[https://unix.stackexchange.com/questions/561093/what-is-the-difference-between-guix-profile-and-config-guix-current][stack overflow]]
-   - guix/current is for guix itself.
-2. Activation and de-activation
-   1. Activated by
+   Profiles in practice [[https://guix.gnu.org/en/blog/2019/guix-profiles-in-practice/][guix blog on profiles]]
+   1. Difference between .guix-profile and .config/guix/current.
+      - .guix-profile is for packages [[https://unix.stackexchange.com/questions/561093/what-is-the-difference-between-guix-profile-and-config-guix-current][stack overflow]]
+      - guix/current is for guix itself.
+   2. Activation and de-activation
+      1. Activated by
+         #+begin_example
+           GUIX_PROFILE="path/to/profile";
+           . $GUIX_PROFILE/etc/profile
+         #+end_example
+   3. Creating new profiles
+      1. Use a directory for profiles, eg. .guix-extra-profiles
+      2. Make a sub directory for a specific profile.
+         #+begin_example
+           mkdir -p .guix-extra-profiles/myprofilename
+         #+end_example
+      3. Install into the profile with -p option
+         #+begin_example
+           guix package -i
+         #+end_example
+** Generations
+   See [[https://guix.gnu.org/blog/2018/multi-dimensional-transactions-and-rollbacks-oh-my/][Blog on transactions and rollbacks]]
+   1. guix generations
       #+begin_example
-        GUIX_PROFILE="path/to/profile";
-        . $GUIX_PROFILE/etc/profile
+        guix pull -l
       #+end_example
-** generations
-See [[https://guix.gnu.org/blog/2018/multi-dimensional-transactions-and-rollbacks-oh-my/][Blog on transactions and rollbacks]]
-1. guix generations
-   #+begin_example
-     guix pull -l
-   #+end_example
-2. Package generations
-   #+begin_example
-     guix package --list-generations
-   #+end_example
+   2. Package generations
+      #+begin_example
+        guix package --list-generations
+      #+end_example
+** Transfer of files
+   Use guix archive [[https://guix.gnu.org/manual/en/html_node/Invoking-guix-archive.html]]
+** Packaging
+*** Package Path
+    - This can be set using -L option or by setting [[https://guix.gnu.org/cookbook/en/html_node/GUIX_005fPACKAGE_005fPATH.html][GUIX_PACKAGE_PATH]].
+    - Ensure that a spec is visible by
+      #+begin_example
+        guix package --show=pkgname
+      #+end_example
+**** File Hash
+     Use guix hash for this.
+     Even easier, do guix download, it will download, put it in the
+     store, and printout the hash.
+**** From Git
+     #+begin_example
+       git clone https://github.com/libgit2/libgit2/
+       cd libgit2
+       git checkout v0.26.6
+       guix hash -rx .
+     #+end_example
+*** File vs Package
+    They are similar but the package has a bit more boiler plate.
+*** Pitfalls
+    - Small missing keys in a package spec may give a warning, but in
+      reality these are errors that prevent package information from
+      being loaded.
+      - e.g. license: If this is not set, a warning will be provided
+        and an error occurs, but it is not obvious that the warning is
+        the cause of the error.
+*** Building
+    - Use option to keep build tree of failed builds
+      #+begin_example
+        guix build -K pkgname
+      #+end_example
+*** Archiving
+    #+begin_example
+      guix pack -RR -S /mybin=bin bash
+    #+end_example
+    - Relocatable: -RR
+    - Creates a symlink called /mybin pointing to bin
+    - The tar file is created.
+    - After the tar file is extracted, it will create a directory tree
+      "gnu" and the symlink mybin pointing to the binary.
+    - Before we use it, we have to setup the GUIX_PROFILE to point to
+      the profile within the store and then source it.

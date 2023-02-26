@@ -5,8 +5,8 @@
 
 MINPKGS=(bash-completion binutils dos2unix emacs-w32 file findutils
          git grep gzip less make man man-db mintty openssh tar
-         terminfo terminfo-extra python38-pygments python38-numpy bc
-         tar
+         terminfo terminfo-extra python39-pygments python39-numpy bc
+         zip unzip
         )
 PUBPKGS=(texinfo texinfo-tex texlive texlive-collection-basic
          texlive-collection-binextra texlive-collection-fontsextra
@@ -20,14 +20,78 @@ PUBPKGS=(texinfo texinfo-tex texlive texlive-collection-basic
          texlive-collection-pstricks texlive-collection-publishers
          aspell aspell-en
          )
-DEVPKGS=(subversion tar terminfo terminfo-extra texinfo texinfo-tex)
-RJPPKGS=(screen ispell popper ledger)
+
+RJPPKGS=(screen ispell terminfo terminfo-extra poppler)
+#RJPHOME=(ledger)
 XPKGS=(xorg-server)
 IFS=','
 
-echo "${MINPKGS[*]}"
-/cygdrive/c/cygwin64_installfiles_min/setup-x86_64.exe \
-    --download --local-package-dir "c:\cygwin64_installfiles_min" \
-    --root "c:\cygwin64_min" \
-    --packages "${MINPKGS[*]}"
+listonly=0
 
+
+# -l list
+# -b base with python
+# -p publication
+# -x X
+# -r rjp
+
+selected_pkgs=()
+install_dir="c:\cygwin64"
+package_dir="c:\cygwin64_installfiles"
+
+while getopts 'lbtxrhi:p:' opt; do
+    case "$opt" in
+        l)
+            listonly=1
+            ;;
+        b)
+            selected_pkgs+=( "${MINPKGS[*]}" )
+            ;;
+
+        t)
+            selected_pkgs+=( "${PUBPKGS[*]}" )
+            ;;
+        x)
+            selected_pkgs+=( "${XPKGS[*]}" )
+            ;;
+
+        r)
+            selected_pkgs+=( "${RJPPKGS[*]}" )
+            ;;
+
+        i)
+            install_dir="$OPTARG"
+            ;;
+        p)
+            package_dir="$OPTARG"
+            ;;
+
+        :)
+            echo "not arg"
+            exit 1
+            ;;
+        :|?|h)
+            echo "Usage: $(basename $0) [-i install_dir] [-p pkg_dir] [-b] [-t] [-x] [-r] [-l]"
+            echo "     -b : base with python"
+            echo "     -t : tex publication"
+            echo "     -x : Xserver"
+            echo "     -r : rjp"
+            echo "     -l : list only"
+            echo "     -i : install dir [normally c:\cygwin64]"
+            echo "     -p : package dir [normally c:\cygwin64_installfiles]"
+            exit 1
+            ;;
+    esac
+done
+shift "$(($OPTIND -1))"
+
+echo "Install dir: ${install_dir}"
+echo "Package dir: ${package_dir}"
+echo "Selected packages: ${selected_pkgs[*]}"
+if [ $listonly -eq 0 ]
+then
+    "${package_dir}"/setup-x86_64.exe \
+        --download --local-package-dir "$package_dir" \
+        --root "$install_dir" \
+        --packages "${selected_pkgs[*]}"
+fi

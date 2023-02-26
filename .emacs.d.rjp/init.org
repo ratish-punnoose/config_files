@@ -155,7 +155,9 @@ See directions and usage of diminish,bind-key at : [[https://github.com/jwiegley
     :config
     (recentf-mode 1)
     :custom
-    (recentf-max-saved-items 50 "Increase size of recent saves"))
+    (recentf-max-saved-items 50 "Increase size of recent saves")
+    (recentf-exclude '(".*poporg.*"))
+    )
 #+END_SRC
 
 
@@ -1172,6 +1174,13 @@ Remove any symbol prettiness at cursor
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 (global-prettify-symbols-mode t)
 #+END_SRC
+** Poporg mode to pop out comments into org buffer
+#+begin_src emacs-lisp
+  (use-package poporg
+    :defer 2
+    :bind (("C-c '" . poporg-dwim)))
+#+end_src
+
 ** Paredit mode
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package paredit

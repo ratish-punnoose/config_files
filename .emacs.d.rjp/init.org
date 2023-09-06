@@ -995,6 +995,15 @@ For shortcuts since 9.2
    #+begin_src emacs-lisp
    (use-package ox-reveal :defer t)
    #+end_src
+* Adoc Mode
+#+begin_src emacs-lisp
+  (use-package adoc-mode
+    :mode
+    (("\\.adoc\\'" . adoc-mode))
+    )
+#+end_src
+
+
 * Yasnippet
 #+begin_src emacs-lisp
   (use-package yasnippet

@@ -290,8 +290,9 @@
       M-x query-regexp-replace RET S1-S2 RET
        \,(let ((start (+ 1000 (* 4 \#)))) (format "%d-%d" start (+ start 3))) RET
       #+end_example
-
-
+** Multi-Cursor
+*** mc
+    -
 ** Copy word at point (doesn't seem to work RJP 1/29/16)
    - C-M-SPC M-w :: Select and copy word without moving cursor
    - C-x w ::  Copy word (RJP custom works 2016/02/22)
@@ -1559,8 +1560,26 @@
    - path
    - path-glob
    - path-regex
-   - paths-from-file (combines all of the above)
-
+   - paths-from-file (combines all of the above)f
+** Recreating objects
+   - Create objects dir.
+   - Remove file packed-refs
+** Submodules
+*** Adding
+    - git submodule add <gitrepoURL>
+*** Using repo with submodules
+    - Populating submodules diretory
+      - Manual
+        - git submodule init
+        - git submodule update
+      - Automatic on clone
+        - git clone --recurse-submodules  mainrepo
+*** Updating submodules
+    - Options
+      1. git pull in submodule directory.
+      2. git submodule update --remote
+*** Sync
+    - git submodule sync (in case remote has changed)
 * SVN
 ** Sparse checkout
    See [[https://stackoverflow.com/questions/50945/can-you-do-a-partial-checkout-with-subversion][SVN sparse checkout]]
@@ -1832,6 +1851,10 @@
   cipher /w:C
   #+END_EXAMPLE
 * Linux
+** tcpdump
+   tcpdump -nnn port portnum
+** firewall with iptables
+   /etc/sysconfig/iptables
 ** Adding virtual interface
 *** Creating interface
     Create file such as /etc/modprobe.d/dummy.conf, with contents

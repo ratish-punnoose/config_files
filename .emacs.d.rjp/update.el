@@ -3,15 +3,17 @@
 ;; Update script to download packages when needed
 ;;; Code:
 (require 'package)
+(require 'use-package)
 (add-to-list
  'package-archives
  '("melpa" . "http://melpa.org/packages/")
  t)
 (package-initialize)
 (package-refresh-contents)
-(package-install 'use-package)
+;; (package-install 'use-package)
 (package-install 'diminish)
 (package-install 'use-package-hydra)
+(package-install 'auto-package-update)
 
 (require 'seq)
 (defun rjp/get-dir-and-subdirs (dirname)
@@ -35,12 +37,20 @@
 (setq package-load-list '(all
                           ))
 (setq rjp/emacs-in-update t)
+(print "========= setting rjp/emacs-in-update")
 (load-file "init.el")
-(if (string= (nth 1 argv) "force")
-    (use-package auto-package-update
-      :config
-      (setq auto-package-update-delete-old-versions t)
-      (auto-package-update-now)))
+
+(print "========== Done loading init.el ============")
+
+(if (string= (nth 0 argv) "force")
+    (progn
+      (print "doing force update")
+      (use-package auto-package-update
+        :config
+        (setq auto-package-update-delete-old-versions t)
+        (auto-package-update-now)))
+  (print "not forcing update")
+  )
 (package-quickstart-refresh)
 ;;; update.el ends here
 

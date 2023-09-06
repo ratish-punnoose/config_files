@@ -1439,6 +1439,7 @@ Additional hydra commands
 ** Wgrep
 - Use C-c C-o to move ivy results into buffer.
 - In there, use C-x C-q that changes it to wgrep mode.
+- Then C-x C-s to save changes
 ** Swiper
 |-----+------------------------------------------------------|
 | C-s | Search                                               |
@@ -1730,8 +1731,9 @@ Dired narrow
 
         (if eshell-outline-status-outlined
             (outline-show-all)
-            (outline-hide-body))
+          (outline-hide-body))
         (setq eshell-outline-status-outlined (not eshell-outline-status-outlined)))
+
 
       )
 
@@ -1784,7 +1786,7 @@ Dired narrow
      '(eshell-prompt-function
        (function
         (lambda ()
-          (let* ((curr-dir (eshell/pwd))
+          (let* ((curr-dir default-directory)
                  (bmk-if-any (rjp/bookmark-rev-search curr-dir))
                  (abrv-curr-dir (abbreviate-file-name curr-dir))
                  (prompt-with-color (propertize abrv-curr-dir
@@ -1843,7 +1845,18 @@ Dired narrow
 Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af280][kkatsuyuki's eshell bookmark]]
 #+begin_src emacs-lisp
   (use-package bookmark
-    :hook ((eshell-mode . bookmark-maybe-load-default-file)))
+    :hook ((eshell-mode . bookmark-maybe-load-default-file))
+    :config
+    ;; Fix bookmark creation
+    ;; Adding filename
+    (defun eshell-bookmark-make-record ()
+      "Create a bookmark for the current Eshell buffer."
+      `(,(eshell-bookmark-name)
+        (location . ,default-directory)
+        (handler . eshell-bookmark-jump)
+        (filename . ,default-directory)
+        ))
+    )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1884,7 +1897,7 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
       (if name
           (progn
             (bookmark-set name)
-            (bookmark-set-filename name (eshell/pwd))
+            ;(bookmark-set-filename name (eshell/pwd))
             (bookmark-save)
             (format "Saved current directory in bookmark %s" name))
         (error "You must enter a bookmark name"))

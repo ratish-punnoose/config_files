@@ -12,6 +12,7 @@
 (package-refresh-contents)
 ;; (package-install 'use-package)
 (package-install 'diminish)
+(package-install 'hydra)
 (package-install 'use-package-hydra)
 (package-install 'auto-package-update)
 
@@ -51,6 +52,7 @@
         (auto-package-update-now)))
   (print "not forcing update")
   )
+(print "refreshing quickstart list")
 (package-quickstart-refresh)
 ;;; update.el ends here
 

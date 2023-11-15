@@ -1460,7 +1460,7 @@ Additional hydra commands
 ** Use-package declaration for ivy
 #+begin_src emacs-lisp
   (use-package ivy
-               :defer t
+               :defer 1
                :custom
                (ivy-count-format "(%d/%d)")
                                           ;(ivy-use-virtual-buffers t)

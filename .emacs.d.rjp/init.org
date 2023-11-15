@@ -2338,6 +2338,41 @@ Undo-tree configuration taken from kakoune site.
          rjp/info-path))
   )
 #+end_src
+* Workspaces
+#+begin_src emacs-lisp
+  (defun rjp/project-override (dir)
+    (let ((override (locate-dominating-file dir ".project.el")))
+      (if override
+        (cons 'vc override)
+        nil)))
+  (use-package tabspaces
+    :init (use-package project
+            :config
+            (add-hook 'project-find-functions #'rjp/project-override))
+
+    :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
+    :commands (tabspaces-switch-or-create-workspace
+               tabspaces-open-or-create-project-and-workspace)
+    :custom
+    (tabspaces-use-filtered-buffers-as-default nil)
+    (tabspaces-default-tab "Default")
+    (tabspaces-remove-to-default t)
+    (tabspaces-include-buffers '("*scratch*"))
+    (tabspaces-initialize-project-with-todo nil)
+    ;;(tabspaces-todo-file-name "project-todo.org")
+    ;; sessions
+    ;;(tabspaces-session t)
+    ;;(tabspaces-session-auto-restore t)
+    (tab-bar-format '(tab-bar-format-history
+                      tab-bar-format-tabs
+                      tab-bar-separator
+                      tab-bar-format-add-tab
+                      tab-bar-format-align-right
+                      tab-bar-format-global))
+
+    )
+#+end_src
+
 * Setup custom file
 #+begin_src emacs-lisp
 (setq custom-file "~/.emacs.d/custom.el")

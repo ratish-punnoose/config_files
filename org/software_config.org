@@ -1,5 +1,11 @@
 #+STARTUP:
 * Emacs
+** Color
+   Check number of colors available
+   #+begin_src elisp
+     (display-color-cells)
+   #+end_src
+
 ** MS Windows Install
 *** Libraries for images and zlib
     Available for download at ezwinports
@@ -1084,6 +1090,12 @@
     - M-{             calendar previous month
     - M-}             calendar next month
 
+** To check out
+   - [[https://menloservice-prod.ca.sandia.gov/https://www.masteringemacs.org/article/how-to-get-started-tree-sitter][tree sitter]]
+   - eglot
+   - [[http://www.newartisans.com/2007/08/using-org-mode-as-a-day-planner/][jwiegly org-mode and scheduling]]
+   - org-mode agenda views to use diary
+
 * Org Mode
 ** Visibility
    - <TAB>              :: Show/hide
@@ -1580,6 +1592,18 @@
       2. git submodule update --remote
 *** Sync
     - git submodule sync (in case remote has changed)
+*** Debug: config locations (See [[https://kentrichards.net/blog/git-submodule-git-fatal-could-not-chdir][link]])
+    1. submodule directory: .git points to git directory.
+    2. In pointed git directory, check the worktree setting within
+       config file.  It should point back to source.
+    3. In main repo:
+       - .gitmodules
+       - .git/config
+
+* SSH
+** To force usage of password instead of key
+   ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password  example.com
+
 * SVN
 ** Sparse checkout
    See [[https://stackoverflow.com/questions/50945/can-you-do-a-partial-checkout-with-subversion][SVN sparse checkout]]
@@ -1712,6 +1736,8 @@
    - C-a ] :: Paste
 ** Hardcopy/logging
    - hardcopy -h filename : write contents of current buffer with scrollback
+   - copy to cygwin:  cat > /dev/clipboard
+     - Paste in with C-a ]
 
 
 ** Window selection
@@ -1979,6 +2005,52 @@
          #+begin_example
            guix package -i
          #+end_example
+*** Listing installed packages within a profile
+    #+begin_example
+      guix package -p ~/.guix-extra-profiles/dir/profile -I
+    #+end_example
+*** Manifests
+    Use manifests to have several programs installed into the profile.
+**** Install from manifest
+     #+begin_example
+       guix package --manifest=/path/to/manifest.scm -p profilename
+     #+end_example
+**** Write a Manifest
+     A simple manifest is as shown in the [[https://guix.gnu.org/cookbook/en/guix-cookbook.html#Advanced-package-management][cookbook]].
+
+     It can however be made more complex by pinning versions.  Now  a
+     given guix generation (pull), may not have the version needed.  To
+     mix packages from different guix commits, we need something like
+     shown at this [[https://unix.stackexchange.com/questions/698811/in-guix-how-to-use-a-old-version-of-a-package-no-longer-in-the-channel][stackexchange]].  This is also in the info page for
+     guix, under Inferiors.
+     #+begin_src elisp
+       (use-modules (guix inferior) (guix channels)
+                    (srfi srfi-1))
+
+       (define channels
+         (list (channel
+                (name 'guix)
+                (url "https://git.savannah.gnu.org/git/guix.git")
+                (commit
+                 ;; The commit with the python-pyyaml 5.4.1
+                 "d3e1a94391a838332b0565d56762a58cf87ac6b1"))))
+
+       (define inferior
+         (inferior-for-channels channels))
+
+       (packages->manifest
+        (list (first (lookup-inferior-packages inferior "python-pyyaml"))
+              (specification->package "python")))
+     #+end_src
+** Reproducible builds
+   To have a reproducible build, in addition to the recipe, a guix
+   channel specification is needed.
+** Channels
+
+
+** Update
+   1. guix pull
+   2. guix package -u
 ** Generations
    See [[https://guix.gnu.org/blog/2018/multi-dimensional-transactions-and-rollbacks-oh-my/][Blog on transactions and rollbacks]]
    1. guix generations
@@ -2034,3 +2106,82 @@
       "gnu" and the symlink mybin pointing to the binary.
     - Before we use it, we have to setup the GUIX_PROFILE to point to
       the profile within the store and then source it.
+** Fixing problems
+*** Locale
+    1. https://www.reddit.com/r/GUIX/comments/jpq1uw/bashminimal507binbash_warning_setlocale_lc_all/
+    2. https://systemcrafters.net/craft-your-system-with-guix/installing-the-package-manager/
+    3. May need to install glibc-locales for both user and root
+* Flexlm
+  To reuse addr : [[https://www.mathworks.com/matlabcentral/answers/142981-why-am-i-unable-to-immediately-restart-the-network-license-manager-after-stopping-it-on-linux][See This]]
+  #+begin_example
+    lmgrd –c /path/to/license/file –l /path/to/log/file –reuseaddr
+  #+end_example
+* Markup
+** [[https://jira.atlassian.com/secure/WikiRendererHelpAction.jspa?section=all][Jira: Link is here]]
+*** Headings
+    h[n].  Heading title.  Where n is 1-6.
+    #+begin_example
+      h3. This is a heading 3
+    #+end_example
+*** Text effects
+    - Bold *bold*
+    - Emphasis _emphasis_
+    - Citation ??citation??
+    - Deleted -deleted-
+    - Inserted +inserted+
+    - Superscript ^superscript^
+    - Subscript ~subscript~
+    - monospaced {{monospaced}}
+    - block quote:
+      #+begin_example
+        bq. This is a block quoted para.
+      #+end_example
+    - quote
+      #+begin_example
+        {quote}
+        this is a quote
+        {quote}
+      #+end_example
+    - color
+      #+begin_example
+        {color:red}
+        red text
+        {color}
+      #+end_example
+*** Lists
+    Use asterisk, doubke astirsk, or dashes, or # for numbered.
+*** Code
+    #+begin_example
+      {code}
+      This is code
+      {code}
+    #+end_example
+** Gitlab Flavored [[https://docs.gitlab.com/ee/user/markdown.html][Markdown]]
+*** List
+    - This is a list item
+*** TAsks
+    Like orgmode
+*** Headings
+    ## first heading
+*** Links
+    - Direct page: [link to doc](doc}
+    - Direct file: [link to File](file.md)
+    - Hierarchcial Link: [Link to related page](../main)
+*** Block quote
+   #+begin_example
+     >>>
+     quote
+     >>>
+   #+end_example
+*** Code
+    #+begin_example
+      ```python
+         def func1(x):
+            return True
+      ```
+      #+begin_example
+        ~~~~~~~
+        Tildes are ok
+        ~~~~~~~
+      #+end_example
+    #+end_example

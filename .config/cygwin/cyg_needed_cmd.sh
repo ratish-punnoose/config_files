@@ -6,7 +6,7 @@
 MINPKGS=(bash-completion binutils dos2unix emacs-w32 file findutils
          git grep gzip less make man man-db mintty openssh tar
          terminfo terminfo-extra python39-pygments python39-numpy bc
-         zip unzip
+         zip unzip patch
         )
 PUBPKGS=(texinfo texinfo-tex texlive texlive-collection-basic
          texlive-collection-binextra texlive-collection-fontsextra
@@ -21,7 +21,7 @@ PUBPKGS=(texinfo texinfo-tex texlive texlive-collection-basic
          aspell aspell-en
          )
 
-RJPPKGS=(screen ispell terminfo terminfo-extra poppler)
+RJPPKGS=(screen ispell terminfo terminfo-extra poppler inetutils)
 #RJPHOME=(ledger)
 XPKGS=(xorg-server)
 IFS=','

@@ -186,6 +186,11 @@ See directions and usage of diminish,bind-key at : [[https://github.com/jwiegley
 #+begin_src emacs-lisp
 (setq-default indent-tabs-mode nil)
 #+end_src
+** Increase column width before auto-wrapper
+#+begin_src emacs-lisp
+  (custom-set-variables '(fill-column 80))
+#+end_src
+
 * Appearance and UI
 ** Font
 Set default font to Consolas.  This is done using
@@ -569,7 +574,7 @@ evaluate this file itself.
       "Show next entry, keeping other entries closed."
       (interactive)
       (if (save-excursion (end-of-line) (outline-invisible-p))
-          (progn (org-show-entry) (outline-show-children))
+          (progn (org-fold-show-entry) (outline-show-children))
         (outline-next-heading)
         (unless (and (bolp) (org-at-heading-p))
           (org-up-heading-safe)
@@ -577,7 +582,7 @@ evaluate this file itself.
           (error "Boundary reached"))
         (org-overview)
         (org-reveal t)
-        (org-show-entry)
+        (org-fold-show-entry)
         (outline-show-children)))
 
     (defun ded/org-show-previous-heading-tidily ()
@@ -593,7 +598,7 @@ evaluate this file itself.
           (error "Boundary reached"))
         (org-overview)
         (org-reveal t)
-        (org-show-entry)
+        (org-fold-show-entry)
         (outline-show-children)))
 
 
@@ -604,7 +609,7 @@ evaluate this file itself.
           (org-previous-visible-heading 1))
       (org-overview)
       (org-reveal '(4))
-      (org-show-subtree))
+      (org-fold-show-subtree))
 
     (add-to-list 'org-speed-commands
                  '("N" ded/org-show-next-heading-tidily))
@@ -643,7 +648,7 @@ Taken from orgmode hacks [[https://orgmode.org/worg/org-hacks.html#sec-1-3-2][Or
     "Show next entry, keeping other entries closed."
     (interactive)
     (if (save-excursion (end-of-line) (outline-invisible-p))
-        (progn (org-show-entry) (outline-show-children))
+        (progn (org-fold-show-entry) (outline-show-children))
       (outline-next-heading)
       (unless (and (bolp) (org-at-heading-p))
         (org-up-heading-safe)
@@ -651,7 +656,7 @@ Taken from orgmode hacks [[https://orgmode.org/worg/org-hacks.html#sec-1-3-2][Or
         (error "Boundary reached"))
       (org-overview)
       (org-reveal t)
-      (org-show-entry)
+      (org-fold-show-entry)
       (outline-show-children)))
 
   (defun ded/org-show-previous-heading-tidily ()
@@ -667,7 +672,7 @@ Taken from orgmode hacks [[https://orgmode.org/worg/org-hacks.html#sec-1-3-2][Or
         (error "Boundary reached"))
       (org-overview)
       (org-reveal t)
-      (org-show-entry)
+      (org-fold-show-entry)
       (outline-show-children)))
 
 
@@ -1250,9 +1255,9 @@ Remove any symbol prettiness at cursor
 #+BEGIN_SRC emacs-lisp
 (add-hook 'c-mode-hook 'imenu-add-menubar-index)
 (add-hook 'c++-mode-hook 'imenu-add-menubar-index)
-(add-hook 'c-mode-hook '(lambda () (c-set-style "linux")))
-(add-hook 'c++-mode-hook '(lambda () (c-set-style "linux")))
-(add-hook 'objc-mode-hook '(lambda () (c-set-style "linux")))
+(add-hook 'c-mode-hook (lambda () (c-set-style "linux")))
+(add-hook 'c++-mode-hook (lambda () (c-set-style "linux")))
+(add-hook 'objc-mode-hook (lambda () (c-set-style "linux")))
 ;; ;;;;;;;;;;;; C, C++ customization
 (setq ckeywords '("FILE" "\\sw+_t"  "u_\\sw*"
                   "_PRETTY_"))
@@ -2009,6 +2014,38 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
 - Allow movement beyond end (add additional newlines as needed)
   Uncomment if needed.  Alternative is to get out of artist mode and
   make space.
+  #+begin_src emacs-lisp
+    (use-package artist
+      :bind (:map artist-mode-map)
+      :after (kakoune)
+      :config
+      (ryo-modal-major-mode-keys
+       'artist-mode
+       ("<down>" artist-next-line)
+       ("<up>" artist-previous-line)
+       ("<right>" artist-forward-char)
+       ("<left>" artist-backward-char)
+       ("L" artist-select-op-line)
+       ("l" artist-select-op-straight-line)
+       ("r" artist-select-op-rectangle)
+       ("R" artist-select-op-square)
+       ("c" artist-select-op-circle)
+       ("e" artist-select-op-ellipse)
+       ("f" artist-select-op-flood-fill)
+
+       ("K" artist-select-op-cut-rectangle)
+       ("k" artist-select-op-copy-rectangle)
+       ("y" artist-select-op-paste)
+       ("v" artist-select-op-vaporize-line)
+       ("V" artist-select-op-vaporize-lines)
+                                            ;("t" artist-select-op-text-see-thru)
+       ("t" artist-select-op-text-overwrite)
+
+       )
+      (princ "loaded artist config")
+      )
+  #+end_src
+
   #+begin_src emacs-lisp :tangle no
     (define-advice artist-next-line (:before (orig-func &optional arg))
     (save-excursion
@@ -2196,29 +2233,29 @@ Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af2
        ("<S-right>" next-buffer)
        ("#" rjp/toggle-line-nums)
        )
-      (ryo-modal-keys
-       (:mode 'artist-mode)
-       ("<down>" artist-next-line)
-       ("<up>" artist-previous-line)
-       ("<right>" artist-forward-char)
-       ("<left>" artist-backward-char)
-       ("l" artist-select-op-line)
-       ("L" artist-select-op-straight-line)
-       ("r" artist-select-op-rectangle)
-       ("R" artist-select-op-square)
-       ("c" artist-select-op-circle)
-       ("e" artist-select-op-ellipse)
-       ("f" artist-select-op-flood-fill)
+      ;; (ryo-modal-keys
+      ;;  (:mode 'artist-mode)
+      ;;  ("<down>" artist-next-line)
+      ;;  ("<up>" artist-previous-line)
+      ;;  ("<right>" artist-forward-char)
+      ;;  ("<left>" artist-backward-char)
+      ;;  ("l" artist-select-op-line)
+      ;;  ("L" artist-select-op-straight-line)
+      ;;  ("r" artist-select-op-rectangle)
+      ;;  ("R" artist-select-op-square)
+      ;;  ("c" artist-select-op-circle)
+      ;;  ("e" artist-select-op-ellipse)
+      ;;  ("f" artist-select-op-flood-fill)
 
-       ("K" artist-select-op-cut-rectangle)
-       ("k" artist-select-op-copy-rectangle)
-       ("y" artist-select-op-paste)
-       ("v" artist-select-op-vaporize-line)
-       ("V" artist-select-op-vaporize-lines)
-       ;("t" artist-select-op-text-see-thru)
-       ("t" artist-select-op-text-overwrite)
+      ;;  ("K" artist-select-op-cut-rectangle)
+      ;;  ("k" artist-select-op-copy-rectangle)
+      ;;  ("y" artist-select-op-paste)
+      ;;  ("v" artist-select-op-vaporize-line)
+      ;;  ("V" artist-select-op-vaporize-lines)
+      ;;  ;("t" artist-select-op-text-see-thru)
+      ;;  ("t" artist-select-op-text-overwrite)
 
-       )
+      ;;  )
       )
     (defun my/kakoune-setup ()
       "Call kakoune-setup-keybinds and then add some personal config."

@@ -4,6 +4,6 @@
 # --
 #+TITLE: $1
 #+AUTHOR: $2
-#+STARTUP: entitiespretty indent hidestars
+#+STARTUP: entitiespretty hidestars
 #+OPTIONS: ^:{}
 $0

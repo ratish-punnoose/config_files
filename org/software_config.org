@@ -1089,6 +1089,24 @@
     - ?               calendar-goto-info-node
     - M-{             calendar previous month
     - M-}             calendar next month
+** Calc
+   - Enter with base:  base#number
+   - twos complement:  base##number. eg. 2##1101
+   - Change word size (default 32):  b w.  This can be negative.
+   - Change radix for display: d r n.  Shortcuts for common
+     - d 0 : decimal
+     - d 2 : binary
+     - O d 2 : binary twos complement
+     - d 6 : hex
+   - For example: To convert a twos-complement hex value to decimal
+     - O d 6: Hex twos complement.
+     - 16##C1F8F181 : Enter this number in twos complement. Note two #s
+     - d 0 : Show decimal value.
+
+   - Show leading zeros: d z
+   - Changing from signed to unsigned.  Use binary clip.
+     1. Set word size: e.g. 8/-8
+     2. Clip/reduce: b c
 
 ** To check out
    - [[https://menloservice-prod.ca.sandia.gov/https://www.masteringemacs.org/article/how-to-get-started-tree-sitter][tree sitter]]
@@ -1641,6 +1659,14 @@
    #+begin_src
    cygcheck-dep -r
    #+end_src
+** Speedup (especially over VPN)
+   - Cygwin can slow down due to Active Directory.
+     - See [[https://stackoverflow.com/questions/28507014/cygwin-commands-from-cmd-are-slow-from-bash-are-fast]]
+     - See [[https://cygwin.com/faq/faq.html#faq.using.startup-slow]]
+     - Fix
+       - Create passwd and group files using mkpasswd -l and mkgroup -l
+       - Change nsswitch.conf entries for passwd, group to: files instead of
+         "files db".
 ** X11
 *** Running
     To run each X app on its own.
@@ -1881,9 +1907,18 @@
    tcpdump -nnn port portnum
 ** firewall with iptables
    /etc/sysconfig/iptables
+** firewall with firewalld
+   - Check if firewalld is in use.
+     - systemctl status firewalld
+   - firewall-cmd --list-services
+   - firewall-cmd --list-ports
+   - The files are stored in /etc/firewalld/zones/public.xml
+   - To add ports:
+     - firewall-cmd --permanent --add-port=portnum/tcp
+     - firewall-cmd --reload
 ** Adding virtual interface
 *** Creating interface
-    Create file such as /etc/modprobe.d/dummy.conf, with contents
+    Create file such as /etc/modprobe.d/dummy.conf, with the following text content
     #+BEGIN_EXAMPLE
     install dummy /sbin/modprobe --ignore-install dummy; /sbin/ip link set name eth2 dev dummy0 ; /sbin/ifconfig eth2 up; chmod 750 /sys/devices/virtual/net
     #+END_EXAMPLE
@@ -1916,6 +1951,22 @@
    - systemctl start unitname
    - systemctl stop unitname
    - systemctl enable file.service  to setup a file.
+*** Fixing problems
+    - systemctl status unitname to see what failed.
+      - status=203/EXEC could be due to bad executable.
+      - One reason is due to SeLinux settings.
+        - Check using ls -lZ filename.
+        - Fix as follows for all files under a directory
+          - For the whole upper directory
+            #+begin_example
+              semanage fcontext -a -t bin_t dirname
+              restorecon -R -v dirname
+            #+end_example
+        - If semanage is not installed, look for package: policycoreutils-python-utils
+    - lsb
+      - On newer redhat (and maybe ubuntu), lsb-core may be missing.
+        - Create a symbolic link to ld-lsb-x86-64.so.3 from ld-linux-x86-64.so.2
+
 
 
 ** CA certificates
@@ -1977,6 +2028,8 @@
         mkswap filename
       #+end_example
    3. Add using swapon or to fstab
+** sssd
+   - adding users:  add to sssd.conf. to metagroup specified in ldap_access_filter
 
 * WSL
 ** For increasing stack limit on wsl
@@ -2116,6 +2169,10 @@
   #+begin_example
     lmgrd –c /path/to/license/file –l /path/to/log/file –reuseaddr
   #+end_example
+** Library no such file or directory
+   - ldd daemon may give /lib64/ld-lsb-x86-64.so which doesn't seem to be
+     present on Redhat 9.
+   - sym linking /lib64/ld-linux-x86-64.so.2 to this missing one seems to fix.
 * Markup
 ** [[https://jira.atlassian.com/secure/WikiRendererHelpAction.jspa?section=all][Jira: Link is here]]
 *** Headings

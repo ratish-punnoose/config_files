@@ -53,7 +53,15 @@ caption always "%?%F%{.by}%?%3n %t%? [%h]%?"
 #  %h hard status of window if it is set.
 
 defscrollback 1000
+
+
+#  If no term is set, a default 8 color term is used.
+#  If screen-256 color is used, then 256 colors are used.
+#  if $TERM is set, it inherits the TERM, and colors are available, but not used properly.
 term screen-256color
+#term $TERM
+#term mintty-direct
+#term mintty  #also works with 256 color, but colors are different from screen-256color
 
 logtstamp on
 logfile screenlog-%S.log

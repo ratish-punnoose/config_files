@@ -136,6 +136,10 @@ See directions and usage of diminish,bind-key at : [[https://github.com/jwiegley
      (require 'hydra)
    #+end_src
 
+* Add transient
+#+begin_src emacs-lisp
+  (require 'transient)
+#+end_src
 
 
 * Global Non-UI Options
@@ -549,6 +553,11 @@ are useful here.
 ;;(define-key isearch-mode-map (kbd "C-*") 'isearch-yank-symbol)
 (define-key isearch-mode-map [(down)] 'isearch-yank-symbol)
 #+END_SRC
+* Use string syntax for re-builder
+#+begin_src emacs-lisp
+  (custom-set-variables '(reb-re-syntax 'string))
+#+end_src
+
 * Copy word at point
 #+BEGIN_SRC emacs-lisp
   (defun rjp/copy-word-at-point ()
@@ -1355,6 +1364,8 @@ Remove VC for git
       ("C-c M-g" . magit-file-dispatch)
       :custom
        (magit-refresh-status-buffer nil)
+      :config
+       (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-modules-overview 'magit-insert-modules-unpulled-from-upstream)
       ;;:config
       ;;(require 'magit-blame)
       ;;(setq magit-refresh-status-buffer nil)

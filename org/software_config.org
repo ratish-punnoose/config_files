@@ -1902,6 +1902,12 @@
   #+BEGIN_EXAMPLE
   cipher /w:C
   #+END_EXAMPLE
+* Windows Intel Graphics resolution
+  For HD 2000, using HDMI, the max resolution is typically 1920x1080.
+  With the [[https://community.intel.com/t5/Graphics/External-screen-max-resolution/m-p/627799#:~:text=The%20Maximum%20Display%20Resolution%20for,1920x1080%20via%20HDMI%2FVGA%20only.][following]] [[https://www.notebookcheck.net/2560x1440-or-2560x1600-via-HDMI.92840.0.html][trick]], the resolution can be pushed a bit higher:
+  - Advanced Parameters: 2560x1440, 55Hz refresh, 32 bit depth, CVT-RB
+    timing.
+
 * Linux
 ** tcpdump
    tcpdump -nnn port portnum

@@ -26,7 +26,11 @@ bindkey ^[[1;2C next
 
 
 #hardstatus alwayslastline '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{+b M}%n%f* %t%{-}%+LW %= ][%h]'
-hardstatus alwayslastline '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{.by}%n%f* %t%{-}%+LW %= ][%h]'
+#hardstatus alwayslastline '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{.by}%n%f* %t%{-}%+LW %= ][%h]'
+
+# Previous Color specification was obsolete. Updating for screen 5
+hardstatus alwayslastline '%{= 7;0}[ %{3}%H%{-} ][ %= %-Lw%{.3;4}%n%f* %t%{-}%+LW %= ][%h]'
+
 # {= kw} : white on black
 # [%{y}%H%{-}]  : Hostname in yellow
 # [  %= Set attribute
@@ -39,11 +43,25 @@ hardstatus alwayslastline '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{.by}%n%f* %t%{-}%+LW 
 #    +Lw   : all windows with flags after current
 #    %=    : padd string to displays width
 #    %h    : hardstatus of the window
+#
+# k : black, 0
+# r : red, 1
+# g : green, 2
+# y : yellow, 3
+# b : blue, 4
+# m : magenta, 5
+# c : cyan, 6
+# w : white, 7
+# https://lizdenys.com/journal/articles/understanding-gnu-screens-captions.html
+# https://www.kilobitspersecond.com/2014/02/10/understanding-gnu-screens-hardstatus-strings/
+
+
 
 
 #caption always '%{= kw}[ %{y}%H%{-} ][ %= %-Lw%{+b M}%n%f* %t%{-}%+LW %= ]'
 #caption always '%{= kw} [%t][%{-}[ %= %-Lw%{+b M}%n%f %t%{-}%+LW %=]'
-caption always "%?%F%{.by}%?%3n %t%? [%h]%?"
+#caption always "%?%F%{.by}%?%3n %t%? [%h]%?"
+caption always "%?%F%{.3;4}%?%3n %t%? [%h]%?"
 # % escape char
 # %?[cond] s1 : s2  %?  - encloses a conditional,
 #  %F sets %? to true if window has focus
@@ -69,4 +87,5 @@ logfile screenlog-%S.log
 
 shelltitle "$ |bash"
 
-source screenrc.local
+#source screenrc.local
+source ~/.config/screen/screenrc.local

@@ -1,2487 +1,2487 @@
 #+TITLE: Ratish Punnoose's Emacs configuration
-#+STARTUP: indent
 #+STARTUP: hidestars
 #+PROPERTY: header-args :tangle yes
 * Introduction
-Originally inspired by Sasha Chua's org mode base emacs configuration
-using org-babel. For years, I used, the the starter kit by Eric
-Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]]. Now this is a custom configuration.
+  Originally inspired by Sasha Chua's org mode base emacs configuration
+  using org-babel. For years, I used, the the starter kit by Eric
+  Schulte [[http://eschulte.github.io/emacs24-starter-kit/][Emacs24 starter kit]]. Now this is a custom configuration.
 * Pre-setup before loading packages
-1. Add a comment for package-initialize.  Emacs may add this
-   automatically if such a comment is not seen.
-   #+begin_src  emacs-lisp
-   ;; (package-initialize)
-   #+end_src
-2. Increase the GC
-   #+begin_src emacs-lisp
-     (setq gc-cons-threshold (* 40 1000 1000 ))
-     (setq gc-cons-percentage 1.0)
-   #+end_src
-3. Utility functions used within this file
-   #+begin_src emacs-lisp
-     (require 'seq)
-     (defun rjp/get-dir-and-subdirs (dirname)
-       "Provide list of directory and its direct subdirectories."
-       (if (file-accessible-directory-p dirname)
-           (append (list dirname)
-                   (seq-filter
-                    'file-directory-p
-                    (nthcdr 2 ;; Remove ".", ".."
-                            (directory-files dirname t))))
-         nil))
+  1. Add a comment for package-initialize.  Emacs may add this
+     automatically if such a comment is not seen.
+     #+begin_src  emacs-lisp
+       ;; (package-initialize)
+     #+end_src
+  2. Increase the GC
+     #+begin_src emacs-lisp
+       (setq gc-cons-threshold (* 40 1000 1000 ))
+       (setq gc-cons-percentage 1.0)
+     #+end_src
+  3. Utility functions used within this file
+     1. Get list of directories and subdirectories
+        #+begin_src emacs-lisp
+          (require 'seq)
+          (defun rjp/get-dir-and-subdirs (dirname)
+            "Provide list of directory and its direct subdirectories."
+            (if (file-accessible-directory-p dirname)
+                (append (list dirname)
+                        (seq-filter
+                         'file-directory-p
+                         (nthcdr 2 ;; Remove ".", ".."
+                                 (directory-files dirname t))))
+              nil))
 
-     (defun rjp/get-info-subdirs (dirname)
-       "Provide list of subdirectories with info files"
-       (if (file-accessible-directory-p dirname)
-           (seq-filter
-            (lambda (x)
-              "Predicate true if directory is a Info directory"
-              (and (file-directory-p x)
-                   (file-exists-p  (expand-file-name "dir" x))))
-            (nthcdr 2 ;; Remove ".", ".."
-                    (directory-files dirname t)))
-         nil))
-   #+end_src
-4. Set load path two
-   #+begin_src emacs-lisp
-4. Set load path two
-   #+begin_src emacs-lisp :tangle yes
-     (setq load-path
-           (append (eval-when-compile
-                     (append
-                      (rjp/get-dir-and-subdirs
-                       (expand-file-name "elpa/" user-emacs-directory))
-                      (rjp/get-dir-and-subdirs
-                       (expand-file-name "lisp/" user-emacs-directory))))
-                   load-path
-                   ))
-   #+end_src
-5. Setup up package repos for melpa
-   #+begin_src emacs-lisp
-     (setq package-archives
-           '(("gnu" . "https://elpa.gnu.org/packages/")
-             ("melpa" . "http://melpa.org/packages/")))
-   #+end_src
+          (defun rjp/get-info-subdirs (dirname)
+            "Provide list of subdirectories with info files"
+            (if (file-accessible-directory-p dirname)
+                (seq-filter
+                 (lambda (x)
+                   "Predicate true if directory is a Info directory"
+                   (and (file-directory-p x)
+                        (file-exists-p  (expand-file-name "dir" x))))
+                 (nthcdr 2 ;; Remove ".", ".."
+                         (directory-files dirname t)))
+              nil))
+        #+end_src
 
-6. Setup up intitial packages
-   #+begin_src emacs-lisp :tangle no
-     (require 'package)
-     (add-to-list
-      'package-archives
-      ;; '("melpa" . "http://stable.melpa.org/packages/") ; many packages won't show if using stable
-      '("melpa" . "http://melpa.milkbox.net/packages/")
-      t)
-     (unless (boundp 'rjp/emacs-in-update)
-       (setq package-load-list
-             '(
-               (cl t)
-               (cl-lib t)
-               (uniquify t)
-               ;;(require 'ansi-color)
-               (recentf t)
-               ;;(auctex  t)
-               ;;(company-anaconda t)
-               ;;(anaconda-mode t)
-               ;;(company t)
-               ;;(esup t)
-               ;;(flycheck t)
-               ;;(helm-ag t)
-               ;;(helm-gtags t)
-               ;;(helm-projectile t)
-               ;;(helm t)
-               ;;(helm-core t)
-               ;;(indent-guide t)
-               ;; (magit t)
-               ;; (git-commit t)
-               ;; (magit-popup t)
-               ;;(popup t)
-               ;;(projectile t)
-               ;;(pkg-info t)
-               ;;(epl t)
-               ;;            (pythonic t)
-               (dash t)
-               (s t)
-               (f t)
-               ;;(rainbow-delimiters t)
-                                             ;(use-package t)
-               ;;(diminish t)
-               ;;(bind-key t)
-               ;;(with-editor t)
-               (async t)
-               ;;(ffap t)
-               ;;(saveplace t)
-               ;;(ansi-color t)
-                                             ;all
-               )))
 
-     (package-initialize)
-   #+end_src
+  4. Set load path two
+     #+begin_src emacs-lisp :tangle yes
+       (setq load-path
+             (append (eval-when-compile
+                       (append
+                        (rjp/get-dir-and-subdirs
+                         (expand-file-name "elpa/" user-emacs-directory))
+                        (rjp/get-dir-and-subdirs
+                         (expand-file-name "lisp/" user-emacs-directory))))
+                     load-path
+                     ))
+     #+end_src
+  5. Setup up package repos for melpa
+     #+begin_src emacs-lisp
+       (setq package-archives
+             '(("gnu" . "https://elpa.gnu.org/packages/")
+               ("melpa" . "http://melpa.org/packages/")))
+     #+end_src
 
-7. Prevent packages from being loaded twice
-   #+begin_src emacs-lisp :tangle yes
-     (unless (boundp 'rjp/emacs-in-update)
-                     (setq package-enable-at-startup nil))
-   #+end_src
+  6. Setup up intitial packages
+     #+begin_src emacs-lisp :tangle no
+       (require 'package)
+       (add-to-list
+        'package-archives
+        ;; '("melpa" . "http://stable.melpa.org/packages/") ; many packages won't show if using stable
+        '("melpa" . "http://melpa.milkbox.net/packages/")
+        t)
+       (unless (boundp 'rjp/emacs-in-update)
+         (setq package-load-list
+               '(
+                 (cl t)
+                 (cl-lib t)
+                 (uniquify t)
+                 ;;(require 'ansi-color)
+                 (recentf t)
+                 ;;(auctex  t)
+                 ;;(company-anaconda t)
+                 ;;(anaconda-mode t)
+                 ;;(company t)
+                 ;;(esup t)
+                 ;;(flycheck t)
+                 ;;(helm-ag t)
+                 ;;(helm-gtags t)
+                 ;;(helm-projectile t)
+                 ;;(helm t)
+                 ;;(helm-core t)
+                 ;;(indent-guide t)
+                 ;; (magit t)
+                 ;; (git-commit t)
+                 ;; (magit-popup t)
+                 ;;(popup t)
+                 ;;(projectile t)
+                 ;;(pkg-info t)
+                 ;;(epl t)
+                 ;;            (pythonic t)
+                 (dash t)
+                 (s t)
+                 (f t)
+                 ;;(rainbow-delimiters t)
+                                               ;(use-package t)
+                 ;;(diminish t)
+                 ;;(bind-key t)
+                 ;;(with-editor t)
+                 (async t)
+                 ;;(ffap t)
+                 ;;(saveplace t)
+                 ;;(ansi-color t)
+                                               ;all
+                 )))
+
+       (package-initialize)
+     #+end_src
+
+  7. Prevent packages from being loaded twice
+     #+begin_src emacs-lisp :tangle yes
+       (unless (boundp 'rjp/emacs-in-update)
+         (setq package-enable-at-startup nil))
+     #+end_src
 
 
 * Package Management
-use-package is needed to load packages but not needed at run time.
-See directions and usage of diminish,bind-key at : [[https://github.com/jwiegley/use-package#use-packageel-is-no-longer-needed-at-runtime][use-package site]]
-   #+begin_src emacs-lisp
-     (eval-when-compile
-       (require 'use-package)
-       (require 'use-package-hydra)
-       )
-      ;; As per use-package readme.md , section use-package.el is no longer needed at runtime
-   #+end_src
+  use-package is needed to load packages but not needed at run time.
+  See directions and usage of diminish,bind-key at : [[https://github.com/jwiegley/use-package#use-packageel-is-no-longer-needed-at-runtime][use-package site]]
+  #+begin_src emacs-lisp
+    (eval-when-compile
+      (require 'use-package)
+      (require 'use-package-hydra)
+      )
+    ;; As per use-package readme.md , section use-package.el is no longer needed at runtime
+  #+end_src
 ** Other basic packages
-#+begin_src emacs-lisp :tangle no
-  (require 'diminish)
-  (require 'bind-key)
-  (require 'hydra)
-#+end_src
+   #+begin_src emacs-lisp :tangle no
+     (require 'diminish)
+     (require 'bind-key)
+     (require 'hydra)
+   #+end_src
 
-#+begin_src emacs-lisp :tangle yes
-  (use-package diminish   )
-  (use-package bind-key     )
- (use-package hydra      )
-#+end_src
+   #+begin_src emacs-lisp :tangle yes
+     (use-package diminish   )
+     (use-package bind-key     )
+     (use-package hydra      )
+   #+end_src
 
 
 * Add transient
-#+begin_src emacs-lisp :tangle no
-  (require 'transient)
-#+end_src
+  #+begin_src emacs-lisp :tangle no
+    (require 'transient)
+  #+end_src
 
 
 * Global Non-UI Options
-#+BEGIN_SRC emacs-lisp
-;; Reload files automatically
-(global-auto-revert-mode 1)
+  #+BEGIN_SRC emacs-lisp
+    ;; Reload files automatically
+    (global-auto-revert-mode 1)
 
-;; Use electric buffers
-(global-set-key "\C-x\C-b" 'electric-buffer-list)
+    ;; Use electric buffers
+    (global-set-key "\C-x\C-b" 'electric-buffer-list)
 
-(define-key global-map "\M-g" 'goto-line)
+    (define-key global-map "\M-g" 'goto-line)
 
-#+END_SRC
+  #+END_SRC
 ** Recent files
-#+BEGIN_SRC emacs-lisp
-  (use-package recentf
-    :config
-    (recentf-mode 1)
-    :custom
-    (recentf-max-saved-items 50 "Increase size of recent saves")
-    (recentf-exclude '(".*poporg.*"))
-    )
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package recentf
+       :config
+       (recentf-mode 1)
+       :custom
+       (recentf-max-saved-items 50 "Increase size of recent saves")
+       (recentf-exclude '(".*poporg.*"))
+       )
+   #+END_SRC
 
 
 ** Transparently open compressed files
-#+begin_src emacs-lisp
-(auto-compression-mode t)
-#+end_src
+   #+begin_src emacs-lisp
+     (auto-compression-mode t)
+   #+end_src
 
 ** Highlight matching parentheses when the point is on them.
-#+begin_src emacs-lisp
-(show-paren-mode 1)
-#+end_src
+   #+begin_src emacs-lisp
+     (show-paren-mode 1)
+   #+end_src
 
 ** UTF encoding
-#+begin_src emacs-lisp
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-#+end_src
+   #+begin_src emacs-lisp
+     (set-terminal-coding-system 'utf-8)
+     (set-keyboard-coding-system 'utf-8)
+     (prefer-coding-system 'utf-8)
+   #+end_src
 
 ** Change Yes/No to y/n
-#+begin_src emacs-lisp
-  (defalias 'yes-or-no-p 'y-or-n-p)
-#+end_src
+   #+begin_src emacs-lisp
+     (defalias 'yes-or-no-p 'y-or-n-p)
+   #+end_src
 ** Default to non tabs mode
-#+begin_src emacs-lisp
-(setq-default indent-tabs-mode nil)
-#+end_src
+   #+begin_src emacs-lisp
+     (setq-default indent-tabs-mode nil)
+   #+end_src
 ** Increase column width before auto-wrapper
-#+begin_src emacs-lisp
-  (custom-set-variables '(fill-column 80))
-#+end_src
+   #+begin_src emacs-lisp
+     (custom-set-variables '(fill-column 80))
+   #+end_src
 
 * Appearance and UI
 ** Font
-Set default font to Consolas.  This is done using
-Options-> Save Options.
-#+begin_src emacs-lisp
-    ;;(set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso8859-1")
-    (cond ((or (eq system-type 'windows-nt)
-               (eq system-type 'cygwin))
-           (custom-set-faces
-            ;; custom-set-faces was added by Custom.
-            ;; If you edit it by hand, you could mess it up, so be careful.
-            ;; Your init file should contain only one such instance.
-            ;; If there is more than one, they won't work right.
-            '(default ((t (:family "Consolas" :foundry "outline" :slant normal
-                                     :weight normal :height 113 :width normal))))
-            '(fixed-pitch ((t (:family "Consolas" :foundry "outline" :slant normal
-                                     :weight normal :height 113 :width normal))))
-            '(fixed-pitch-serif ((t (:family "Consolas" :foundry "outline" :slant normal
-                                     :weight normal :height 113 :width normal))))
-            ))
-          ((eq system-type 'gnu/linux)
-           (cond
-            ((find-font (font-spec :name "Source Code Variable"))
-             (custom-set-faces
-              ;; custom-set-faces was added by Custom.
-              ;; If you edit it by hand, you could mess it up, so be careful.
-              ;; Your init file should contain only one such instance.
-              ;; If there is more than one, they won't work right.
-              '(default ((t (:family "Source Code Variable" :foundry "adobe" :slant normal
-                                     :weight normal :height 130 :width normal))))
-                                            ;'(default ((t (:family "Inconsolata" :foundry "outline" :slant normal
-                                            ;                      :weight normal :height 113 :width normal))))
-              )))))
-  (global-font-lock-mode t)
-#+end_src
+   Set default font to Consolas.  This is done using
+   Options-> Save Options.
+   #+begin_src emacs-lisp
+     ;;(set-default-font "-outline-Consolas-normal-normal-normal-mono-*-*-*-*-c-*-iso8859-1")
+     (cond ((or (eq system-type 'windows-nt)
+                (eq system-type 'cygwin))
+            (custom-set-faces
+             ;; custom-set-faces was added by Custom.
+             ;; If you edit it by hand, you could mess it up, so be careful.
+             ;; Your init file should contain only one such instance.
+             ;; If there is more than one, they won't work right.
+             '(default ((t (:family "Consolas" :foundry "outline" :slant normal
+                                    :weight normal :height 113 :width normal))))
+             '(fixed-pitch ((t (:family "Consolas" :foundry "outline" :slant normal
+                                        :weight normal :height 113 :width normal))))
+             '(fixed-pitch-serif ((t (:family "Consolas" :foundry "outline" :slant normal
+                                              :weight normal :height 113 :width normal))))
+             ))
+           ((eq system-type 'gnu/linux)
+            (cond
+             ((find-font (font-spec :name "Source Code Variable"))
+              (custom-set-faces
+               ;; custom-set-faces was added by Custom.
+               ;; If you edit it by hand, you could mess it up, so be careful.
+               ;; Your init file should contain only one such instance.
+               ;; If there is more than one, they won't work right.
+               '(default ((t (:family "Source Code Variable" :foundry "adobe" :slant normal
+                                      :weight normal :height 130 :width normal))))
+                                             ;'(default ((t (:family "Inconsolata" :foundry "outline" :slant normal
+                                             ;                      :weight normal :height 113 :width normal))))
+               )))))
+     (global-font-lock-mode t)
+   #+end_src
 
 *** Unicode symbol fallback
 
-Normally, if the primary font does not have a unicode code point that
-character will not be displayed.  This provides a fallback font to use
-for such symbols.  The font Symbola is chosen.
-Specifically, a modified version of Symbola with fixed with matched to the width of a Consolas character is used.
-See: [[https://github.com/cpitclaudel/monospacifier]] and
- [[https://graphicdesign.stackexchange.com/questions/10644/how-can-i-make-a-font-monospaced]].
+    Normally, if the primary font does not have a unicode code point that
+    character will not be displayed.  This provides a fallback font to use
+    for such symbols.  The font Symbola is chosen.
+    Specifically, a modified version of Symbola with fixed with matched to the width of a Consolas character is used.
+    See: [[https://github.com/cpitclaudel/monospacifier]] and
+    [[https://graphicdesign.stackexchange.com/questions/10644/how-can-i-make-a-font-monospaced]].
 
-#+begin_src emacs-lisp
-  (cond ((or (eq system-type 'windows-nt)
-             (eq system-type 'cygwin))
-         (dolist (ft (fontset-list))
-           (set-fontset-font ft 'unicode
-                             (font-spec
-                              :name "Consolas"))
-           (set-fontset-font ft 'unicode
-                             (font-spec
-                              :name "Symbola monospacified for Consolas") nil 'append))))
-#+end_src
+    #+begin_src emacs-lisp
+      (cond ((or (eq system-type 'windows-nt)
+                 (eq system-type 'cygwin))
+             (dolist (ft (fontset-list))
+               (set-fontset-font ft 'unicode
+                                 (font-spec
+                                  :name "Consolas"))
+               (set-fontset-font ft 'unicode
+                                 (font-spec
+                                  :name "Symbola monospacified for Consolas") nil 'append))))
+    #+end_src
 ** Zoom
-#+begin_src emacs-lisp
-(define-key global-map (kbd "C-+") 'text-scale-increase)
-(define-key global-map (kbd "C--") 'text-scale-decrease)
-#+end_src
+   #+begin_src emacs-lisp
+     (define-key global-map (kbd "C-+") 'text-scale-increase)
+     (define-key global-map (kbd "C--") 'text-scale-decrease)
+   #+end_src
 
 ** Window appearance
 *** Colors
-#+begin_src emacs-lisp
-(setq default-frame-alist
-      '((minibuffer . 1)
-         (menu-bar-lines . 1)
-         (cursor-color .  "cyan")
-         (foreground-color . "grey" )
-         (background-color . "black")
-         (mouse-color . "yellow" )))
-#+end_src
+    #+begin_src emacs-lisp
+      (setq default-frame-alist
+            '((minibuffer . 1)
+              (menu-bar-lines . 1)
+              (cursor-color .  "cyan")
+              (foreground-color . "grey" )
+              (background-color . "black")
+              (mouse-color . "yellow" )))
+    #+end_src
 *** Color themes
-To use a color theme. Use load-library and then color-theme.
-Suitable color themes are aalto-dark, aalto-light,
-color-theme-alice-blue, color-theme-andreas
+    To use a color theme. Use load-library and then color-theme.
+    Suitable color themes are aalto-dark, aalto-light,
+    color-theme-alice-blue, color-theme-andreas
 *** Disable toolbar
-#+begin_src emacs-lisp
-(if window-system
-    (tool-bar-mode -1)
-)
-#+end_src
+    #+begin_src emacs-lisp
+      (if window-system
+          (tool-bar-mode -1)
+        )
+    #+end_src
 *** Disable menu
-#+begin_src emacs-lisp
-  (menu-bar-mode -1)
-  ;(global-set-key [f1] 'menu-bar-mode)
-#+end_src
+    #+begin_src emacs-lisp
+      (menu-bar-mode -1)
+                                              ;(global-set-key [f1] 'menu-bar-mode)
+    #+end_src
 *** Disable scroll bar
-#+begin_src emacs-lisp
-  (scroll-bar-mode -1)
-#+end_src
+    #+begin_src emacs-lisp
+      (scroll-bar-mode -1)
+    #+end_src
 *** Title and Status [[http://mnemonikk.org/][mnemonikk]]
-#+begin_src emacs-lisp
-(setq frame-title-format
-      '(buffer-file-name "%f"
-                                 (dired-directory dired-directory "%b")))
-(setq-default mode-line-buffer-identification
-              (cons
-               '(:eval (replace-regexp-in-string "^.*/\\(.*\\)/" "\\1/" default-directory))
-               mode-line-buffer-identification))
-(display-time)
-(setq display-time-day-and-date t)
-(setq line-number-mode t)
-(setq column-number-mode t)
-(setq next-line-add-newlines nil)
-(setq blink-matching-paren t)
-#+end_src
+    #+begin_src emacs-lisp
+      (setq frame-title-format
+            '(buffer-file-name "%f"
+                               (dired-directory dired-directory "%b")))
+      (setq-default mode-line-buffer-identification
+                    (cons
+                     '(:eval (replace-regexp-in-string "^.*/\\(.*\\)/" "\\1/" default-directory))
+                     mode-line-buffer-identification))
+      (display-time)
+      (setq display-time-day-and-date t)
+      (setq line-number-mode t)
+      (setq column-number-mode t)
+      (setq next-line-add-newlines nil)
+      (setq blink-matching-paren t)
+    #+end_src
 *** Blink cursor
-#+begin_src emacs-lisp
-(blink-cursor-mode -1)
-#+end_src
+    #+begin_src emacs-lisp
+      (blink-cursor-mode -1)
+    #+end_src
 *** Mouse wheel
-#+begin_src emacs-lisp
-  (use-package mwheel
-    :defer 5
-    :if window-system
-    :config
-    (mouse-wheel-mode t))
-#+end_src
+    #+begin_src emacs-lisp
+      (use-package mwheel
+        :defer 5
+        :if window-system
+        :config
+        (mouse-wheel-mode t))
+    #+end_src
 *** Miscellaneous UI
-#+begin_src emacs-lisp
-  (setq visible-bell t
-        echo-keystrokes 0.1
-        font-lock-maximum-decoration t
-        inhibit-startup-message t
-        transient-mark-mode t
-        color-theme-is-global t
-        delete-by-moving-to-trash t
-        shift-select-mode nil
-        truncate-partial-width-windows nil
-        uniquify-buffer-name-style 'forward
-        whitespace-style '(trailing lines space-before-tab
-                                    indentation space-after-tab)
-        whitespace-line-column 100
-        ediff-window-setup-function 'ediff-setup-windows-plain
-        xterm-mouse-mode t)
-#+end_src
+    #+begin_src emacs-lisp
+      (setq visible-bell t
+            echo-keystrokes 0.1
+            font-lock-maximum-decoration t
+            inhibit-startup-message t
+            transient-mark-mode t
+            color-theme-is-global t
+            delete-by-moving-to-trash t
+            shift-select-mode nil
+            truncate-partial-width-windows nil
+            uniquify-buffer-name-style 'forward
+            whitespace-style '(trailing lines space-before-tab
+                                        indentation space-after-tab)
+            whitespace-line-column 100
+            ediff-window-setup-function 'ediff-setup-windows-plain
+            xterm-mouse-mode t)
+    #+end_src
 
 ** HideShow
-;; Invoke HideShow mode with M-x hs-minor-mode.
-;; For Emacs 20:
-;;    * C-c S show all
-;;    * C-c H hide all
-;;    * C-c s show block
-;;    * C-c h hide block
-;;
-;; For Emacs 21:
-;;
-;;    * C-c @ ESC C-s show all
-;;    * C-c @ ESC C-h hide all
-;;    * C-c @ C-s show block
-;;    * C-c @ C-h hide block
-;;    * C-c @ C-c toggle hide/show
-;; http://www.emacswiki.org/cgi-bin/wiki/HideShow
-;;http://www.gnu.org/software/emacs/manual/html_node/Hideshow.html#Hideshow
+   ;; Invoke HideShow mode with M-x hs-minor-mode.
+   ;; For Emacs 20:
+   ;;    * C-c S show all
+   ;;    * C-c H hide all
+   ;;    * C-c s show block
+   ;;    * C-c h hide block
+   ;;
+   ;; For Emacs 21:
+   ;;
+   ;;    * C-c @ ESC C-s show all
+   ;;    * C-c @ ESC C-h hide all
+   ;;    * C-c @ C-s show block
+   ;;    * C-c @ C-h hide block
+   ;;    * C-c @ C-c toggle hide/show
+   ;; http://www.emacswiki.org/cgi-bin/wiki/HideShow
+   ;;http://www.gnu.org/software/emacs/manual/html_node/Hideshow.html#Hideshow
 
-- Hide comments too when hiding
-- Add Promela
-  #+begin_src emacs-lisp
-    ;; Add Promela
-    ;;(add-to-list 'hs-special-modes-alist '(promela-mode "{" "}" "/[*/]" nil nil))
-  #+end_src
-- When toggling, by default don't expand sub-blocks.  With a prefix
-  argument expand everything.
-- Global shortcut for the custom toggle of a block
-- Global short for Toggle everything
-- Define regexp for nXML
-- Add hs-minor mode to other modes
-  - prog-mode
-  - nxml mode
-- Hs use-package
-  #+begin_src emacs-lisp
-    (use-package hideshow
-      :hook ((prog-mode . hs-minor-mode)
-             (nxml-mode . hs-minor-mode))
-      :custom (hs-hide-comments-when-hiding-all t)
-      :config
-      (add-hook 'hs-minor-mode-hook #'hs-hide-all)
-      (add-to-list 'hs-special-modes-alist
-                   '(nxml-mode
-                      "<!--\\|<[^/>][^>]*>" "-->\\|</[^/>]+>" "<!--"
-                      nxml-forward-element nil))
-      (add-to-list 'hs-special-modes-alist
-                   '(verilog-mode "\\<begin\\>" "\\<end\\>" "/[*/]"
-                                  verilog-forward-sexp-function))
-      ;;  Toggle hide/show for a specific block
-      (defun rjp/hs-toggle (arg)
-        "Toggle hiding/showing of a block"
-        (interactive "P")
-        (hs-life-goes-on
-         (if (hs-already-hidden-p)
-             (progn
-               (hs-show-block)
-               (if (not  arg)
-                   (hs-hide-level -1)))
-           (hs-hide-block))))
-      ;;  Global toggle
-      (defvar rjp/hs-status nil "Current state of hideshow")
-      (defun rjp/toggle-hs-all() "Toggle hideshow all."
-             (interactive)
-             (setq rjp/hs-status (not rjp/hs-status))
-             (if rjp/hs-status (hs-hide-all) (hs-show-all)))
+   - Hide comments too when hiding
+   - Add Promela
+     #+begin_src emacs-lisp
+       ;; Add Promela
+       ;;(add-to-list 'hs-special-modes-alist '(promela-mode "{" "}" "/[*/]" nil nil))
+     #+end_src
+   - When toggling, by default don't expand sub-blocks.  With a prefix
+     argument expand everything.
+   - Global shortcut for the custom toggle of a block
+   - Global short for Toggle everything
+   - Define regexp for nXML
+   - Add hs-minor mode to other modes
+     - prog-mode
+     - nxml mode
+   - Hs use-package
+     #+begin_src emacs-lisp
+       (use-package hideshow
+         :hook ((prog-mode . hs-minor-mode)
+                (nxml-mode . hs-minor-mode))
+         :custom (hs-hide-comments-when-hiding-all t)
+         :config
+         (add-hook 'hs-minor-mode-hook #'hs-hide-all)
+         (add-to-list 'hs-special-modes-alist
+                      '(nxml-mode
+                        "<!--\\|<[^/>][^>]*>" "-->\\|</[^/>]+>" "<!--"
+                        nxml-forward-element nil))
+         (add-to-list 'hs-special-modes-alist
+                      '(verilog-mode "\\<begin\\>" "\\<end\\>" "/[*/]"
+                                     verilog-forward-sexp-function))
+         ;;  Toggle hide/show for a specific block
+         (defun rjp/hs-toggle (arg)
+           "Toggle hiding/showing of a block"
+           (interactive "P")
+           (hs-life-goes-on
+            (if (hs-already-hidden-p)
+                (progn
+                  (hs-show-block)
+                  (if (not  arg)
+                      (hs-hide-level -1)))
+              (hs-hide-block))))
+         ;;  Global toggle
+         (defvar rjp/hs-status nil "Current state of hideshow")
+         (defun rjp/toggle-hs-all() "Toggle hideshow all."
+                (interactive)
+                (setq rjp/hs-status (not rjp/hs-status))
+                (if rjp/hs-status (hs-hide-all) (hs-show-all)))
 
-      :commands (rjp/hs-toggle rjp/toggle-hs-all)
-      :bind
-      ("C-," . 'rjp/hs-toggle)
-      ("C-M-," . 'rjp/toggle-hs-all)
-      )
+         :commands (rjp/hs-toggle rjp/toggle-hs-all)
+         :bind
+         ("C-," . 'rjp/hs-toggle)
+         ("C-M-," . 'rjp/toggle-hs-all)
+         )
 
-  #+end_src
+     #+end_src
 
 ** Indent guide
-#+BEGIN_SRC emacs-lisp
-  (use-package indent-guide
-               :defer 5
-               :config
-               (indent-guide-global-mode)
-               (setq indent-guide-delay 0.5)
-               (setq indent-guide-recursive t))
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package indent-guide
+       :defer 5
+       :config
+       (indent-guide-global-mode)
+       (setq indent-guide-delay 0.5)
+       (setq indent-guide-recursive t))
+   #+END_SRC
 
 ** Rainbow Delimiters
-#+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters
-                   :defer 4
-                   :config
-                   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package rainbow-delimiters
+       :defer 4
+       :config
+       (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+   #+END_SRC
 
 ** Trailing Whitespace
-#+BEGIN_SRC emacs-lisp
-(setq-default show-trailing-whitespace t)
-(add-hook 'before-save-hook 'whitespace-cleanup)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (setq-default show-trailing-whitespace t)
+     (add-hook 'before-save-hook 'whitespace-cleanup)
+   #+END_SRC
 ** Uniquify buffers
-#+begin_src emacs-lisp
-(use-package uniquify :defer 4)
-#+end_src
+   #+begin_src emacs-lisp
+     (use-package uniquify :defer 4)
+   #+end_src
 ** Ediff
 *** Split side by side and make minimal diff
-#+begin_src emacs-lisp
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ediff-split-window-function (quote split-window-horizontally))
- '(ediff-diff-options "-w -d"))
-#+end_src
+    #+begin_src emacs-lisp
+      (custom-set-variables
+       ;; custom-set-variables was added by Custom.
+       ;; If you edit it by hand, you could mess it up, so be careful.
+       ;; Your init file should contain only one such instance.
+       ;; If there is more than one, they won't work right.
+       '(ediff-split-window-function (quote split-window-horizontally))
+       '(ediff-diff-options "-w -d"))
+    #+end_src
 *** Colors
-- ediff has the following matrix options
-  |         | A | B | C | ancestor |
-  |---------+---+---+---+----------|
-  | odd     |   |   |   |          |
-  | even    |   |   |   |          |
-  | current |   |   |   |          |
-  | fine    |   |   |   |          |
-- Colors in shades
-|          | Red    | Green  | Blue   | Pink   |
-|----------+--------+--------+--------+--------|
-| Dark     | 371108 | 083711 | 080D37 | 330837 |
-| Lighter  | 4B160A | 0A4B13 | 0A114B | 460A4B |
-| Lighter  | 611302 | 02610F | 021261 | 500261 |
-| Lightest | 841A03 | 038417 | 031C84 | 5F0384 |
+    - ediff has the following matrix options
+      |         | A | B | C | ancestor |
+      |---------+---+---+---+----------|
+      | odd     |   |   |   |          |
+      | even    |   |   |   |          |
+      | current |   |   |   |          |
+      | fine    |   |   |   |          |
+    - Colors in shades
+    |          | Red    | Green  | Blue   | Pink   |
+    |----------+--------+--------+--------+--------|
+    | Dark     | 371108 | 083711 | 080D37 | 330837 |
+    | Lighter  | 4B160A | 0A4B13 | 0A114B | 460A4B |
+    | Lighter  | 611302 | 02610F | 021261 | 500261 |
+    | Lightest | 841A03 | 038417 | 031C84 | 5F0384 |
 
-#+begin_src emacs-lisp
-    (custom-set-faces
-     '(ediff-even-diff-A ((t (:background "#371108"))))
-     '(ediff-even-diff-B ((t (:background "#083711"))))
-     '(ediff-even-diff-C ((t (:background "#080D37"))))
-     '(ediff-even-diff-Ancestor ((t (:background "#330837"))))
-     '(ediff-odd-diff-A ((t (:background "#4B160A"))))
-     '(ediff-odd-diff-B ((t (:background "#0A4B13"))))
-     '(ediff-odd-diff-C ((t (:background "#0A114B"))))
-     '(ediff-odd-diff-Ancestor ((t (:background "#460A4B"))))
-     '(ediff-current-diff-A ((t (:background "#611302"))))
-     '(ediff-current-diff-B ((t (:background "#02610F"))))
-     '(ediff-current-diff-C ((t (:background "#021261"))))
-     '(ediff-current-diff-Ancestor ((t (:background "#500261"))))
-     '(ediff-fine-diff-A ((t (:background "#841A03"))))
-     '(ediff-fine-diff-B ((t (:background "#038417"))))
-     '(ediff-fine-diff-C ((t (:background "#031C84"))))
-     '(ediff-fine-diff-Ancestor ((t (:background "#5F0384")))) )
-#+end_src
+    #+begin_src emacs-lisp
+      (custom-set-faces
+       '(ediff-even-diff-A ((t (:background "#371108"))))
+       '(ediff-even-diff-B ((t (:background "#083711"))))
+       '(ediff-even-diff-C ((t (:background "#080D37"))))
+       '(ediff-even-diff-Ancestor ((t (:background "#330837"))))
+       '(ediff-odd-diff-A ((t (:background "#4B160A"))))
+       '(ediff-odd-diff-B ((t (:background "#0A4B13"))))
+       '(ediff-odd-diff-C ((t (:background "#0A114B"))))
+       '(ediff-odd-diff-Ancestor ((t (:background "#460A4B"))))
+       '(ediff-current-diff-A ((t (:background "#611302"))))
+       '(ediff-current-diff-B ((t (:background "#02610F"))))
+       '(ediff-current-diff-C ((t (:background "#021261"))))
+       '(ediff-current-diff-Ancestor ((t (:background "#500261"))))
+       '(ediff-fine-diff-A ((t (:background "#841A03"))))
+       '(ediff-fine-diff-B ((t (:background "#038417"))))
+       '(ediff-fine-diff-C ((t (:background "#031C84"))))
+       '(ediff-fine-diff-Ancestor ((t (:background "#5F0384")))) )
+    #+end_src
 *** Ediff save layout
-#+begin_src emacs-lisp
-  (defvar rjp/ediff-last-windows nil)
+    #+begin_src emacs-lisp
+      (defvar rjp/ediff-last-windows nil)
 
-  (defun rjp/store-pre-ediff-winconfig ()
-    (setq rjp/ediff-last-windows (current-window-configuration)))
+      (defun rjp/store-pre-ediff-winconfig ()
+        (setq rjp/ediff-last-windows (current-window-configuration)))
 
-  (defun rjp/restore-pre-ediff-winconfig ()
-    (set-window-configuration rjp/ediff-last-windows))
+      (defun rjp/restore-pre-ediff-winconfig ()
+        (set-window-configuration rjp/ediff-last-windows))
 
-  (add-hook 'ediff-before-setup-hook #'rjp/store-pre-ediff-winconfig)
-  (add-hook 'ediff-quit-hook #'rjp/restore-pre-ediff-winconfig)
-#+end_src
+      (add-hook 'ediff-before-setup-hook #'rjp/store-pre-ediff-winconfig)
+      (add-hook 'ediff-quit-hook #'rjp/restore-pre-ediff-winconfig)
+    #+end_src
 ** Line number display
-#+begin_src emacs-lisp
-  (custom-set-faces '(line-number ((t (:foreground "DimGray"))))
-                    '(line-number-current-line ((t (:foreground "LimeGreen")))))
-#+end_src
+   #+begin_src emacs-lisp
+     (custom-set-faces '(line-number ((t (:foreground "DimGray"))))
+                       '(line-number-current-line ((t (:foreground "LimeGreen")))))
+   #+end_src
 * Navigation
-Easier keys for switching windows
+  Easier keys for switching windows
 ** For moving using arrows
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-<left>") 'windmove-left)          ; move to left windnow
-(global-set-key (kbd "C-<right>") 'windmove-right)        ; move to right window
-(global-set-key (kbd "C-<up>") 'windmove-up)              ; move to upper window
-(global-set-key (kbd "C-<down>") 'windmove-down)          ; move to downer window
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "C-<left>") 'windmove-left)          ; move to left windnow
+     (global-set-key (kbd "C-<right>") 'windmove-right)        ; move to right window
+     (global-set-key (kbd "C-<up>") 'windmove-up)              ; move to upper window
+     (global-set-key (kbd "C-<down>") 'windmove-down)          ; move to downer window
+   #+END_SRC
 ** Using ace-window
 *** Key bindings
-- x - delete window
-- m - swap windows
-- M - move window
-- c - copy window
-- j - select buffer
-- n - select the previous window
-- u - select buffer in the other window
-- c - split window fairly, either vertically or horizontally
-- v - split window vertically
-- b - split window horizontally
-- o - maximize current window
-- ? - show these command bindings
+    - x - delete window
+    - m - swap windows
+    - M - move window
+    - c - copy window
+    - j - select buffer
+    - n - select the previous window
+    - u - select buffer in the other window
+    - c - split window fairly, either vertically or horizontally
+    - v - split window vertically
+    - b - split window horizontally
+    - o - maximize current window
+    - ? - show these command bindings
 *** Declaration
-#+begin_src emacs-lisp
-  (use-package ace-window
-    :bind ("M-o" . 'ace-window)
-    :custom
-    (aw-keys '(?a ?s ?d ?f ?g ?h ?k ?l ?t ?r))
-    (aw-scope 'frame)
-    (aw-dispatch-always t)
-    ;; (aw-background nil)
+    #+begin_src emacs-lisp
+      (use-package ace-window
+        :bind ("M-o" . 'ace-window)
+        :custom
+        (aw-keys '(?a ?s ?d ?f ?g ?h ?k ?l ?t ?r))
+        (aw-scope 'frame)
+        (aw-dispatch-always t)
+        ;; (aw-background nil)
 
-    )
-#+end_src
+        )
+    #+end_src
 * Search at Point
-To use this, start search with C-s and then type C-*.
-Note: find-tag-default-as-regexp and find-tag-default-as-symbol-regexp
-are useful here.
-#+BEGIN_SRC emacs-lisp
-(defun isearch-yank-symbol ()
-  "*Put symbol at current point into search string."
-  (interactive)
-  (let ((sym (symbol-at-point)))
-    (if sym
-        (progn
-          (setq isearch-regexp t
-                isearch-string (find-tag-default-as-regexp)
-                isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
-                isearch-yank-flag t))
-      (ding)))
-  (isearch-search-and-update))
-;;(define-key isearch-mode-map (kbd "C-*") 'isearch-yank-symbol)
-(define-key isearch-mode-map [(down)] 'isearch-yank-symbol)
-#+END_SRC
+  To use this, start search with C-s and then type C-*.
+  Note: find-tag-default-as-regexp and find-tag-default-as-symbol-regexp
+  are useful here.
+  #+BEGIN_SRC emacs-lisp
+    (defun isearch-yank-symbol ()
+      "*Put symbol at current point into search string."
+      (interactive)
+      (let ((sym (symbol-at-point)))
+        (if sym
+            (progn
+              (setq isearch-regexp t
+                    isearch-string (find-tag-default-as-regexp)
+                    isearch-message (mapconcat 'isearch-text-char-description isearch-string "")
+                    isearch-yank-flag t))
+          (ding)))
+      (isearch-search-and-update))
+    ;;(define-key isearch-mode-map (kbd "C-*") 'isearch-yank-symbol)
+    (define-key isearch-mode-map [(down)] 'isearch-yank-symbol)
+  #+END_SRC
 * Use string syntax for re-builder
-#+begin_src emacs-lisp
-  (custom-set-variables '(reb-re-syntax 'string))
-#+end_src
+  #+begin_src emacs-lisp
+    (custom-set-variables '(reb-re-syntax 'string))
+  #+end_src
 
 * Copy word at point
-#+BEGIN_SRC emacs-lisp
-  (defun rjp/copy-word-at-point ()
+  #+BEGIN_SRC emacs-lisp
+    (defun rjp/copy-word-at-point ()
       "Copy word at point with underscores."
       (interactive)
       (kill-new (thing-at-point 'symbol) ))
-  (define-key global-map (kbd "\C-xw") 'rjp/copy-word-at-point)
-#+END_SRC
+    (define-key global-map (kbd "\C-xw") 'rjp/copy-word-at-point)
+  #+END_SRC
 * Tags
-#+BEGIN_SRC emacs-lisp :tangle no
-;; Tags search
-(global-set-key "\C-t" 'tags-search)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp :tangle no
+    ;; Tags search
+    (global-set-key "\C-t" 'tags-search)
+  #+END_SRC
 * Org-mode
 ** Setup before loading org
-Loading it in this file does not work since org has to be started to
-evaluate this file itself.
-#+begin_src emacs-lisp
-  (use-package org
-    :defer t
-    :config
-    (defun ded/org-show-next-heading-tidily ()
-      "Show next entry, keeping other entries closed."
-      (interactive)
-      (if (save-excursion (end-of-line) (outline-invisible-p))
-          (progn (org-fold-show-entry) (outline-show-children))
-        (outline-next-heading)
-        (unless (and (bolp) (org-at-heading-p))
-          (org-up-heading-safe)
-          (outline-hide-subtree)
-          (error "Boundary reached"))
-        (org-overview)
-        (org-reveal t)
-        (org-fold-show-entry)
-        (outline-show-children)))
+   Loading it in this file does not work since org has to be started to
+   evaluate this file itself.
+   #+begin_src emacs-lisp
+     (use-package org
+       :defer t
+       :config
+       (defun ded/org-show-next-heading-tidily ()
+         "Show next entry, keeping other entries closed."
+         (interactive)
+         (if (save-excursion (end-of-line) (outline-invisible-p))
+             (progn (org-fold-show-entry) (outline-show-children))
+           (outline-next-heading)
+           (unless (and (bolp) (org-at-heading-p))
+             (org-up-heading-safe)
+             (outline-hide-subtree)
+             (error "Boundary reached"))
+           (org-overview)
+           (org-reveal t)
+           (org-fold-show-entry)
+           (outline-show-children)))
 
-    (defun ded/org-show-previous-heading-tidily ()
-      "Show previous entry, keeping other entries closed."
-      (interactive)
-      (let ((pos (point)))
-        (outline-previous-heading)
-        (unless (and (< (point) pos)
-                     (bolp)
-                     (org-at-heading-p))
-          (goto-char pos)
-          (outline-hide-subtree)
-          (error "Boundary reached"))
-        (org-overview)
-        (org-reveal t)
-        (org-fold-show-entry)
-        (outline-show-children)))
+       (defun ded/org-show-previous-heading-tidily ()
+         "Show previous entry, keeping other entries closed."
+         (interactive)
+         (let ((pos (point)))
+           (outline-previous-heading)
+           (unless (and (< (point) pos)
+                        (bolp)
+                        (org-at-heading-p))
+             (goto-char pos)
+             (outline-hide-subtree)
+             (error "Boundary reached"))
+           (org-overview)
+           (org-reveal t)
+           (org-fold-show-entry)
+           (outline-show-children)))
 
 
-    (defun rjp/org-hide-all-except-curr ()
-      "Outline hide all except current."
-      (interactive)
-      (if (not (org-at-heading-p))
-          (org-previous-visible-heading 1))
-      (org-overview)
-      (org-reveal '(4))
-      (org-fold-show-subtree))
+       (defun rjp/org-hide-all-except-curr ()
+         "Outline hide all except current."
+         (interactive)
+         (if (not (org-at-heading-p))
+             (org-previous-visible-heading 1))
+         (org-overview)
+         (org-reveal '(4))
+         (org-fold-show-subtree))
 
-    (add-to-list 'org-speed-commands
-                 '("N" ded/org-show-next-heading-tidily))
+       (add-to-list 'org-speed-commands
+                    '("N" ded/org-show-next-heading-tidily))
 
-    (add-to-list 'org-speed-commands
-                 '("P" ded/org-show-previous-heading-tidily))
+       (add-to-list 'org-speed-commands
+                    '("P" ded/org-show-previous-heading-tidily))
 
-    (add-to-list 'org-speed-commands
-                 '("C" rjp/org-hide-all-except-curr))
+       (add-to-list 'org-speed-commands
+                    '("C" rjp/org-hide-all-except-curr))
 
-    (define-key org-mode-map (kbd "C-c N") 'ded/org-show-next-heading-tidily)
-    (define-key org-mode-map (kbd "C-c P") 'ded/org-show-previous-heading-tidily)
-    (define-key org-mode-map (kbd "C-c C") 'rjp/org-hide-all-except-curr))
-#+end_src
+       (define-key org-mode-map (kbd "C-c N") 'ded/org-show-next-heading-tidily)
+       (define-key org-mode-map (kbd "C-c P") 'ded/org-show-previous-heading-tidily)
+       (define-key org-mode-map (kbd "C-c C") 'rjp/org-hide-all-except-curr))
+   #+end_src
 ** org speed keys
-When cursor is at the beginning of a headline, speed commands can be used. Here are some of the useful ones:
-- ? :: Help
-- n :: Next heading
-- p :: Previous heading
-- f :: Next heading same level
-- b :: Previous heading same level
-- j :: goto
-- c  :: cycle
-- k :: Cut subtree
-- = :: Turn on column view
-- # :: Toggle comment
-- ^ :: sort
+   When cursor is at the beginning of a headline, speed commands can be used. Here are some of the useful ones:
+   - ? :: Help
+   - n :: Next heading
+   - p :: Previous heading
+   - f :: Next heading same level
+   - b :: Previous heading same level
+   - j :: goto
+   - c  :: cycle
+   - k :: Cut subtree
+   - = :: Turn on column view
+   - # :: Toggle comment
+   - ^ :: sort
 
-#+begin_src emacs-lisp
-  (custom-set-variables '(org-use-speed-commands t))
-#+end_src
+   #+begin_src emacs-lisp
+     (custom-set-variables '(org-use-speed-commands t))
+   #+end_src
 *** Function to collapse nearby
-Taken from orgmode hacks [[https://orgmode.org/worg/org-hacks.html#sec-1-3-2][Org Mode hacks]]
-#+begin_src emacs-lisp :tangle no
-  (defun ded/org-show-next-heading-tidily ()
-    "Show next entry, keeping other entries closed."
-    (interactive)
-    (if (save-excursion (end-of-line) (outline-invisible-p))
-        (progn (org-fold-show-entry) (outline-show-children))
-      (outline-next-heading)
-      (unless (and (bolp) (org-at-heading-p))
-        (org-up-heading-safe)
-        (outline-hide-subtree)
-        (error "Boundary reached"))
-      (org-overview)
-      (org-reveal t)
-      (org-fold-show-entry)
-      (outline-show-children)))
+    Taken from orgmode hacks [[https://orgmode.org/worg/org-hacks.html#sec-1-3-2][Org Mode hacks]]
+    #+begin_src emacs-lisp :tangle no
+      (defun ded/org-show-next-heading-tidily ()
+        "Show next entry, keeping other entries closed."
+        (interactive)
+        (if (save-excursion (end-of-line) (outline-invisible-p))
+            (progn (org-fold-show-entry) (outline-show-children))
+          (outline-next-heading)
+          (unless (and (bolp) (org-at-heading-p))
+            (org-up-heading-safe)
+            (outline-hide-subtree)
+            (error "Boundary reached"))
+          (org-overview)
+          (org-reveal t)
+          (org-fold-show-entry)
+          (outline-show-children)))
 
-  (defun ded/org-show-previous-heading-tidily ()
-    "Show previous entry, keeping other entries closed."
-    (interactive)
-    (let ((pos (point)))
-      (outline-previous-heading)
-      (unless (and (< (point) pos)
-                   (bolp)
-                   (org-at-heading-p))
-        (goto-char pos)
-        (outline-hide-subtree)
-        (error "Boundary reached"))
-      (org-overview)
-      (org-reveal t)
-      (org-fold-show-entry)
-      (outline-show-children)))
+      (defun ded/org-show-previous-heading-tidily ()
+        "Show previous entry, keeping other entries closed."
+        (interactive)
+        (let ((pos (point)))
+          (outline-previous-heading)
+          (unless (and (< (point) pos)
+                       (bolp)
+                       (org-at-heading-p))
+            (goto-char pos)
+            (outline-hide-subtree)
+            (error "Boundary reached"))
+          (org-overview)
+          (org-reveal t)
+          (org-fold-show-entry)
+          (outline-show-children)))
 
 
-  (defun rjp/org-hide-all-except-curr ()
-    "Outline hide all except current."
-    (interactive)
-    (if (not (org-at-heading-p))
-        (org-previous-visible-heading 1))
-    (org-overview)
-    (org-reveal t))
+      (defun rjp/org-hide-all-except-curr ()
+        "Outline hide all except current."
+        (interactive)
+        (if (not (org-at-heading-p))
+            (org-previous-visible-heading 1))
+        (org-overview)
+        (org-reveal t))
 
-#+end_src
+    #+end_src
 *** Add speed key
-#+begin_src emacs-lisp :tangle no
-  (add-to-list 'org-speed-commands-user
-               '("N" ded/org-show-next-heading-tidily))
-  (add-to-list 'org-speed-commands-user
-               '("P" ded/org-show-previous-heading-tidily))
-  (define-key org-mode-map (kbd "C-c N") 'ded/org-show-next-heading-tidily)
-  (define-key org-mode-map (kbd "C-c P") 'ded/org-show-previous-heading-tidily)
-  (define-key org-mode-map (kbd "C-c C")  'rjp/org-hide-all-except-curr)
-#+end_src
+    #+begin_src emacs-lisp :tangle no
+      (add-to-list 'org-speed-commands-user
+                   '("N" ded/org-show-next-heading-tidily))
+      (add-to-list 'org-speed-commands-user
+                   '("P" ded/org-show-previous-heading-tidily))
+      (define-key org-mode-map (kbd "C-c N") 'ded/org-show-next-heading-tidily)
+      (define-key org-mode-map (kbd "C-c P") 'ded/org-show-previous-heading-tidily)
+      (define-key org-mode-map (kbd "C-c C")  'rjp/org-hide-all-except-curr)
+    #+end_src
 ** Cycle plain list
-#+begin_src emacs-lisp
-  (custom-set-variables '(org-cycle-include-plain-lists (quote integrate)))
-#+end_src
+   #+begin_src emacs-lisp
+     (custom-set-variables '(org-cycle-include-plain-lists (quote integrate)))
+   #+end_src
 ** Tab in code block
-#+begin_src emacs-lisp
-  (custom-set-variables
-   '(org-src-tab-acts-natively t))
-#+end_src
+   #+begin_src emacs-lisp
+     (custom-set-variables
+      '(org-src-tab-acts-natively t))
+   #+end_src
 ** Org indentation
-- org-indent shows indentation virtually but it is not reflected in
-  the file.
-- To reflect in the file:
-  - turn org-indent off.
-  - set org-adapt-indentation to t:
-  - set electric-indent-mode to t.
-#+begin_src emacs-lisp
-  (custom-set-variables  '(org-adapt-indentation t))
-#+end_src
+   - org-indent shows indentation virtually but it is not reflected in
+     the file.
+   - To reflect in the file:
+     - turn org-indent off.
+     - set org-adapt-indentation to t:
+     - set electric-indent-mode to t.
+   #+begin_src emacs-lisp
+     (custom-set-variables  '(org-adapt-indentation t))
+   #+end_src
 
 ** Org global configuration and shortcuts
-#+begin_src emacs-lisp
-  ;;(set-time-zone-rule "GMT+8")
-  ;;(set-time-zone-rule "PST")
-  (custom-set-variables '(org-directory "~/org")
-                        '(org-hide-leading-stars t))
+   #+begin_src emacs-lisp
+     ;;(set-time-zone-rule "GMT+8")
+     ;;(set-time-zone-rule "PST")
+     (custom-set-variables '(org-directory "~/org")
+                           '(org-hide-leading-stars t))
 
 
-  (global-set-key "\C-cl" 'org-store-link)
-  ;; Use C-c C-l to insert link
-  (global-set-key "\C-cc" 'org-capture)
-  (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-cb" 'org-iswitchb)
+     (global-set-key "\C-cl" 'org-store-link)
+     ;; Use C-c C-l to insert link
+     (global-set-key "\C-cc" 'org-capture)
+     (global-set-key "\C-ca" 'org-agenda)
+     (global-set-key "\C-cb" 'org-iswitchb)
 
 
 
-#+end_src
+   #+end_src
 ** Org capture
-#+begin_src emacs-lisp :tangle yes
-  (custom-set-variables '(org-agenda-files (quote ("~/org/jnl.org")))
-                        '(org-refile-targets '((org-agenda-files  :maxlevel . 3)))
-                        '(org-default-notes-file (concat org-directory "/jnl.org"))
-                        '(org-log-into-drawer t)
-                        '(org-log-done 'time) ;; Record time of task completion
-                        '(org-clock-into-drawer t)
-                        ;; (setq org-log-done 'note) ;; Record time+note of task completion
+   #+begin_src emacs-lisp :tangle yes
+     (custom-set-variables '(org-agenda-files (quote ("~/org/jnl.org")))
+                           '(org-refile-targets '((org-agenda-files  :maxlevel . 3)))
+                           '(org-default-notes-file (concat org-directory "/jnl.org"))
+                           '(org-log-into-drawer t)
+                           '(org-log-done 'time) ;; Record time of task completion
+                           '(org-clock-into-drawer t)
+                           ;; (setq org-log-done 'note) ;; Record time+note of task completion
 
-                        ;; C-c c     (org-capture) Call the command org-capture
-                        ;; C-c C-c     (org-capture-finalize)
-                        ;;      Once you have finished entering information into the capture buffer,
-                        ;; C-c C-w (refile)
-                        ;; C-c C-k abort capture
-                        ;; C-u C-c c visit target of capture template
-                        ;; C-u C-u C-c c Visit last stored capture item in its buffer
-                        ;; C-0 + C-c c  capture at point in an org buffer
-                        '(org-capture-templates
-                              '(("t" "Todo" entry (file+headline "~/org/jnl.org" "Todolist")
-                                 "* TODO %?\n  %iAdded: %U")
-                                ("d" "Date" entry (file+datetree+prompt "~/org/jnl.org")
-                                 "* %?")
-                                ("j" "Journal" entry (file+datetree "~/org/jnl.org")
-                                 "* %?\nAdded: %U\n  %i")
-                                ("n" "NowAction" entry (file+datetree "~/org/jnl.org")
-                                 "* %?" :clock-in t :clock-resume t))))
+                           ;; C-c c     (org-capture) Call the command org-capture
+                           ;; C-c C-c     (org-capture-finalize)
+                           ;;      Once you have finished entering information into the capture buffer,
+                           ;; C-c C-w (refile)
+                           ;; C-c C-k abort capture
+                           ;; C-u C-c c visit target of capture template
+                           ;; C-u C-u C-c c Visit last stored capture item in its buffer
+                           ;; C-0 + C-c c  capture at point in an org buffer
+                           '(org-capture-templates
+                             '(("t" "Todo" entry (file+headline "~/org/jnl.org" "Todolist")
+                                "* TODO %?\n  %iAdded: %U")
+                               ("d" "Date" entry (file+datetree+prompt "~/org/jnl.org")
+                                "* %?")
+                               ("j" "Journal" entry (file+datetree "~/org/jnl.org")
+                                "* %?\nAdded: %U\n  %i")
+                               ("n" "NowAction" entry (file+datetree "~/org/jnl.org")
+                                "* %?" :clock-in t :clock-resume t))))
 
-  ;; To define special keys to capture to a particular template without going through the interactive template selection, you can create your key binding like this:
+     ;; To define special keys to capture to a particular template without going through the interactive template selection, you can create your key binding like this:
 
-  (define-key global-map "\C-ct"
-        (lambda () (interactive) (org-capture nil "t")))
+     (define-key global-map "\C-ct"
+                 (lambda () (interactive) (org-capture nil "t")))
 
-#+end_src
-Also log into drawer
-#+BEGIN_SRC emacs-lisp :tangle no
-(set 'org-log-into-drawer t)
-#+END_SRC
+   #+end_src
+   Also log into drawer
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (set 'org-log-into-drawer t)
+   #+END_SRC
 ** Org beamer
 *** Emphasis lists are set before org is loaded. Currently this is set in [[file:init.el::(setq%20org-emphasis-alist][init.el]].
-Note in init.el by self describes that it is not used by beamer
-anymore.  Don't remember details.
-#+begin_src emacs-lisp :tangle no
-  (setq org-emphasis-alist
-        (quote (("*" bold "<b>" "</b>")
-                ("/" italic "<i>" "</i>")
-                ("_" underline "<span style=\"text-decoration:underline;\">" "</span>")
-                ("=" org-code "<code>" "</code>" verbatim)
-                ("~" org-verbatim "<code>" "</code>" verbatim)
-                ("+" (:strike-through t) "<del>" "</del>")
-                ("@" org-warning "<b>" "</b>")))
-        org-export-latex-emphasis-alist
-        (quote (("*" "\\textbf{%s}" nil)
-                ("/" "\\emph{%s}" nil)
-                ("_" "\\underline{%s}" nil)
-                ("+" "\\texttt{%s}" nil)
-                ("=" "\\verb=%s=" nil)
-                ("~" "\\verb~%s~" t)
-                ("@" "\\alert{%s}" nil)))
-        )
+    Note in init.el by self describes that it is not used by beamer
+    anymore.  Don't remember details.
+    #+begin_src emacs-lisp :tangle no
+      (setq org-emphasis-alist
+            (quote (("*" bold "<b>" "</b>")
+                    ("/" italic "<i>" "</i>")
+                    ("_" underline "<span style=\"text-decoration:underline;\">" "</span>")
+                    ("=" org-code "<code>" "</code>" verbatim)
+                    ("~" org-verbatim "<code>" "</code>" verbatim)
+                    ("+" (:strike-through t) "<del>" "</del>")
+                    ("@" org-warning "<b>" "</b>")))
+            org-export-latex-emphasis-alist
+            (quote (("*" "\\textbf{%s}" nil)
+                    ("/" "\\emph{%s}" nil)
+                    ("_" "\\underline{%s}" nil)
+                    ("+" "\\texttt{%s}" nil)
+                    ("=" "\\verb=%s=" nil)
+                    ("~" "\\verb~%s~" t)
+                    ("@" "\\alert{%s}" nil)))
+            )
 
-#+end_src
+    #+end_src
 *** Set code export to minted
-latex  is part of the default export backend. To customize.
-Wait until ox-latex is loaded and then modify the custom vars.
-#+begin_src emacs-lisp
-  (custom-set-variables '(org-latex-listings 'minted)
-                        '(org-latex-minted-options
-                          '(("frame" "lines")
-                            ("fontsize" "\\scriptsize")
-                            ("linenos" ""))))
-  (with-eval-after-load "ox-latex"
-    (add-to-list 'org-latex-packages-alist '("" "minted"))
-      ;; Add language alias
-    (add-to-list 'org-latex-minted-langs '(verilog "v")))
-#+end_src
+    latex  is part of the default export backend. To customize.
+    Wait until ox-latex is loaded and then modify the custom vars.
+    #+begin_src emacs-lisp
+      (custom-set-variables '(org-latex-listings 'minted)
+                            '(org-latex-minted-options
+                              '(("frame" "lines")
+                                ("fontsize" "\\scriptsize")
+                                ("linenos" ""))))
+      (with-eval-after-load "ox-latex"
+        (add-to-list 'org-latex-packages-alist '("" "minted"))
+        ;; Add language alias
+        (add-to-list 'org-latex-minted-langs '(verilog "v")))
+    #+end_src
 
 
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package ox-latex
-    :defer 10
-    :config
-    (setq org-latex-listings 'minted)
-    (add-to-list 'org-latex-packages-alist '("" "minted"))
-    (setq org-latex-minted-options
-             '(("frame" "lines")
-               ("fontsize" "\\scriptsize")
-               ("linenos" "")))
-    ;; Add language alias
-    (add-to-list 'org-latex-minted-langs '(verilog "v"))      )
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (use-package ox-latex
+        :defer 10
+        :config
+        (setq org-latex-listings 'minted)
+        (add-to-list 'org-latex-packages-alist '("" "minted"))
+        (setq org-latex-minted-options
+              '(("frame" "lines")
+                ("fontsize" "\\scriptsize")
+                ("linenos" "")))
+        ;; Add language alias
+        (add-to-list 'org-latex-minted-langs '(verilog "v"))      )
+    #+END_SRC
 
 ** Org diff
-My customization to allow folding and unfolding
-#+BEGIN_SRC emacs-lisp
-  ;; Check for org mode and existence of buffer
-  (defun f-ediff-org-showhide (buf command &rest cmdargs)
-    "If buffer exists and is orgmode then execute command"
-    (if buf
-        (if (eq (buffer-local-value 'major-mode (get-buffer buf)) 'org-mode)
-            (with-current-buffer buf (apply command cmdargs)))))
+   My customization to allow folding and unfolding
+   #+BEGIN_SRC emacs-lisp
+     ;; Check for org mode and existence of buffer
+     (defun f-ediff-org-showhide (buf command &rest cmdargs)
+       "If buffer exists and is orgmode then execute command"
+       (if buf
+           (if (eq (buffer-local-value 'major-mode (get-buffer buf)) 'org-mode)
+               (with-current-buffer buf (apply command cmdargs)))))
 
-  (defun f-ediff-org-unfold-tree-element ()
-    "Unfold tree at diff location"
-    (f-ediff-org-showhide ediff-buffer-A 'org-reveal)
-    (f-ediff-org-showhide ediff-buffer-B 'org-reveal)
-    (f-ediff-org-showhide ediff-buffer-C 'org-reveal)
-    )
-  ;;
-  (defun f-ediff-org-fold-tree ()
-    "Fold tree back to top level"
-    (f-ediff-org-showhide ediff-buffer-A 'hide-sublevels 1)
-    (f-ediff-org-showhide ediff-buffer-B 'hide-sublevels 1)
-    (f-ediff-org-showhide ediff-buffer-C 'hide-sublevels 1)
-    )
-  ;; diff hooks for org mode
-  (add-hook 'ediff-select-hook 'f-ediff-org-unfold-tree-element)
-  (add-hook 'ediff-unselect-hook 'f-ediff-org-fold-tree)
-#+END_SRC
+     (defun f-ediff-org-unfold-tree-element ()
+       "Unfold tree at diff location"
+       (f-ediff-org-showhide ediff-buffer-A 'org-reveal)
+       (f-ediff-org-showhide ediff-buffer-B 'org-reveal)
+       (f-ediff-org-showhide ediff-buffer-C 'org-reveal)
+       )
+     ;;
+     (defun f-ediff-org-fold-tree ()
+       "Fold tree back to top level"
+       (f-ediff-org-showhide ediff-buffer-A 'hide-sublevels 1)
+       (f-ediff-org-showhide ediff-buffer-B 'hide-sublevels 1)
+       (f-ediff-org-showhide ediff-buffer-C 'hide-sublevels 1)
+       )
+     ;; diff hooks for org mode
+     (add-hook 'ediff-select-hook 'f-ediff-org-unfold-tree-element)
+     (add-hook 'ediff-unselect-hook 'f-ediff-org-fold-tree)
+   #+END_SRC
 
 ** Export drawers with latex
-Export org-drawers with latex enclosed in a \drawername{contents}
-format.
-#+BEGIN_SRC emacs-lisp
-    (defun rjp/chomp (str)
-          "Chomp leading and tailing whitespace from STR."
-          (while (string-match "\\`\n+\\|^\\s-+\\|\\s-+$\\|\n+\\'"
-                               str)
-            (setq str (replace-match "" t t str)))
-          str)
-    ;;
-    (defun rjp/org-latex-drawer-format (name contents)
-      "Create a customized latex drawer export"
-      (format "\n\\%s{%s}\n" name (rjp/chomp contents) )
-    )
-    ;;
-    (custom-set-variables
-     '(org-latex-format-drawer-function
-       (quote rjp/org-latex-drawer-format))       )
-    ;;
-#+END_SRC
+   Export org-drawers with latex enclosed in a \drawername{contents}
+   format.
+   #+BEGIN_SRC emacs-lisp
+     (defun rjp/chomp (str)
+       "Chomp leading and tailing whitespace from STR."
+       (while (string-match "\\`\n+\\|^\\s-+\\|\\s-+$\\|\n+\\'"
+                            str)
+         (setq str (replace-match "" t t str)))
+       str)
+     ;;
+     (defun rjp/org-latex-drawer-format (name contents)
+       "Create a customized latex drawer export"
+       (format "\n\\%s{%s}\n" name (rjp/chomp contents) )
+       )
+     ;;
+     (custom-set-variables
+      '(org-latex-format-drawer-function
+        (quote rjp/org-latex-drawer-format))       )
+     ;;
+   #+END_SRC
 ** Epresent
-#+begin_src emacs-lisp :tangle no
-   (defun rjp/epresentfix ()
-     "Fix some epresent settings "
-     (interactive)
-     (setq epresent-page-number 1)
-     (rjp/set-line-spacing 0.25)
-     )
-   (use-package epresent
-     :commands (epresent-run)
-     :custom
-     (epresent-start-presentation-hook #'rjp/epresentfix)
-   )
+   #+begin_src emacs-lisp :tangle no
+     (defun rjp/epresentfix ()
+       "Fix some epresent settings "
+       (interactive)
+       (setq epresent-page-number 1)
+       (rjp/set-line-spacing 0.25)
+       )
+     (use-package epresent
+       :commands (epresent-run)
+       :custom
+       (epresent-start-presentation-hook #'rjp/epresentfix)
+       )
 
-#+end_src
+   #+end_src
 ** Relative links
-#+begin_src emacs-lisp
-  (custom-set-variables  '(org-link-file-path-type (quote relative)))
-#+end_src
+   #+begin_src emacs-lisp
+     (custom-set-variables  '(org-link-file-path-type (quote relative)))
+   #+end_src
 ** List of targets
-Can use org-all-targets *Automatically added by starter kit.
-- Use org-in-regexp
-- org-bracket-link-regexp
-- Option for using prefix C-u - Tab to send a prefix arg to the
-  following function since in org-cycle,
-  run-hook-with-args-until-success is not passed the arguments
-- Currently 5/2019, the org-all-targets is not found in org 9.
+   Can use org-all-targets *Automatically added by starter kit.
+   - Use org-in-regexp
+   - org-bracket-link-regexp
+   - Option for using prefix C-u - Tab to send a prefix arg to the
+     following function since in org-cycle,
+     run-hook-with-args-until-success is not passed the arguments
+   - Currently 5/2019, the org-all-targets is not found in org 9.
 
-#+BEGIN_SRC emacs-lisp :tangle no
-  (defun rjp/org-all-included-targets()
-    "Get the ORG targets from the current file and all included ORG
-  files.  If the included files include other files, this will recurse
-    over all those files."
-    (interactive)
-    (save-excursion
-      (let* ((inc-re "^#\\+INCLUDE:[ \t]+\"\\([^\t\n\r\"]*\\)\"[ \t]*.*$")
-             (thisfile (buffer-file-name))
-             (included-file-list (list thisfile)  )
-             (targets (list nil))
-             ;; A Function that can retrieve included files and targets
-             ;; given a filename
-             (f (lambda(file)
-                  (let ((tmplst nil);; temporary include list
-                        (buf (if (file-readable-p file)
-                                 (find-file-noselect file)))
-                        incfile ;; one include file from list
-                        tgt)  ;; target
-                    (if buf
-                        (progn
-                          (set-buffer buf)
-                          (setq tgt (org-all-targets))
-                          (nconc targets tgt) ;; append and nil tgt is removed
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (defun rjp/org-all-included-targets()
+       "Get the ORG targets from the current file and all included ORG
+       files.  If the included files include other files, this will recurse
+         over all those files."
+       (interactive)
+       (save-excursion
+         (let* ((inc-re "^#\\+INCLUDE:[ \t]+\"\\([^\t\n\r\"]*\\)\"[ \t]*.*$")
+                (thisfile (buffer-file-name))
+                (included-file-list (list thisfile)  )
+                (targets (list nil))
+                ;; A Function that can retrieve included files and targets
+                ;; given a filename
+                (f (lambda(file)
+                     (let ((tmplst nil);; temporary include list
+                           (buf (if (file-readable-p file)
+                                    (find-file-noselect file)))
+                           incfile ;; one include file from list
+                           tgt)  ;; target
+                       (if buf
+                           (progn
+                             (set-buffer buf)
+                             (setq tgt (org-all-targets))
+                             (nconc targets tgt) ;; append and nil tgt is removed
 
-                          ;; Search for files included from here.
-                          (goto-char (point-min))
-                          (while (re-search-forward inc-re nil t)
-                            (add-to-list 'tmplst
-                                         (expand-file-name
-                                          (match-string 1))))
+                             ;; Search for files included from here.
+                             (goto-char (point-min))
+                             (while (re-search-forward inc-re nil t)
+                               (add-to-list 'tmplst
+                                            (expand-file-name
+                                             (match-string 1))))
 
-                          ;; iterate over include list
-                          (while tmplst
-                            (setq incfile (car tmplst))
-                            ;; if not already in list then ...
-                            (if (not (member incfile '
-                                             included-file-list))
-                                (progn
-                                  ;; Add to list and recurse
-                                  (add-to-list 'included-file-list
-                                               incfile)
-                                  (setq tmplst (cdr tmplst))
-                                  (funcall f incfile)))) ) ))) ))
+                             ;; iterate over include list
+                             (while tmplst
+                               (setq incfile (car tmplst))
+                               ;; if not already in list then ...
+                               (if (not (member incfile '
+                                                included-file-list))
+                                   (progn
+                                     ;; Add to list and recurse
+                                     (add-to-list 'included-file-list
+                                                  incfile)
+                                     (setq tmplst (cdr tmplst))
+                                     (funcall f incfile)))) ) ))) ))
 
-        ;; Body of let statement
-        (funcall f thisfile)
-        ;; return value is targets
-        (print (cdr targets))
-        )))
+           ;; Body of let statement
+           (funcall f thisfile)
+           ;; return value is targets
+           (print (cdr targets))
+           )))
 
-;; Add a hook to bring up a tab list when TAB is hit after [[
-  (add-hook 'org-tab-before-tab-emulation-hook
-              (lambda (&rest args)
-                ;; If at the right point (which is following two left square brackets)
-                "list targets in org file and complete"
-                (interactive "P")
-                (if (string=
-                     (buffer-substring-no-properties
-                      (point) (- (point) 2)  )
-                     "[[")
-                    ;; Right place. Check if we are called with an argument
-                    (insert (ido-completing-read
-                             "Target:"
-                             (if (equal args '(-))
-                                 (rjp/org-all-included-targets)
-                               (org-all-targets) ))
-                            "]]")
-                    (if (equal args '(-))
-                        (rjp/org-all-i)
-                      )  )))
-#+END_SRC
+     ;; Add a hook to bring up a tab list when TAB is hit after [[
+     (add-hook 'org-tab-before-tab-emulation-hook
+               (lambda (&rest args)
+                 ;; If at the right point (which is following two left square brackets)
+                 "list targets in org file and complete"
+                 (interactive "P")
+                 (if (string=
+                      (buffer-substring-no-properties
+                       (point) (- (point) 2)  )
+                      "[[")
+                     ;; Right place. Check if we are called with an argument
+                     (insert (ido-completing-read
+                              "Target:"
+                              (if (equal args '(-))
+                                  (rjp/org-all-included-targets)
+                                (org-all-targets) ))
+                             "]]")
+                   (if (equal args '(-))
+                       (rjp/org-all-i)
+                     )  )))
+   #+END_SRC
 ** org modules
-For shortcuts since 9.2
-#+begin_src emacs-lisp
-;;(require 'org-tempo)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- ;; Removing org-tempo
- '(org-modules
-   (quote (ox-md))))
-#+end_src
+   For shortcuts since 9.2
+   #+begin_src emacs-lisp
+     ;;(require 'org-tempo)
+     (custom-set-variables
+      ;; custom-set-variables was added by Custom.
+      ;; If you edit it by hand, you could mess it up, so be careful.
+      ;; Your init file should contain only one such instance.
+      ;; If there is more than one, they won't work right.
+      ;; Removing org-tempo
+      '(org-modules
+        (quote (ox-md))))
+   #+end_src
 ** Fade out properties
-#+begin_src emacs-lisp
-  (custom-set-faces
-   '(org-meta-line ((t (:foreground "dim gray")))))
-#+end_src
+   #+begin_src emacs-lisp
+     (custom-set-faces
+      '(org-meta-line ((t (:foreground "dim gray")))))
+   #+end_src
 ** org reveal
-1. Add org-export backend
-   #+begin_src emacs-lisp
-   (custom-set-variables '(org-export-backends (quote (ascii html latex reveal))))
-   #+end_src
-2. Download ox-reveal as needed
-   #+begin_src emacs-lisp
-   (use-package ox-reveal :defer t)
-   #+end_src
+   1. Add org-export backend
+      #+begin_src emacs-lisp
+        (custom-set-variables '(org-export-backends (quote (ascii html latex reveal))))
+      #+end_src
+   2. Download ox-reveal as needed
+      #+begin_src emacs-lisp
+        (use-package ox-reveal :defer t)
+      #+end_src
 * Adoc Mode
-#+begin_src emacs-lisp
-  (use-package adoc-mode
-    :mode
-    (("\\.adoc\\'" . adoc-mode))
-    )
-#+end_src
+  #+begin_src emacs-lisp
+    (use-package adoc-mode
+      :mode
+      (("\\.adoc\\'" . adoc-mode))
+      )
+  #+end_src
 
 
 * Yasnippet
-#+begin_src emacs-lisp
-  (use-package yasnippet
-    :hook ((org-mode . yas-minor-mode)
-           (verilog-mode . yas-minor-mode)
-           (coq-mode . yas-minor-mode)
-           (ledger-mode . yas-minor-mode)
-           (eshell-mode . yas-minor-mode))
-    ;; :bind (:map yas-minor-mode-map
-    ;;             ("\C-c" . nil))
-    :bind (:map yas-minor-mode-map
-                ("<f2>" . hydra-yas/body)
-                ("\C-c&\C-s" . nil)
-                ("\C-c&\C-n" . nil)
-                ("\C-c&\C-v" . nil)
-                ("\C-c&" . nil)
-                )
-    :hydra (hydra-yas (:color blue :hint nil)
-            "
-                ^YASnippets^
-  --------------------------------------------
-    Modes:    Load/Visit:    Actions:
+  #+begin_src emacs-lisp
+    (use-package yasnippet
+      :hook ((org-mode . yas-minor-mode)
+             (verilog-mode . yas-minor-mode)
+             (coq-mode . yas-minor-mode)
+             (ledger-mode . yas-minor-mode)
+             (eshell-mode . yas-minor-mode))
+      ;; :bind (:map yas-minor-mode-map
+      ;;             ("\C-c" . nil))
+      :bind (:map yas-minor-mode-map
+                  ("<f2>" . hydra-yas/body)
+                  ("\C-c&\C-s" . nil)
+                  ("\C-c&\C-n" . nil)
+                  ("\C-c&\C-v" . nil)
+                  ("\C-c&" . nil)
+                  )
+      :hydra (hydra-yas (:color blue :hint nil)
+                        "
+                  ^YASnippets^
+    --------------------------------------------
+      Modes:    Load/Visit:    Actions:
 
-   _g_lobal  _d_irectory    _i_nsert
-   _m_inor   _f_ile         _t_ryout
-   _e_xtra   _l_ist         _n_ew
-           _a_ll
-  "
-            ("d" yas-load-directory)
-            ("e" yas-activate-extra-mode)
-            ("i" yas-insert-snippet)
-            ("f" yas-visit-snippet-file :color blue)
-            ("n" yas-new-snippet)
-            ("t" yas-tryout-snippet)
-            ("l" yas-describe-tables)
-            ("g" yas-global-mode)
-            ("m" yas-minor-mode)
-            ("a" yas-reload-all))
-    :config
-    (yas-reload-all nil))
-#+end_src
+     _g_lobal  _d_irectory    _i_nsert
+     _m_inor   _f_ile         _t_ryout
+     _e_xtra   _l_ist         _n_ew
+             _a_ll
+    "
+                        ("d" yas-load-directory)
+                        ("e" yas-activate-extra-mode)
+                        ("i" yas-insert-snippet)
+                        ("f" yas-visit-snippet-file :color blue)
+                        ("n" yas-new-snippet)
+                        ("t" yas-tryout-snippet)
+                        ("l" yas-describe-tables)
+                        ("g" yas-global-mode)
+                        ("m" yas-minor-mode)
+                        ("a" yas-reload-all))
+      :config
+      (yas-reload-all nil))
+  #+end_src
 * Cygwin and Windows
-Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]
+  Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]
 
 ** Cygwin
-Set the shell to use cygwin's bash, if Emacs finds it is running
-under Windows and c:\cygwin exists.  Assumes that c:\cygwin\bin is
-not already in the Windows path.
-#+begin_src emacs-lisp :tangle no
-  (let* ((cygwin-root "c:/cygwin64")
-         (cygwin-bin (concat cygwin-root "/bin")))
-    (when (and (eq 'windows-nt system-type)
-               (file-readable-p cygwin-root))
+   Set the shell to use cygwin's bash, if Emacs finds it is running
+   under Windows and c:\cygwin exists.  Assumes that c:\cygwin\bin is
+   not already in the Windows path.
+   #+begin_src emacs-lisp :tangle no
+     (let* ((cygwin-root "c:/cygwin64")
+            (cygwin-bin (concat cygwin-root "/bin")))
+       (when (and (eq 'windows-nt system-type)
+                  (file-readable-p cygwin-root))
 
-      (setq exec-path (cons cygwin-bin exec-path))
-      (setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
+         (setq exec-path (cons cygwin-bin exec-path))
+         (setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
 
-      ;; By default use the Windows HOME.
-      ;; Otherwise, uncomment below to set a HOME
-      ;;      (setenv "HOME" (concat cygwin-root "/home/eric"))
+         ;; By default use the Windows HOME.
+         ;; Otherwise, uncomment below to set a HOME
+         ;;      (setenv "HOME" (concat cygwin-root "/home/eric"))
 
-      ;; NT-emacs assumes a Windows shell. Change to baash.
-      (setq shell-file-name "bash")
-      (setenv "SHELL" shell-file-name)
-      (setq explicit-shell-file-name shell-file-name)
+         ;; NT-emacs assumes a Windows shell. Change to baash.
+         (setq shell-file-name "bash")
+         (setenv "SHELL" shell-file-name)
+         (setq explicit-shell-file-name shell-file-name)
 
-      ;; This removes unsightly ^M characters that would otherwise
-      ;; appear in the output of java applications.
-      (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)))
-#+end_src
+         ;; This removes unsightly ^M characters that would otherwise
+         ;; appear in the output of java applications.
+         (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)))
+   #+end_src
 
 ** Fix auto-revert notify
-In emacs 26.1 'auto-revert-use-notify' is set to t.  This causes
-scrolling pauses.
-[[https://www.masteringemacs.org/article/whats-new-in-emacs-26-1][whats new emacs 26.1]]
-#+BEGIN_SRC emacs-lisp
-  (when (eq 'cygwin system-type)
-    (custom-set-variables
-    '(auto-revert-use-notify nil)))
-#+END_SRC
+   In emacs 26.1 'auto-revert-use-notify' is set to t.  This causes
+   scrolling pauses.
+   [[https://www.masteringemacs.org/article/whats-new-in-emacs-26-1][whats new emacs 26.1]]
+   #+BEGIN_SRC emacs-lisp
+     (when (eq 'cygwin system-type)
+       (custom-set-variables
+        '(auto-revert-use-notify nil)))
+   #+END_SRC
 
 ** Cygwin paths
-#+begin_src emacs-lisp :tangle no
-    ;; Fix windows problems of trying to check file permissions
-    ;; Causes emacs to stutter
-  (when (eq 'windows-nt system-type)
-    (setq w32-get-true-file-attributes nil)
-    ;; Cygwin mount paths
-    (use-package cygwin-mount
-      :ensure t
-      :config
-      (cygwin-mount-activate)    )
-    )
-#+end_src
+   #+begin_src emacs-lisp :tangle no
+     ;; Fix windows problems of trying to check file permissions
+     ;; Causes emacs to stutter
+     (when (eq 'windows-nt system-type)
+       (setq w32-get-true-file-attributes nil)
+       ;; Cygwin mount paths
+       (use-package cygwin-mount
+         :ensure t
+         :config
+         (cygwin-mount-activate)    )
+       )
+   #+end_src
 
 ** Line endings
-On windows emacs uses dos line feeds. Fix this.
-#+BEGIN_SRC emacs-lisp
-(setq default-buffer-file-coding-system 'utf-8-unix)
-#+END_SRC
+   On windows emacs uses dos line feeds. Fix this.
+   #+BEGIN_SRC emacs-lisp
+     (setq default-buffer-file-coding-system 'utf-8-unix)
+   #+END_SRC
 
 ** Changing the executable-find to find files without extension
-#+BEGIN_SRC emacs-lisp :tangle no
-  (when (eq 'windows-nt system-type)
-    (defun executable-find (command)
-      "Search for COMMAND in `exec-path' and return the absolute file name.
-  Return nil if COMMAND is not found anywhere in `exec-path'."
-      ;; Use 1 rather than file-executable-p to better match the behavior of
-      ;; call-process.
-      (locate-file command exec-path exec-suffixes :executable)))
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (when (eq 'windows-nt system-type)
+       (defun executable-find (command)
+         "Search for COMMAND in `exec-path' and return the absolute file name.
+     Return nil if COMMAND is not found anywhere in `exec-path'."
+         ;; Use 1 rather than file-executable-p to better match the behavior of
+         ;; call-process.
+         (locate-file command exec-path exec-suffixes :executable)))
+   #+END_SRC
 ** Slow startup time on disconnected machine
-This is due to emacs not being able to obtain the hostname easily. To
-solve this find the hosts file on Windows. For Windows 7 it is at
-"c:\Windows\system32\drivers\etc".  Edit the hosts file and uncomment/add
-the two lines below.
-#+BEGIN_SRC
+   This is due to emacs not being able to obtain the hostname easily. To
+   solve this find the hosts file on Windows. For Windows 7 it is at
+   "c:\Windows\system32\drivers\etc".  Edit the hosts file and uncomment/add
+   the two lines below.
+   #+BEGIN_SRC
 127.0.0.1  localhost loopback
 ::1        localhost
-#+END_SRC
+   #+END_SRC
 
 * Language Support
 ** Auto fill mode
-#+begin_src emacs-lisp
-(add-hook 'text-mode-hook 'auto-fill-mode)
-#+end_src
+   #+begin_src emacs-lisp
+     (add-hook 'text-mode-hook 'auto-fill-mode)
+   #+end_src
 ** Programming language hooks
-#+begin_src emacs-lisp
-  (defun rjp/prog-lang-common-hook ()
-      ;(make-local-variable 'column-number-mode)
-      ;(column-number-mode t)
-      (auto-fill-mode t)
-      (whitespace-mode t))
-  (add-hook 'prog-mode-hook #'rjp/prog-lang-common-hook)
-#+end_src
+   #+begin_src emacs-lisp
+     (defun rjp/prog-lang-common-hook ()
+                                             ;(make-local-variable 'column-number-mode)
+                                             ;(column-number-mode t)
+       (auto-fill-mode t)
+       (whitespace-mode t))
+     (add-hook 'prog-mode-hook #'rjp/prog-lang-common-hook)
+   #+end_src
 
 ** Flycheck
-Syntax check
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :defer 2
-    :config
-    (global-flycheck-mode)
-    (setq flycheck-check-syntax-automatically '(mode-enabled save))
-    (setq flycheck-idle-change-delay   5)
-    )
-#+END_SRC
+   Syntax check
+   #+BEGIN_SRC emacs-lisp
+     (use-package flycheck
+       :defer 2
+       :config
+       (global-flycheck-mode)
+       (setq flycheck-check-syntax-automatically '(mode-enabled save))
+       (setq flycheck-idle-change-delay   5)
+       )
+   #+END_SRC
 
 ** Flyspell
-On the fly spelling
-#+begin_src emacs-lisp
-  (use-package flyspell
-               :hook ((text-mode org-mode) . flyspell-mode))
-#+end_src
+   On the fly spelling
+   #+begin_src emacs-lisp
+     (use-package flyspell
+       :hook ((text-mode org-mode) . flyspell-mode))
+   #+end_src
 ** Highlight symbol
-Highlight symbols
-Doesn't currently work properly with hideshow
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package highlight-symbol
-    :defer 2
-    :config
-    (add-hook 'prog-mode-hook (lambda () (highlight-symbol-mode)))
-    (setq highlight-symbol-on-navigation-p t)
-    (global-set-key [f3] 'highlight-symbol-next)
-    (global-set-key [(shift f3)] 'highlight-symbol-prev))
-#+END_SRC
+   Highlight symbols
+   Doesn't currently work properly with hideshow
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (use-package highlight-symbol
+       :defer 2
+       :config
+       (add-hook 'prog-mode-hook (lambda () (highlight-symbol-mode)))
+       (setq highlight-symbol-on-navigation-p t)
+       (global-set-key [f3] 'highlight-symbol-next)
+       (global-set-key [(shift f3)] 'highlight-symbol-prev))
+   #+END_SRC
 ** Comment region
-C-c C-c is set to comment region in the cc-modes in the standard lisp
-dirs. It would be preferable to bind a standard key to
-comment-or-uncomment-region in all progmodes
-#+BEGIN_SRC emacs-lisp
-(global-set-key "\C-c\C-c" 'comment-or-uncomment-region)
-#+END_SRC
+   C-c C-c is set to comment region in the cc-modes in the standard lisp
+   dirs. It would be preferable to bind a standard key to
+   comment-or-uncomment-region in all progmodes
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key "\C-c\C-c" 'comment-or-uncomment-region)
+   #+END_SRC
 ** Unprettify symbol at point
-Remove any symbol prettiness at cursor
-#+BEGIN_SRC emacs-lisp
-(setq prettify-symbols-unprettify-at-point 'right-edge)
-(global-prettify-symbols-mode t)
-#+END_SRC
+   Remove any symbol prettiness at cursor
+   #+BEGIN_SRC emacs-lisp
+     (setq prettify-symbols-unprettify-at-point 'right-edge)
+     (global-prettify-symbols-mode t)
+   #+END_SRC
 ** Poporg mode to pop out comments into org buffer
-#+begin_src emacs-lisp
-  (use-package poporg
-    :defer 2
-    :bind (("C-c '" . poporg-dwim)))
-#+end_src
+   #+begin_src emacs-lisp
+     (use-package poporg
+       :defer 2
+       :bind (("C-c '" . poporg-dwim)))
+   #+end_src
 
 ** Paredit mode
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package paredit
-    :defer 2
-    :init
-    (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-    (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-    (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-    (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-    (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-    (add-hook 'scheme-mode-hook           #'enable-paredit-mode))
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (use-package paredit
+       :defer 2
+       :init
+       (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+       (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+       (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+       (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+       (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+       (add-hook 'scheme-mode-hook           #'enable-paredit-mode))
+   #+END_SRC
 ** Matlab
-#+BEGIN_SRC emacs-lisp
-  (use-package matlab
-    ;:ensure matlab-mode
-    :mode ("\\.m\\'" . matlab-mode)
-    :custom
-    (matlab-functions-have-end t)
-    :config
-    (setq matlab-indent-function t)
-    )
+   #+BEGIN_SRC emacs-lisp
+     (use-package matlab
+                                             ;:ensure matlab-mode
+       :mode ("\\.m\\'" . matlab-mode)
+       :custom
+       (matlab-functions-have-end t)
+       :config
+       (setq matlab-indent-function t)
+       )
 
-  ;; (autoload 'matlab-mode "matlab" "Matlab Mode" t)
+     ;; (autoload 'matlab-mode "matlab" "Matlab Mode" t)
 
-  ;;(autoload 'matlab-shell "matlab" "Interactive Matlab mode." t)
-  ;;(setq matlab-shell-command "/usr/local/bin/matlabShell")
+     ;;(autoload 'matlab-shell "matlab" "Interactive Matlab mode." t)
+     ;;(setq matlab-shell-command "/usr/local/bin/matlabShell")
 
-#+END_SRC
+   #+END_SRC
 ** VHDL
-#+BEGIN_SRC emacs-lisp
-  (custom-set-variables
-   '(vhdl-hide-all-init t)
-   '(vhdl-hideshow-menu t)
-   '(vhdl-index-menu t)
-   '(vhdl-speedbar-auto-open nil))
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (custom-set-variables
+      '(vhdl-hide-all-init t)
+      '(vhdl-hideshow-menu t)
+      '(vhdl-index-menu t)
+      '(vhdl-speedbar-auto-open nil))
+   #+END_SRC
 ** Verilog
-#+begin_src emacs-lisp
-  (use-package verilog-mode
-    :mode
-    (("\\.v\\'" . verilog-mode)
-     ("\\.sv\\'" . verilog-mode))
-    :custom
-    (verilog-cexp-indent 0 "indentation across lines")
-    (verilog-auto-lineup 'all "indent all assignments")
-    :config
-    ;; This sets a buffer local variable
-    (add-hook 'verilog-mode-hook
-              (lambda () (setq indent-tabs-mode nil))))
-#+end_src
-#+begin_src emacs-lisp :tangle no
-  (add-hook 'verilog-mode-hook
-            (lambda () (setq indent-tabs-mode nil)))
-  (custom-set-variables '(verilog-cexp-indent 0))
-#+end_src
+   #+begin_src emacs-lisp
+     (use-package verilog-mode
+       :mode
+       (("\\.v\\'" . verilog-mode)
+        ("\\.sv\\'" . verilog-mode))
+       :custom
+       (verilog-cexp-indent 0 "indentation across lines")
+       (verilog-auto-lineup 'all "indent all assignments")
+       :config
+       ;; This sets a buffer local variable
+       (add-hook 'verilog-mode-hook
+                 (lambda () (setq indent-tabs-mode nil))))
+   #+end_src
+   #+begin_src emacs-lisp :tangle no
+     (add-hook 'verilog-mode-hook
+               (lambda () (setq indent-tabs-mode nil)))
+     (custom-set-variables '(verilog-cexp-indent 0))
+   #+end_src
 ** C,C++
-#+BEGIN_SRC emacs-lisp
-(add-hook 'c-mode-hook 'imenu-add-menubar-index)
-(add-hook 'c++-mode-hook 'imenu-add-menubar-index)
-(add-hook 'c-mode-hook (lambda () (c-set-style "linux")))
-(add-hook 'c++-mode-hook (lambda () (c-set-style "linux")))
-(add-hook 'objc-mode-hook (lambda () (c-set-style "linux")))
-;; ;;;;;;;;;;;; C, C++ customization
-(setq ckeywords '("FILE" "\\sw+_t"  "u_\\sw*"
-                  "_PRETTY_"))
-(setq c-font-lock-extra-types ckeywords)
-(setq c++-font-lock-extra-types ckeywords)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'c-mode-hook 'imenu-add-menubar-index)
+     (add-hook 'c++-mode-hook 'imenu-add-menubar-index)
+     (add-hook 'c-mode-hook (lambda () (c-set-style "linux")))
+     (add-hook 'c++-mode-hook (lambda () (c-set-style "linux")))
+     (add-hook 'objc-mode-hook (lambda () (c-set-style "linux")))
+     ;; ;;;;;;;;;;;; C, C++ customization
+     (setq ckeywords '("FILE" "\\sw+_t"  "u_\\sw*"
+                       "_PRETTY_"))
+     (setq c-font-lock-extra-types ckeywords)
+     (setq c++-font-lock-extra-types ckeywords)
+   #+END_SRC
 ** Promela
-#+BEGIN_SRC emacs-lisp
-  (use-package promela-mode
-    :mode "\\.pml\\'"
-    :config
-    (setq-default  promela-block-indent 8)
-    (setq-default promela-auto-match-delimiter nil)
-    )
-  ;;(require 'promela-mode)
-  ;;(setq-default  promela-block-indent 8)
-  ;;(setq-default promela-auto-match-delimiter nil)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package promela-mode
+       :mode "\\.pml\\'"
+       :config
+       (setq-default  promela-block-indent 8)
+       (setq-default promela-auto-match-delimiter nil)
+       )
+     ;;(require 'promela-mode)
+     ;;(setq-default  promela-block-indent 8)
+     ;;(setq-default promela-auto-match-delimiter nil)
+   #+END_SRC
 ** NuSMV
-#+BEGIN_SRC emacs-lisp
-  (use-package nusmv-mode   :mode "\\.smv$")
-  ;;(autoload 'nusmv-mode "nusmv-mode" "NuSMV mode")
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (use-package nusmv-mode   :mode "\\.smv$")
+     ;;(autoload 'nusmv-mode "nusmv-mode" "NuSMV mode")
+   #+END_SRC
 ** Latex
 *** Configuration via starter kit
-#+BEGIN_SRC emacs-lisp :tangle no
-(starter-kit-load "latex")
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (starter-kit-load "latex")
+    #+END_SRC
 *** Reftex
-This section is no longer required.  Done by starter kit.
-Add reftex mode
-#+BEGIN_SRC emacs-lisp :tangle no
-(add-hook 'latex-mode-hook 'reftex-mode)
-#+END_SRC
+    This section is no longer required.  Done by starter kit.
+    Add reftex mode
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (add-hook 'latex-mode-hook 'reftex-mode)
+    #+END_SRC
 
 ** Ruby
-#+BEGIN_SRC emacs-lisp
-(setq ruby-indent-level 4)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (setq ruby-indent-level 4)
+   #+END_SRC
 
 ** TLA+
-#+begin_src emacs-lisp
-  (use-package tla-mode
-    :mode "\\.tla$")
-#+end_src
+   #+begin_src emacs-lisp
+     (use-package tla-mode
+       :mode "\\.tla$")
+   #+end_src
 
 ** Haskell
-#+BEGIN_SRC emacs-lisp
-  (use-package haskell-mode
-    :mode (("\\.hs\\'"    . haskell-mode)
-           ("\\.cabal\\'" . haskell-cabal-mode)
-           ("\\.hcr\\'"   . haskell-core-mode))
-    :interpreter ("haskell" . haskell-mode)
+   #+BEGIN_SRC emacs-lisp
+     (use-package haskell-mode
+       :mode (("\\.hs\\'"    . haskell-mode)
+              ("\\.cabal\\'" . haskell-cabal-mode)
+              ("\\.hcr\\'"   . haskell-core-mode))
+       :interpreter ("haskell" . haskell-mode)
 
 
-    :config
-    (require 'haskell)
-    (require 'haskell-mode)
-    (require 'haskell-interactive-mode)
-    (require 'autoinsert))
-#+END_SRC
+       :config
+       (require 'haskell)
+       (require 'haskell-mode)
+       (require 'haskell-interactive-mode)
+       (require 'autoinsert))
+   #+END_SRC
 
 ** Lisp
-#+begin_src emacs-lisp
-  (use-package lispy
-    :hook ((emacs-lisp-mode . lispy-mode)
-           (lisp-mode . lispy-mode)
-           (ielm-mode . lispy-mode)
-           (lisp-interaction-mode . lispy-mode)
-           (scheme-mode . lispy-mode))
-    :bind
-    (:map lispy-mode-map
-          ("C-S-k" . lispy-kill-at-point)
-          ("M-o" . nil)
-          ("C-," . hs-toggle-hiding)))
-#+end_src
+   #+begin_src emacs-lisp
+     (use-package lispy
+       :hook ((emacs-lisp-mode . lispy-mode)
+              (lisp-mode . lispy-mode)
+              (ielm-mode . lispy-mode)
+              (lisp-interaction-mode . lispy-mode)
+              (scheme-mode . lispy-mode))
+       :bind
+       (:map lispy-mode-map
+             ("C-S-k" . lispy-kill-at-point)
+             ("M-o" . nil)
+             ("C-," . hs-toggle-hiding)))
+   #+end_src
 
 
 * Magit
-Magit mostly just works.  Only thing to add here is to add a simple
-keystroke to start it.
-#+BEGIN_SRC emacs-lisp :tangle no
-(define-key global-map "\C-xg" 'magit-status)
-#+END_SRC
-Remove VC for git
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq magit-refresh-status-buffer nil)
-  (setq vc-handled-backends (delq 'Git vc-handled-backends))
-#+END_SRC
-#+begin_src emacs-lisp
-  (use-package magit
+  Magit mostly just works.  Only thing to add here is to add a simple
+  keystroke to start it.
+  #+BEGIN_SRC emacs-lisp :tangle no
+    (define-key global-map "\C-xg" 'magit-status)
+  #+END_SRC
+  Remove VC for git
+  #+BEGIN_SRC emacs-lisp :tangle no
+    (setq magit-refresh-status-buffer nil)
+    (setq vc-handled-backends (delq 'Git vc-handled-backends))
+  #+END_SRC
+  #+begin_src emacs-lisp
+    (use-package magit
       :commands (magit-status)
       :bind
       ("C-x g" . magit-status)
       ("C-c M-g" . magit-file-dispatch)
       :custom
-       (magit-refresh-status-buffer nil)
+      (magit-refresh-status-buffer nil)
       :config
-       (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-modules-overview 'magit-insert-modules-unpulled-from-upstream)
+      (magit-add-section-hook 'magit-status-sections-hook 'magit-insert-modules-overview 'magit-insert-modules-unpulled-from-upstream)
       ;;:config
       ;;(require 'magit-blame)
       ;;(setq magit-refresh-status-buffer nil)
-      ;(magit-file-dispatch magit-blame)
+                                            ;(magit-file-dispatch magit-blame)
       ;; (setq vc-handled-backends (delq 'Git vc-handled-backends))
       )
-#+end_src
-Add magit blame
-#+begin_src emacs-lisp :tangle no
+  #+end_src
+  Add magit blame
+  #+begin_src emacs-lisp :tangle no
     (use-package magit-blame
       :defer t
       :commands (magit-file-dispatch magit-blame))
-#+end_src
+  #+end_src
 * Ivy
-:PROPERTIES:
-:header-args: :tangle yes
-:END:
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
 ** Ivy migration
-  [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][Description of Ivy, Counsel, Swiper]]
+   [[https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html][Description of Ivy, Counsel, Swiper]]
 
 ** Keybindings
-  | Key               | Hydra | Description                                                                      | Command                      |
-  |-------------------+-------+----------------------------------------------------------------------------------+------------------------------|
-  | Movement          |       |                                                                                  |                              |
-  |-------------------+-------+----------------------------------------------------------------------------------+------------------------------|
-  | C-n               | j     | Next line                                                                        | ivy-next-line                |
-  | C-p               | k     | Previous line                                                                    | ivy-previous-line            |
-  | C-v               |       | Page up by one Ivy buffer size                                                   | ivy-scroll-up-command        |
-  | M-v               |       | Page down by one Ivy buffer size                                                 | ivy-scroll-down-command      |
-  | M-<               | h     | Beginning of the Ivy minibuffer                                                  | ivy-beginning-of-buffer      |
-  | M->               | l     | End of the Ivy minibuffer                                                        | ivy-end-of-buffer            |
-  |-------------------+-------+----------------------------------------------------------------------------------+------------------------------|
-  | Altering input    |       |                                                                                  |                              |
-  | M-p               |       | Select previous history element                                                  | ivy-previous-history-element |
-  | M-n               |       | Select next history element                                                      | ivy-next-history-element     |
-  | C-r               |       | recursive completion session to select a history element                         | ivy-reverse-i-search         |
-  | M-i               |       | Insert current candidate to top of minibuffer to edit                            | ivy-insert-current           |
-  | M-j               |       | Insert sub-word                                                                  | ivy-yank-word                |
-  | S-SPC             |       | Delete current input, resets candidates to currently restricted list (narrowing) | ivy-restrict-to-matches      |
-  |-------------------+-------+----------------------------------------------------------------------------------+------------------------------|
-  | Action            |       |                                                                                  |                              |
-  |-------------------+-------+----------------------------------------------------------------------------------+------------------------------|
-  | C-m-or-RET        | d     | Calls the default action                                                         | ivy-done                     |
-  | C-j               | f     |                                                                                  | ivy-alt-done                 |
-  | C-M-j             |       | select partial completion. Useful for find-file for starting new file            | ivy-immediate-done           |
-  | C-M-m             | g     | Calls the default action, keeps Ivy open                                         | ivy-call                     |
-  | C-M-n             |       | combines C-M-m and M-n                                                           |                              |
-  | C-M-p             |       | combines C-M-m and M-p                                                           |                              |
-  | M-o               |       | Displays the available actions                                                   | ivy-dispatching-done         |
-  | C-M-o             |       | Displays available actions, keeps Ivy open                                       | ivy-dispacthing-call         |
-  | C-'               |       | Uses Avy to select candidates                                                    | ivy-avy                      |
-  | C-c C-o           | u     |                                                                                  | ivy-occur                    |
-  | TAB               |       | Tab completion, repeated presses may call done                                   | ivy-partial-or-done          |
-  | F6: Not assigned  |       | Restart Ivy before last action                                                   | ivy-resume                   |
-  | C-o: Not assigned |       | Activates hydra if ivy-hydra installed                                           |                              |
+   | Key               | Hydra | Description                                                                      | Command                      |
+   |-------------------+-------+----------------------------------------------------------------------------------+------------------------------|
+   | Movement          |       |                                                                                  |                              |
+   |-------------------+-------+----------------------------------------------------------------------------------+------------------------------|
+   | C-n               | j     | Next line                                                                        | ivy-next-line                |
+   | C-p               | k     | Previous line                                                                    | ivy-previous-line            |
+   | C-v               |       | Page up by one Ivy buffer size                                                   | ivy-scroll-up-command        |
+   | M-v               |       | Page down by one Ivy buffer size                                                 | ivy-scroll-down-command      |
+   | M-<               | h     | Beginning of the Ivy minibuffer                                                  | ivy-beginning-of-buffer      |
+   | M->               | l     | End of the Ivy minibuffer                                                        | ivy-end-of-buffer            |
+   |-------------------+-------+----------------------------------------------------------------------------------+------------------------------|
+   | Altering input    |       |                                                                                  |                              |
+   | M-p               |       | Select previous history element                                                  | ivy-previous-history-element |
+   | M-n               |       | Select next history element                                                      | ivy-next-history-element     |
+   | C-r               |       | recursive completion session to select a history element                         | ivy-reverse-i-search         |
+   | M-i               |       | Insert current candidate to top of minibuffer to edit                            | ivy-insert-current           |
+   | M-j               |       | Insert sub-word                                                                  | ivy-yank-word                |
+   | S-SPC             |       | Delete current input, resets candidates to currently restricted list (narrowing) | ivy-restrict-to-matches      |
+   |-------------------+-------+----------------------------------------------------------------------------------+------------------------------|
+   | Action            |       |                                                                                  |                              |
+   |-------------------+-------+----------------------------------------------------------------------------------+------------------------------|
+   | C-m-or-RET        | d     | Calls the default action                                                         | ivy-done                     |
+   | C-j               | f     |                                                                                  | ivy-alt-done                 |
+   | C-M-j             |       | select partial completion. Useful for find-file for starting new file            | ivy-immediate-done           |
+   | C-M-m             | g     | Calls the default action, keeps Ivy open                                         | ivy-call                     |
+   | C-M-n             |       | combines C-M-m and M-n                                                           |                              |
+   | C-M-p             |       | combines C-M-m and M-p                                                           |                              |
+   | M-o               |       | Displays the available actions                                                   | ivy-dispatching-done         |
+   | C-M-o             |       | Displays available actions, keeps Ivy open                                       | ivy-dispacthing-call         |
+   | C-'               |       | Uses Avy to select candidates                                                    | ivy-avy                      |
+   | C-c C-o           | u     |                                                                                  | ivy-occur                    |
+   | TAB               |       | Tab completion, repeated presses may call done                                   | ivy-partial-or-done          |
+   | F6: Not assigned  |       | Restart Ivy before last action                                                   | ivy-resume                   |
+   | C-o: Not assigned |       | Activates hydra if ivy-hydra installed                                           |                              |
 ** Actions
-  Add custom actions
+   Add custom actions
 ** Commands
-| Command                    | Actions                                           |
-| counsel-find-file          | Open externally, open other window, …             |
-| counsel-M-x                | Find symbol, describe function                    |
-| counsel-describe-function  | Open definition, find symbol                      |
-| counsel-describe-variable  | Open definition, find symbol                      |
-| counsel-find-library       | No additional actions, jumps to library/feature   |
-| counsel-info-lookup-symbol | No additional actions, jumps to symbol definition |
+   | Command                    | Actions                                           |
+   | counsel-find-file          | Open externally, open other window, …             |
+   | counsel-M-x                | Find symbol, describe function                    |
+   | counsel-describe-function  | Open definition, find symbol                      |
+   | counsel-describe-variable  | Open definition, find symbol                      |
+   | counsel-find-library       | No additional actions, jumps to library/feature   |
+   | counsel-info-lookup-symbol | No additional actions, jumps to symbol definition |
 ** ivy-hydra
-Additional hydra commands
-| c   | toggle calling             |
-| >   | increase ivy height        |
-| <   | shrink height              |
-| w   | previous action            |
-| s   | next action                |
-| a   | ivy read action            |
-| C   | toggle case fold in search |
-| m   | mark                       |
-| u   | unmark                     |
-| DEL | unmark backward            |
-| t   | toggle marks               |
+   Additional hydra commands
+   | c   | toggle calling             |
+   | >   | increase ivy height        |
+   | <   | shrink height              |
+   | w   | previous action            |
+   | s   | next action                |
+   | a   | ivy read action            |
+   | C   | toggle case fold in search |
+   | m   | mark                       |
+   | u   | unmark                     |
+   | DEL | unmark backward            |
+   | t   | toggle marks               |
 ** From helm to ivy
-  [[https://sam217pa.github.io/2016/09/13/from-helm-to-ivy/][From helm to ivy]]
+   [[https://sam217pa.github.io/2016/09/13/from-helm-to-ivy/][From helm to ivy]]
 
-|-----------------------+--------------------+-----------------------------------------------|
-| Helm                  | Ivy                | What ?                                        |
-| helm-mini             | ivy-switch-buffer  | search for currently opened buffers           |
-| helm-recentf          | counsel-recentf    | search for recently edited files              |
-| helm-find-files       | counsel-find-files | search files starting from ./                 |
-| helm-ag               | counsel-ag         | search regexp occurence in current project    |
-| helm-grep-do-git-grep | counsel-git-grep   | search regexp in current project              |
-| helm-swoop            | swiper             | search string interactively in current buffer |
-| helm-show-kill-ring   | counsel-yank-pop   | search copy-paste history                     |
-| helm-projectile       | counsel-projectile | search project and file in it                 |
-| helm-ls-git-ls        | counsel-git        | search file in current git project            |
-| helm-themes           | counsel-load-theme | switch themes                                 |
-| helm-descbinds        | counsel-descbinds  | describe keybindings and associated functions |
-| helm-M-x              | counsel-M-x        | enhanced M-x command                          |
+   |-----------------------+--------------------+-----------------------------------------------|
+   | Helm                  | Ivy                | What ?                                        |
+   | helm-mini             | ivy-switch-buffer  | search for currently opened buffers           |
+   | helm-recentf          | counsel-recentf    | search for recently edited files              |
+   | helm-find-files       | counsel-find-files | search files starting from ./                 |
+   | helm-ag               | counsel-ag         | search regexp occurence in current project    |
+   | helm-grep-do-git-grep | counsel-git-grep   | search regexp in current project              |
+   | helm-swoop            | swiper             | search string interactively in current buffer |
+   | helm-show-kill-ring   | counsel-yank-pop   | search copy-paste history                     |
+   | helm-projectile       | counsel-projectile | search project and file in it                 |
+   | helm-ls-git-ls        | counsel-git        | search file in current git project            |
+   | helm-themes           | counsel-load-theme | switch themes                                 |
+   | helm-descbinds        | counsel-descbinds  | describe keybindings and associated functions |
+   | helm-M-x              | counsel-M-x        | enhanced M-x command                          |
 ** Wgrep
-- Use C-c C-o to move ivy results into buffer.
-- In there, use C-x C-q that changes it to wgrep mode.
-- Then C-x C-s to save changes
+   - Use C-c C-o to move ivy results into buffer.
+   - In there, use C-x C-q that changes it to wgrep mode.
+   - Then C-x C-s to save changes
 ** Swiper
-|-----+------------------------------------------------------|
-| C-s | Search                                               |
-| M-n | In search, this selects the thing at point           |
-| M-q | In search, replace candidate with new                |
-| C-' | In search, use avy to jump                           |
-| C-7 | In search, start multiple cursors around search term |
+   |-----+------------------------------------------------------|
+   | C-s | Search                                               |
+   | M-n | In search, this selects the thing at point           |
+   | M-q | In search, replace candidate with new                |
+   | C-' | In search, use avy to jump                           |
+   | C-7 | In search, start multiple cursors around search term |
 
 ** Use-package declaration for ivy
-#+begin_src emacs-lisp
-  (use-package ivy
-               :defer 1
-               :custom
-               (ivy-count-format "(%d/%d)")
-                                          ;(ivy-use-virtual-buffers t)
-               :config
-               (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
-               )
+   #+begin_src emacs-lisp
+     (use-package ivy
+       :defer 1
+       :custom
+       (ivy-count-format "(%d/%d)")
+                                             ;(ivy-use-virtual-buffers t)
+       :config
+       (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
+       )
 
-#+end_src
-#+begin_src emacs-lisp
-  (use-package ivy-rich
-               :after (counsel)
-               :config
-               (ivy-rich-mode 1)
-               (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-               )
-#+end_src
-#+begin_src emacs-lisp
-  (use-package ivy-hydra
-    :after (ivy)
-    )
-#+end_src
+   #+end_src
+   #+begin_src emacs-lisp
+     (use-package ivy-rich
+       :after (counsel)
+       :config
+       (ivy-rich-mode 1)
+       (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+       )
+   #+end_src
+   #+begin_src emacs-lisp
+     (use-package ivy-hydra
+       :after (ivy)
+       )
+   #+end_src
 ** Use-package declaration for counsel
-#+begin_src emacs-lisp
-  (use-package counsel
-    :after (ivy)
-    :demand t
-    :bind
-    ( ("C-x C-f" . counsel-find-file)
-      ("C-x b" . counsel-recentf)
-      ("M-x" . counsel-M-x)
-      ("M-y" . counsel-yank-pop)
-      ("C-h f" . counsel-describe-function)
-      ("C-h v" . counsel-describe-variable)
-      ("C-s" . swiper-isearch)
-      )
-    :custom
-    (counsel-find-file-at-point t )
-    )
-#+end_src
-** Use-package for projectile
-#+begin_src emacs-lisp
-  (require 'use-package-bind-key)
-  (use-package counsel-projectile
-               :bind-keymap
-               (("C-c p" .  projectile-command-map))
-               :custom
-               (projectile-completion-system 'ivy)
-               (projectile-use-git-grep t)
-               :config
-               (projectile-mode +1)
-               (counsel-projectile-mode)
-               )
-#+end_src
-* Helm and Projectile
-:PROPERTIES:
-:header-args: :tangle no
-:END:
-** Helm for autocompletes
-#+BEGIN_SRC emacs-lisp
- ;(use-package helm-config)
-  (use-package helm
-    :defer t
-    :diminish helm-mode
-    :init
-    ;; http://tuhdo.github.io/helm-intro.html
-    ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-    ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-    ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-    (global-set-key (kbd "C-c h") 'helm-command-prefix)
-    (global-unset-key (kbd "C-x c"))
-    (require 'helm-config)
-    :bind
-    (("C-c h"  . helm-command-prefix)
-     ("M-x"     . helm-M-x)
-     ("M-y"     . helm-show-kill-ring)
-     ;("C-x b"   . helm-buffers-list)
-     ("C-x b"   . helm-mini)
-     ("C-x C-f" . helm-find-files)
-     ("C-c h o" . helm-occur)
-     :map helm-map
-     ([tab] . helm-execute-persistent-action)  ; rebind tab to run persistent action
-     ("C-i"  . helm-execute-persistent-action) ; make TAB works in terminal
-     ("C-z"  . helm-select-action))            ; list actions using C-z
-    :config
-    (setq helm-split-window-inside-p            t ; open helm buffer inside current window, not occupy whole other window
-          helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
-          helm-recentf-fuzzy-match              t ; match recentf
-          helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
-          helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
-          helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
-          helm-ff-file-name-history-use-recentf t)
-    (helm-mode 1) )
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; http://tuhdo.github.io/helm-intro.html
-  ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-  ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-  ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-
-  (global-set-key (kbd "C-c h") 'helm-command-prefix)
-  (global-unset-key (kbd "C-x c"))
-
-  (when (require 'helm-config nil 'noerror)
-
-
-
-    (global-set-key (kbd "M-x") 'helm-M-x)       ; Even without this, M-x does some helm completeion
-    (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
-          helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
-          helm-recentf-fuzzy-match              t ; match recentf
-          helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
-          helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
-          helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
-          helm-ff-file-name-history-use-recentf t)
-    (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-    (global-set-key (kbd "C-x b") 'helm-mini)
-    (global-set-key (kbd "C-x C-f") 'helm-find-files)
-    (global-set-key (kbd "C-c h o") 'helm-occur)
-    (helm-mode 1)
-    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-    (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-
-    )
-#+END_SRC
-** Projectile
-#+BEGIN_SRC emacs-lisp
-  (use-package helm-projectile
-    :commands (helm-projectile-find-file helm-projectile-switch-project)
-    ;:bind
-    ;(("C-c p p"  . helm-projectile-switch-project)
-    ; ("C-c p f"  . helm-projectile-find-file))
-    :bind-keymap
-    (("C-c p" .  projectile-command-map))
-    :custom
-    (projectile-completion-system 'helm)
-    (projectile-use-git-grep t)
-    :config
-    (projectile-mode)
-    (helm-projectile-on)
-    ;; On windows native indexing is slow
-    ;;(setq projectile-indexing-method 'alien)
-    )
-#+END_SRC
-** Helm-AG
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package helm-ag
-  :defer 4
-  )
-#+END_SRC
-** Helm Gtags
-To setup:
-1. Install gnu global
-2. Install pygments plugin for gnu global.
-   1. autoconf, automake, libtool, pygments
-3. Copy /usr/local/share/gtags/gtags.conf to .globalrc
-4. Edit line default: to be
-   #+BEGIN_VERSE
-   default:\
-        :tc=native:tc=pygments:
-   #+END_VERSE
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package helm-gtags
-    :defer 5
-    :config
-    (define-prefix-command 'helm-gtags-mode-map)
-    (global-set-key (kbd "C-t") 'helm-gtags-mode-map)
-    (add-hook 'prog-mode-hook (lambda () (helm-gtags-mode)))
-    :bind (  :map helm-gtags-mode-map
-                  ("f" . helm-gtags-find-tag-other-window)
-                  ("s" . helm-gtags-show-stack)
-                  ("c" . helm-gtags-create-tags)
-                  ("u" . helm-gtags-update-tags))
+   #+begin_src emacs-lisp
+     (use-package counsel
+       :after (ivy)
+       :demand t
+       :bind
+       ( ("C-x C-f" . counsel-find-file)
+         ("C-x b" . counsel-recentf)
+         ("M-x" . counsel-M-x)
+         ("M-y" . counsel-yank-pop)
+         ("C-h f" . counsel-describe-function)
+         ("C-h v" . counsel-describe-variable)
+         ("C-s" . swiper-isearch)
          )
-#+END_SRC
-* Wgrep
-#+begin_src emacs-lisp
-  (use-package wgrep
-               :hook ((grep-mode . wgrep-setup)))
-  #+end_src
-#+begin_src emacs-lisp :tangle no
-  (use-package wgrep
-    :hook ((grep-mode . wgrep-setup)
-           (helm-grep-mode . wgrep-setup)))
-  (use-package wgrep-helm
-    :after (wgrep)
-    :hook (helm-grep-mode . wgrep-helm-setup))
-#+end_src
-* Tramp
-#+BEGIN_SRC emacs-lisp :tangle no
-(setq tramp-default-method "ssh")
-#+END_SRC
-#+begin_src emacs-lisp
-  (use-package tramp
-    :defer t
-    :config
-    (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
-#+end_src
-* Dired
-Dired narrow
-#+begin_src emacs-lisp
-  ;;narrow dired to match filter
-  (use-package dired-narrow
-    :after dired
-    :bind (:map dired-mode-map
-                ("/" . dired-narrow)))
-#+end_src
-* Eshell
-- To use ssh with eshell
-  #+begin_verse
-  cd /ssh:hostname:~
-  #+end_verse
-  #+begin_src emacs-lisp
-    (use-package eshell
-      :commands eshell
-      :custom
-      ;;  Remove ulgy coloring
-      (eshell-highlight-prompt nil)
-      ;; tramp is not loaded by default. Add it.
-      (eshell-modules-list
-       (quote
-        (eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs
-                      eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt
-                      eshell-script eshell-term eshell-tramp
-                      eshell-unix)))
-      :config
-      ;; Add better grep
-      ;; Fix problem where first eshell grep looks different from
-      ;; following ones.
-      (defun eshell/grep (&rest args)
-        "Use Emacs grep facility instead of calling external grep."
-        (eshell-grep "grep --color -H --null" args))
-      (defun eshell/zgrep (&rest args)
-        "Use Emacs grep facility instead of calling external grep."
-        (eshell-grep "zgrep --color -H" args))
-
-      ;; Use CD history into a command for expansion
-      (defun rdir (index)
-        "Return the directory from eshell-last-dir-ring with index"
-        (interactive "Return directory with index in eshell")
-        (if (and (numberp index)
-                 (< index (ring-length eshell-last-dir-ring)))
-            (ring-ref eshell-last-dir-ring index)
-          ""))
-
-      ;; Fix slow tramp remote connections
-      (defun rjp/eshell-external-command-advice (orig-fn &rest args)
-        "Wrapper around eshell command to redirect ssh commands"
-        (if (string-prefix-p "/ssh:" default-directory)
-            (apply 'eshell-remote-command args)
-          (apply orig-fn args)))
-
-      (advice-add 'eshell-external-command :around #'rjp/eshell-external-command-advice)
-
-      ;; Add outline mode
-      (defun rjp/eshell-hook-outline-regexp ()
-        (setq-local outline-regexp eshell-prompt-regexp )
-        (setq-local eshell-outline-status-outlined nil)
-        )
-
-      (add-hook 'eshell-mode-hook 'rjp/eshell-hook-outline-regexp)
-      (add-hook 'eshell-mode-hook 'outline-minor-mode)
-
-
-      ;; Add function to toggle  if next to prompt
-      (defun rjp/eshell-outline-toggle ()
-        (interactive)
-        (if (looking-back eshell-prompt-regexp)
-            (outline-toggle-children)
-          (call-interactively 'eshell-pcomplete)
-          )
-        )
-      (defun rjp/eshell-outline-global-toggle ()
-        (interactive)
-
-        (if eshell-outline-status-outlined
-            (outline-show-all)
-          (outline-hide-body))
-        (setq eshell-outline-status-outlined (not eshell-outline-status-outlined)))
-
-
-      )
-
-
-
-
-  #+end_src
-
-- Remove up/down arrow from eshell-mode-map
-  #+begin_src emacs-lisp :tangle no
-    (add-hook 'eshell-mode-hook
-              '(lambda () (progn
-                            (define-key eshell-mode-map [M-down] 'eshell-next-input)
-                            (define-key eshell-mode-map [M-up] 'eshell-previous-input)
-                            (define-key eshell-mode-map [C-down] nil)
-                            (define-key eshell-mode-map [C-up] nil)
-                            (define-key eshell-mode-map [up] nil)
-                            (define-key eshell-mode-map [down] nil)
-                            (define-key eshell-mode-map [tab]
-                              'rjp/eshell-outline-toggle)
-                            (define-key eshell-mode-map [S-tab] 'rjp/eshell-outline-global-toggle))))
-  #+end_src
-  To make working with emacs 28
-  #+begin_src emacs-lisp
-    (use-package em-hist
-      :defer t
-      :config
-          (define-key eshell-hist-mode-map [M-down] 'eshell-next-input)
-          (define-key eshell-hist-mode-map [M-up] 'eshell-previous-input)
-          (define-key eshell-hist-mode-map [C-down] nil)
-          (define-key eshell-hist-mode-map [C-up] nil)
-          (define-key eshell-hist-mode-map [up] nil)
-          (define-key eshell-hist-mode-map [down] nil)
-          (define-key eshell-hist-mode-map [tab]
-            'rjp/eshell-outline-toggle)
-          (define-key eshell-hist-mode-map [S-tab] 'rjp/eshell-outline-global-toggle)
-
-      )
-  #+end_src
-
-** Prompt
-- Remove ugly coloring
-  #+begin_src emacs-lisp :tangle no
-    (custom-set-variables
-     '(eshell-highlight-prompt nil))
-  #+end_src
-- Add better prompt
-  #+begin_src emacs-lisp
-    (custom-set-variables
-     '(eshell-prompt-function
-       (function
-        (lambda ()
-          (let* ((curr-dir default-directory)
-                 (bmk-if-any (rjp/bookmark-rev-search curr-dir))
-                 (abrv-curr-dir (abbreviate-file-name curr-dir))
-                 (prompt-with-color (propertize abrv-curr-dir
-                                                'face
-                                                `(:foreground "sienna"))))
-            (concat
-             (if (string-match "sudo" prompt-with-color)
-                 ;; Concat pre-match with normal color
-                 ;; sudo with red
-                 ;; post-match with normal color
-                 (progn
-                   (put-text-property (match-beginning 0) (match-end 0)
-                                      'face `(:foreground "yellow")
-                                      prompt-with-color)
-                   prompt-with-color)
-               prompt-with-color)
-             (if bmk-if-any
-                 (propertize (concat "["
-                                     bmk-if-any
-                                     "]")
-                             'face
-                             `(:foreground "DeepSkyBlue"))
-
-               "")
-             (if (= (user-uid) 0) " # " " $ ")))))))
-  #+end_src
-- Add function to search bookmarks in reverse
-  #+begin_src emacs-lisp
-    (defun rjp/bookmark-rev-search (filename)
-      "Return bookmark name"
-      (interactive)
-      (when (boundp 'bookmark-alist )
-        (cl-dolist (entry bookmark-alist)
-          (when
-              (string=
-               ;; (abbreviate-file-name (cdr assoc-string 'filename
-               ;; entry))
-               (cdr (assoc-string 'filename entry))
-               filename)
-            (cl-return (car entry))) )))
-  #+end_src
-
-** Aliases
-1. Find file this window
-  #+begin_src emacs-lisp
-    (defun eshell/fi (file)
-      (find-file file))
-  #+end_src
-2. Find file other window
-  #+begin_src emacs-lisp
-    (defun eshell/ff (file)
-      (find-file-other-window file))
-  #+end_src
-3. eshell grep : See below under em-unix.
-** Bookmarks CD
-Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af280][kkatsuyuki's eshell bookmark]]
-#+begin_src emacs-lisp
-  (use-package bookmark
-    :hook ((eshell-mode . bookmark-maybe-load-default-file))
-    :config
-    ;; Fix bookmark creation
-    ;; Adding filename
-    (defun eshell-bookmark-make-record ()
-      "Create a bookmark for the current Eshell buffer."
-      `(,(eshell-bookmark-name)
-        (location . ,default-directory)
-        (handler . eshell-bookmark-jump)
-        (filename . ,default-directory)
-        ))
-    )
-#+end_src
-
-#+begin_src emacs-lisp
-  (defun show-bmk-list ()
-    "Show the registed bookmark list and each corresponding path"
-    (let (output-string
-          bmk-name
-          bmk-path
-          (each-format "%-15s|%-5s|%s\n"))
-      (setq output-string (concat
-                           (format each-format
-                                   "Bookmarks" "Type" "Path")
-                           (format "%s\n"
-                                   (make-string 80 ?-))))
-      (dolist (tmp bookmark-alist)
-        (setq bmk-name (car tmp))
-        (setq bmk-path (assoc-default 'filename tmp))
-        (if (not (assoc-default 'front-context-string tmp))
-            ;; dir listings
-            ;; in bookmarks have this key set to null
-            (progn
-              (set (intern bmk-name) bmk-path)
-              (setq output-string
-                    (concat output-string
-                            (format each-format
-                                    bmk-name "D" bmk-path))))
-          (setq output-string
-                (concat output-string
-                        (format each-format
-                                bmk-name "F" bmk-path)))))
-      output-string))
-
-  (defun add-bmk (&optional args)
-    "add the current path to the bookmark as the name of the first args' element"
-    (let ((name (or (car args)
-                    (file-name-nondirectory
-                     (directory-file-name default-directory)))))
-      (if name
-          (progn
-            (bookmark-set name)
-            ;(bookmark-set-filename name (eshell/pwd))
-            (bookmark-save)
-            (format "Saved current directory in bookmark %s" name))
-        (error "You must enter a bookmark name"))
-      )
-    )
-
-  (defun delete-bmk (args)
-    "delete the elements of args from the bookmark"
-    (let (output-string)
-      (if args
-          (progn (dolist (tmp args)
-                   (bookmark-delete tmp)
-                   (bookmark-save)
-                   (setq output-string
-                         (concat output-string (format "Deleted the bookmark %s
-  " tmp))))
-                 output-string)
-        (error "You must enter a bookmark name"))))
-
-  (defun cd-bmk (args)
-    "cd to the bookmark entry of the args' first element or open its entry"
-    (let ((bookmark (car args)) filename)
-      (if (setq filename (bookmark-get-filename bookmark))
-          ;; If it points to a directory, change to it.
-          (if (file-directory-p filename)
-              (eshell/cd filename)
-            ;; otherwise, just jump to the bookmark
-            (bookmark-jump bookmark))
-        (error "%s is not a bookmark" bookmark)))
-    )
-
-  ;; to add bookmark on eshell
-  (defun bookmark-alternate-buffer-file-name ()
-    "Return the current buffer's file in a way useful for bookmarks."
-    ;; Abbreviate the path, both so it's shorter and so it's more
-    ;; portable.  E.g., the user's home dir might be a different
-    ;; path on different machines, but "~/" will still reach it.
-    (abbreviate-file-name
-     (cond
-      (buffer-file-name buffer-file-name)
-      ((and (boundp 'dired-directory) dired-directory)
-       (if (stringp dired-directory)
-           dired-directory
-         (car dired-directory)))
-      (default-directory)
-      (t (error "Buffer not visiting a file or directory")))))
-
-  (advice-add 'bookmark-buffer-file-name :override
-              #'bookmark-alternate-buffer-file-name)
-
-
-  (defun eshell/s (args)
-    "Save bookmark"
-    (add-bmk (list args)))
-
-
-  (defun eshell/g (args)
-    "CD to bookmark"
-    (cd-bmk (list args)))
-
-
-  (defun eshell/l ()
-    "List bookmarks"
-    (show-bmk-list))
-
-  (defun eshell/d (args)
-    "Remove bookmark"
-    (delete-bmk (list args)))
-#+end_src
-** eshell usepackage
-1. Set esh-mode related
-   #+begin_src emacs-lisp :tangle no
-     (use-package esh-mode
-       :defer t
-       :config
-       ;; Add remote path for tramp sessions
-       (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-       ;; Use CD history into a command for expansion
-       (defun rdir (index)
-         "Return the directory from eshell-last-dir-ring with index"
-         (interactive "Return directory with index in eshell")
-         (if (and (numberp index)
-                  (< index (ring-length eshell-last-dir-ring)))
-             (ring-ref eshell-last-dir-ring index)
-           "")))
+       :custom
+       (counsel-find-file-at-point t )
+       )
    #+end_src
-2. Override eshell grep
-   #+begin_src emacs-lisp :tangle no
-     (use-package em-unix
-       :defer t
+** Use-package for projectile
+   #+begin_src emacs-lisp
+     (require 'use-package-bind-key)
+     (use-package counsel-projectile
+       :bind-keymap
+       (("C-c p" .  projectile-command-map))
+       :custom
+       (projectile-completion-system 'ivy)
+       (projectile-use-git-grep t)
        :config
-       (defun eshell/grep (&rest args)
-         "Use Emacs grep facility instead of calling external grep."
-         (eshell-grep "grep --color -H --null" args))
-       (defun eshell/zgrep (&rest args)
-         "Use Emacs grep facility instead of calling external grep."
-         (eshell-grep "zgrep --color -H --null" args)))
+       (projectile-mode +1)
+       (counsel-projectile-mode)
+       )
    #+end_src
-* Artist mode
-- Allow movement beyond end (add additional newlines as needed)
-  Uncomment if needed.  Alternative is to get out of artist mode and
-  make space.
-  #+begin_src emacs-lisp
-    (use-package artist
-      :bind (:map artist-mode-map)
-      :after (kakoune)
-      :config
-      (ryo-modal-major-mode-keys
-       'artist-mode
-       ("<down>" artist-next-line)
-       ("<up>" artist-previous-line)
-       ("<right>" artist-forward-char)
-       ("<left>" artist-backward-char)
-       ("L" artist-select-op-line)
-       ("l" artist-select-op-straight-line)
-       ("r" artist-select-op-rectangle)
-       ("R" artist-select-op-square)
-       ("c" artist-select-op-circle)
-       ("e" artist-select-op-ellipse)
-       ("f" artist-select-op-flood-fill)
+* Helm and Projectile
+  :PROPERTIES:
+  :header-args: :tangle no
+  :END:
+** Helm for autocompletes
+   #+BEGIN_SRC emacs-lisp
+                                             ;(use-package helm-config)
+     (use-package helm
+       :defer t
+       :diminish helm-mode
+       :init
+       ;; http://tuhdo.github.io/helm-intro.html
+       ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+       ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+       ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+       (global-set-key (kbd "C-c h") 'helm-command-prefix)
+       (global-unset-key (kbd "C-x c"))
+       (require 'helm-config)
+       :bind
+       (("C-c h"  . helm-command-prefix)
+        ("M-x"     . helm-M-x)
+        ("M-y"     . helm-show-kill-ring)
+                                             ;("C-x b"   . helm-buffers-list)
+        ("C-x b"   . helm-mini)
+        ("C-x C-f" . helm-find-files)
+        ("C-c h o" . helm-occur)
+        :map helm-map
+        ([tab] . helm-execute-persistent-action)  ; rebind tab to run persistent action
+        ("C-i"  . helm-execute-persistent-action) ; make TAB works in terminal
+        ("C-z"  . helm-select-action))            ; list actions using C-z
+       :config
+       (setq helm-split-window-inside-p            t ; open helm buffer inside current window, not occupy whole other window
+             helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
+             helm-recentf-fuzzy-match              t ; match recentf
+             helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+             helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+             helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+             helm-ff-file-name-history-use-recentf t)
+       (helm-mode 1) )
+   #+END_SRC
 
-       ("K" artist-select-op-cut-rectangle)
-       ("k" artist-select-op-copy-rectangle)
-       ("y" artist-select-op-paste)
-       ("v" artist-select-op-vaporize-line)
-       ("V" artist-select-op-vaporize-lines)
-                                            ;("t" artist-select-op-text-see-thru)
-       ("t" artist-select-op-text-overwrite)
+   #+BEGIN_SRC emacs-lisp :tangle no
+     ;; http://tuhdo.github.io/helm-intro.html
+     ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+     ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+     ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+
+     (global-set-key (kbd "C-c h") 'helm-command-prefix)
+     (global-unset-key (kbd "C-x c"))
+
+     (when (require 'helm-config nil 'noerror)
+
+
+
+       (global-set-key (kbd "M-x") 'helm-M-x)       ; Even without this, M-x does some helm completeion
+       (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+             helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
+             helm-recentf-fuzzy-match              t ; match recentf
+             helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+             helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+             helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+             helm-ff-file-name-history-use-recentf t)
+       (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+       (global-set-key (kbd "C-x b") 'helm-mini)
+       (global-set-key (kbd "C-x C-f") 'helm-find-files)
+       (global-set-key (kbd "C-c h o") 'helm-occur)
+       (helm-mode 1)
+       (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+       (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+       (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
 
        )
-      (princ "loaded artist config")
+   #+END_SRC
+** Projectile
+   #+BEGIN_SRC emacs-lisp
+     (use-package helm-projectile
+       :commands (helm-projectile-find-file helm-projectile-switch-project)
+                                             ;:bind
+                                             ;(("C-c p p"  . helm-projectile-switch-project)
+                                             ; ("C-c p f"  . helm-projectile-find-file))
+       :bind-keymap
+       (("C-c p" .  projectile-command-map))
+       :custom
+       (projectile-completion-system 'helm)
+       (projectile-use-git-grep t)
+       :config
+       (projectile-mode)
+       (helm-projectile-on)
+       ;; On windows native indexing is slow
+       ;;(setq projectile-indexing-method 'alien)
+       )
+   #+END_SRC
+** Helm-AG
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (use-package helm-ag
+       :defer 4
+       )
+   #+END_SRC
+** Helm Gtags
+   To setup:
+   1. Install gnu global
+   2. Install pygments plugin for gnu global.
+      1. autoconf, automake, libtool, pygments
+   3. Copy /usr/local/share/gtags/gtags.conf to .globalrc
+   4. Edit line default: to be
+      #+BEGIN_VERSE
+      default:\
+           :tc=native:tc=pygments:
+      #+END_VERSE
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (use-package helm-gtags
+       :defer 5
+       :config
+       (define-prefix-command 'helm-gtags-mode-map)
+       (global-set-key (kbd "C-t") 'helm-gtags-mode-map)
+       (add-hook 'prog-mode-hook (lambda () (helm-gtags-mode)))
+       :bind (  :map helm-gtags-mode-map
+                ("f" . helm-gtags-find-tag-other-window)
+                ("s" . helm-gtags-show-stack)
+                ("c" . helm-gtags-create-tags)
+                ("u" . helm-gtags-update-tags))
+       )
+   #+END_SRC
+* Wgrep
+  #+begin_src emacs-lisp
+    (use-package wgrep
+      :hook ((grep-mode . wgrep-setup)))
+  #+end_src
+  #+begin_src emacs-lisp :tangle no
+    (use-package wgrep
+      :hook ((grep-mode . wgrep-setup)
+             (helm-grep-mode . wgrep-setup)))
+    (use-package wgrep-helm
+      :after (wgrep)
+      :hook (helm-grep-mode . wgrep-helm-setup))
+  #+end_src
+* Tramp
+  #+BEGIN_SRC emacs-lisp :tangle no
+    (setq tramp-default-method "ssh")
+  #+END_SRC
+  #+begin_src emacs-lisp
+    (use-package tramp
+      :defer t
+      :config
+      (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+  #+end_src
+* Dired
+  Dired narrow
+  #+begin_src emacs-lisp
+    ;;narrow dired to match filter
+    (use-package dired-narrow
+      :after dired
+      :bind (:map dired-mode-map
+                  ("/" . dired-narrow)))
+  #+end_src
+* Eshell
+  - To use ssh with eshell
+    #+begin_verse
+    cd /ssh:hostname:~
+    #+end_verse
+    #+begin_src emacs-lisp
+      (use-package eshell
+        :commands eshell
+        :custom
+        ;;  Remove ulgy coloring
+        (eshell-highlight-prompt nil)
+        ;; tramp is not loaded by default. Add it.
+        (eshell-modules-list
+         (quote
+          (eshell-alias eshell-banner eshell-basic eshell-cmpl eshell-dirs
+                        eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt
+                        eshell-script eshell-term eshell-tramp
+                        eshell-unix)))
+        :config
+        ;; Add better grep
+        ;; Fix problem where first eshell grep looks different from
+        ;; following ones.
+        (defun eshell/grep (&rest args)
+          "Use Emacs grep facility instead of calling external grep."
+          (eshell-grep "grep --color -H --null" args))
+        (defun eshell/zgrep (&rest args)
+          "Use Emacs grep facility instead of calling external grep."
+          (eshell-grep "zgrep --color -H" args))
+
+        ;; Use CD history into a command for expansion
+        (defun rdir (index)
+          "Return the directory from eshell-last-dir-ring with index"
+          (interactive "Return directory with index in eshell")
+          (if (and (numberp index)
+                   (< index (ring-length eshell-last-dir-ring)))
+              (ring-ref eshell-last-dir-ring index)
+            ""))
+
+        ;; Fix slow tramp remote connections
+        (defun rjp/eshell-external-command-advice (orig-fn &rest args)
+          "Wrapper around eshell command to redirect ssh commands"
+          (if (string-prefix-p "/ssh:" default-directory)
+              (apply 'eshell-remote-command args)
+            (apply orig-fn args)))
+
+        (advice-add 'eshell-external-command :around #'rjp/eshell-external-command-advice)
+
+        ;; Add outline mode
+        (defun rjp/eshell-hook-outline-regexp ()
+          (setq-local outline-regexp eshell-prompt-regexp )
+          (setq-local eshell-outline-status-outlined nil)
+          )
+
+        (add-hook 'eshell-mode-hook 'rjp/eshell-hook-outline-regexp)
+        (add-hook 'eshell-mode-hook 'outline-minor-mode)
+
+
+        ;; Add function to toggle  if next to prompt
+        (defun rjp/eshell-outline-toggle ()
+          (interactive)
+          (if (looking-back eshell-prompt-regexp)
+              (outline-toggle-children)
+            (call-interactively 'eshell-pcomplete)
+            )
+          )
+        (defun rjp/eshell-outline-global-toggle ()
+          (interactive)
+
+          (if eshell-outline-status-outlined
+              (outline-show-all)
+            (outline-hide-body))
+          (setq eshell-outline-status-outlined (not eshell-outline-status-outlined)))
+
+
+        )
+
+
+
+
+    #+end_src
+
+  - Remove up/down arrow from eshell-mode-map
+    #+begin_src emacs-lisp :tangle no
+      (add-hook 'eshell-mode-hook
+                '(lambda () (progn
+                              (define-key eshell-mode-map [M-down] 'eshell-next-input)
+                              (define-key eshell-mode-map [M-up] 'eshell-previous-input)
+                              (define-key eshell-mode-map [C-down] nil)
+                              (define-key eshell-mode-map [C-up] nil)
+                              (define-key eshell-mode-map [up] nil)
+                              (define-key eshell-mode-map [down] nil)
+                              (define-key eshell-mode-map [tab]
+                                          'rjp/eshell-outline-toggle)
+                              (define-key eshell-mode-map [S-tab] 'rjp/eshell-outline-global-toggle))))
+    #+end_src
+    To make working with emacs 28
+    #+begin_src emacs-lisp
+      (use-package em-hist
+        :defer t
+        :config
+        (define-key eshell-hist-mode-map [M-down] 'eshell-next-input)
+        (define-key eshell-hist-mode-map [M-up] 'eshell-previous-input)
+        (define-key eshell-hist-mode-map [C-down] nil)
+        (define-key eshell-hist-mode-map [C-up] nil)
+        (define-key eshell-hist-mode-map [up] nil)
+        (define-key eshell-hist-mode-map [down] nil)
+        (define-key eshell-hist-mode-map [tab]
+                    'rjp/eshell-outline-toggle)
+        (define-key eshell-hist-mode-map [S-tab] 'rjp/eshell-outline-global-toggle)
+
+        )
+    #+end_src
+
+** Prompt
+   - Remove ugly coloring
+     #+begin_src emacs-lisp :tangle no
+       (custom-set-variables
+        '(eshell-highlight-prompt nil))
+     #+end_src
+   - Add better prompt
+     #+begin_src emacs-lisp
+       (custom-set-variables
+        '(eshell-prompt-function
+          (function
+           (lambda ()
+             (let* ((curr-dir default-directory)
+                    (bmk-if-any (rjp/bookmark-rev-search curr-dir))
+                    (abrv-curr-dir (abbreviate-file-name curr-dir))
+                    (prompt-with-color (propertize abrv-curr-dir
+                                                   'face
+                                                   `(:foreground "sienna"))))
+               (concat
+                (if (string-match "sudo" prompt-with-color)
+                    ;; Concat pre-match with normal color
+                    ;; sudo with red
+                    ;; post-match with normal color
+                    (progn
+                      (put-text-property (match-beginning 0) (match-end 0)
+                                         'face `(:foreground "yellow")
+                                         prompt-with-color)
+                      prompt-with-color)
+                  prompt-with-color)
+                (if bmk-if-any
+                    (propertize (concat "["
+                                        bmk-if-any
+                                        "]")
+                                'face
+                                `(:foreground "DeepSkyBlue"))
+
+                  "")
+                (if (= (user-uid) 0) " # " " $ ")))))))
+     #+end_src
+   - Add function to search bookmarks in reverse
+     #+begin_src emacs-lisp
+       (defun rjp/bookmark-rev-search (filename)
+         "Return bookmark name"
+         (interactive)
+         (when (boundp 'bookmark-alist )
+           (cl-dolist (entry bookmark-alist)
+             (when
+                 (string=
+                  ;; (abbreviate-file-name (cdr assoc-string 'filename
+                  ;; entry))
+                  (cdr (assoc-string 'filename entry))
+                  filename)
+               (cl-return (car entry))) )))
+     #+end_src
+
+** Aliases
+   1. Find file this window
+      #+begin_src emacs-lisp
+        (defun eshell/fi (file)
+          (find-file file))
+      #+end_src
+   2. Find file other window
+      #+begin_src emacs-lisp
+        (defun eshell/ff (file)
+          (find-file-other-window file))
+      #+end_src
+   3. eshell grep : See below under em-unix.
+** Bookmarks CD
+   Adapted from [[https://gist.github.com/kkatsuyuki/fa930411a86169c3bb1f03337d4af280][kkatsuyuki's eshell bookmark]]
+   #+begin_src emacs-lisp
+     (use-package bookmark
+       :hook ((eshell-mode . bookmark-maybe-load-default-file))
+       :config
+       ;; Fix bookmark creation
+       ;; Adding filename
+       (defun eshell-bookmark-make-record ()
+         "Create a bookmark for the current Eshell buffer."
+         `(,(eshell-bookmark-name)
+           (location . ,default-directory)
+           (handler . eshell-bookmark-jump)
+           (filename . ,default-directory)
+           ))
+       )
+   #+end_src
+
+   #+begin_src emacs-lisp
+     (defun show-bmk-list ()
+       "Show the registed bookmark list and each corresponding path"
+       (let (output-string
+             bmk-name
+             bmk-path
+             (each-format "%-15s|%-5s|%s\n"))
+         (setq output-string (concat
+                              (format each-format
+                                      "Bookmarks" "Type" "Path")
+                              (format "%s\n"
+                                      (make-string 80 ?-))))
+         (dolist (tmp bookmark-alist)
+           (setq bmk-name (car tmp))
+           (setq bmk-path (assoc-default 'filename tmp))
+           (if (not (assoc-default 'front-context-string tmp))
+               ;; dir listings
+               ;; in bookmarks have this key set to null
+               (progn
+                 (set (intern bmk-name) bmk-path)
+                 (setq output-string
+                       (concat output-string
+                               (format each-format
+                                       bmk-name "D" bmk-path))))
+             (setq output-string
+                   (concat output-string
+                           (format each-format
+                                   bmk-name "F" bmk-path)))))
+         output-string))
+
+     (defun add-bmk (&optional args)
+       "add the current path to the bookmark as the name of the first args' element"
+       (let ((name (or (car args)
+                       (file-name-nondirectory
+                        (directory-file-name default-directory)))))
+         (if name
+             (progn
+               (bookmark-set name)
+                                             ;(bookmark-set-filename name (eshell/pwd))
+               (bookmark-save)
+               (format "Saved current directory in bookmark %s" name))
+           (error "You must enter a bookmark name"))
+         )
+       )
+
+     (defun delete-bmk (args)
+       "delete the elements of args from the bookmark"
+       (let (output-string)
+         (if args
+             (progn (dolist (tmp args)
+                      (bookmark-delete tmp)
+                      (bookmark-save)
+                      (setq output-string
+                            (concat output-string (format "Deleted the bookmark %s
+     " tmp))))
+                    output-string)
+           (error "You must enter a bookmark name"))))
+
+     (defun cd-bmk (args)
+       "cd to the bookmark entry of the args' first element or open its entry"
+       (let ((bookmark (car args)) filename)
+         (if (setq filename (bookmark-get-filename bookmark))
+             ;; If it points to a directory, change to it.
+             (if (file-directory-p filename)
+                 (eshell/cd filename)
+               ;; otherwise, just jump to the bookmark
+               (bookmark-jump bookmark))
+           (error "%s is not a bookmark" bookmark)))
+       )
+
+     ;; to add bookmark on eshell
+     (defun bookmark-alternate-buffer-file-name ()
+       "Return the current buffer's file in a way useful for bookmarks."
+       ;; Abbreviate the path, both so it's shorter and so it's more
+       ;; portable.  E.g., the user's home dir might be a different
+       ;; path on different machines, but "~/" will still reach it.
+       (abbreviate-file-name
+        (cond
+         (buffer-file-name buffer-file-name)
+         ((and (boundp 'dired-directory) dired-directory)
+          (if (stringp dired-directory)
+              dired-directory
+            (car dired-directory)))
+         (default-directory)
+         (t (error "Buffer not visiting a file or directory")))))
+
+     (advice-add 'bookmark-buffer-file-name :override
+                 #'bookmark-alternate-buffer-file-name)
+
+
+     (defun eshell/s (args)
+       "Save bookmark"
+       (add-bmk (list args)))
+
+
+     (defun eshell/g (args)
+       "CD to bookmark"
+       (cd-bmk (list args)))
+
+
+     (defun eshell/l ()
+       "List bookmarks"
+       (show-bmk-list))
+
+     (defun eshell/d (args)
+       "Remove bookmark"
+       (delete-bmk (list args)))
+   #+end_src
+** eshell usepackage
+   1. Set esh-mode related
+      #+begin_src emacs-lisp :tangle no
+        (use-package esh-mode
+          :defer t
+          :config
+          ;; Add remote path for tramp sessions
+          (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+          ;; Use CD history into a command for expansion
+          (defun rdir (index)
+            "Return the directory from eshell-last-dir-ring with index"
+            (interactive "Return directory with index in eshell")
+            (if (and (numberp index)
+                     (< index (ring-length eshell-last-dir-ring)))
+                (ring-ref eshell-last-dir-ring index)
+              "")))
+      #+end_src
+   2. Override eshell grep
+      #+begin_src emacs-lisp :tangle no
+        (use-package em-unix
+          :defer t
+          :config
+          (defun eshell/grep (&rest args)
+            "Use Emacs grep facility instead of calling external grep."
+            (eshell-grep "grep --color -H --null" args))
+          (defun eshell/zgrep (&rest args)
+            "Use Emacs grep facility instead of calling external grep."
+            (eshell-grep "zgrep --color -H --null" args)))
+      #+end_src
+* Artist mode
+  - Allow movement beyond end (add additional newlines as needed)
+    Uncomment if needed.  Alternative is to get out of artist mode and
+    make space.
+    #+begin_src emacs-lisp
+      (use-package artist
+        :bind (:map artist-mode-map)
+        :after (kakoune)
+        :config
+        (ryo-modal-major-mode-keys
+         'artist-mode
+         ("<down>" artist-next-line)
+         ("<up>" artist-previous-line)
+         ("<right>" artist-forward-char)
+         ("<left>" artist-backward-char)
+         ("L" artist-select-op-line)
+         ("l" artist-select-op-straight-line)
+         ("r" artist-select-op-rectangle)
+         ("R" artist-select-op-square)
+         ("c" artist-select-op-circle)
+         ("e" artist-select-op-ellipse)
+         ("f" artist-select-op-flood-fill)
+
+         ("K" artist-select-op-cut-rectangle)
+         ("k" artist-select-op-copy-rectangle)
+         ("y" artist-select-op-paste)
+         ("v" artist-select-op-vaporize-line)
+         ("V" artist-select-op-vaporize-lines)
+                                              ;("t" artist-select-op-text-see-thru)
+         ("t" artist-select-op-text-overwrite)
+
+         )
+        (princ "loaded artist config")
+        )
+    #+end_src
+
+    #+begin_src emacs-lisp :tangle no
+      (define-advice artist-next-line (:before (orig-func &optional arg))
+        (save-excursion
+          (next-line arg)))
+    #+end_src
+* Which-key
+  #+begin_src emacs-lisp
+    (use-package which-key
+      :custom
+      ;; Manual activation setup
+      ;; Allow C-h to trigger which-key before it is done automatically
+      (which-key-show-early-on-C-h t)
+      ;; make sure which-key doesn't show normally but refreshes quickly after it is
+      ;; triggered.
+      (which-key-idle-delay 10000)
+      (which-key-idle-secondary-delay 0.05)
+      ;;
+      :config (which-key-mode)
+      :diminish which-key-mode
       )
   #+end_src
-
-  #+begin_src emacs-lisp :tangle no
-    (define-advice artist-next-line (:before (orig-func &optional arg))
-    (save-excursion
-      (next-line arg)))
-  #+end_src
-* Which-key
-#+begin_src emacs-lisp
-  (use-package which-key
-    :custom
-    ;; Manual activation setup
-    ;; Allow C-h to trigger which-key before it is done automatically
-    (which-key-show-early-on-C-h t)
-    ;; make sure which-key doesn't show normally but refreshes quickly after it is
-    ;; triggered.
-    (which-key-idle-delay 10000)
-    (which-key-idle-secondary-delay 0.05)
-    ;;
-    :config (which-key-mode)
-    :diminish which-key-mode
-    )
-#+end_src
 * Ryo Modal
-#+begin_src emacs-lisp :tangle no
-  (use-package ryo-modal
-    :commands ryo-modal-mode
-    :bind ("C-c SPC" . ryo-modal-mode)
-    :config
-    (ryo-modal-keys
-     ("," ryo-modal-repeat)
-     ("q" ryo-modal-mode)
-     ("h" backward-char)
-     ("j" next-line)
-     ("k" previous-line)
-     ("l" forward-char))
+  #+begin_src emacs-lisp :tangle no
+    (use-package ryo-modal
+      :commands ryo-modal-mode
+      :bind ("C-c SPC" . ryo-modal-mode)
+      :config
+      (ryo-modal-keys
+       ("," ryo-modal-repeat)
+       ("q" ryo-modal-mode)
+       ("h" backward-char)
+       ("j" next-line)
+       ("k" previous-line)
+       ("l" forward-char))
 
-    (ryo-modal-keys
-     ;; First argument to ryo-modal-keys may be a list of keywords.
-     ;; These keywords will be applied to all keybindings.
-     (:norepeat t)
-     ("0" "M-0")
-     ("1" "M-1")
-     ("2" "M-2")
-     ("3" "M-3")
-     ("4" "M-4")
-     ("5" "M-5")
-     ("6" "M-6")
-     ("7" "M-7")
-     ("8" "M-8")
-     ("9" "M-9")))
-#+end_src
+      (ryo-modal-keys
+       ;; First argument to ryo-modal-keys may be a list of keywords.
+       ;; These keywords will be applied to all keybindings.
+       (:norepeat t)
+       ("0" "M-0")
+       ("1" "M-1")
+       ("2" "M-2")
+       ("3" "M-3")
+       ("4" "M-4")
+       ("5" "M-5")
+       ("6" "M-6")
+       ("7" "M-7")
+       ("8" "M-8")
+       ("9" "M-9")))
+  #+end_src
 * Kakoune
 ** Helper funcs
 *** Toggle line nums
-#+begin_src emacs-lisp
-  (defun rjp/toggle-line-nums ()
-    "Toggle display of line numbers"
-    (interactive)
-    (if (not display-line-numbers)
-        (display-line-numbers-mode)
-      (if (eq display-line-numbers 'relative)
-          (display-line-numbers-mode 0)
-        (setq display-line-numbers 'relative))))
-#+end_src
+    #+begin_src emacs-lisp
+      (defun rjp/toggle-line-nums ()
+        "Toggle display of line numbers"
+        (interactive)
+        (if (not display-line-numbers)
+            (display-line-numbers-mode)
+          (if (eq display-line-numbers 'relative)
+              (display-line-numbers-mode 0)
+            (setq display-line-numbers 'relative))))
+    #+end_src
 ** Kakoune setup
-#+begin_src emacs-lisp
-  (use-package kakoune
-    ;; Having a non-chord way to escape is important, since key-chords don't work in macros
-    :bind ("C-z" . ryo-modal-mode)
-                                          ;:hook (after-init . my/kakoune-setup)
-    :config
-    (defun ryo-enter () "Enter normal mode" (interactive) (ryo-modal-mode 1))
-    (defun rjp/kakoune-setup-keybinds ()
-      "Set up default kakoune keybindings for normal mode."
-      ;; (global-subword-mode 1)
-      ;; (ryo-modal-major-mode-keys
-      ;;  'text-mode
-      ;;  ;; Region selectors
-      ;;   (:mc-all t)
-      ;;   ("M-i" (("w" er/mark-word)
-      ;;           ("b" er/mark-inside-pairs)
-      ;;           ("'" er/mark-inside-quotes)
-      ;;           ("s" er/mark-text-sentence)
-      ;;           ("p" er/mark-text-paragraph)))
-      ;;   ("M-a" (("w" er/mark-symbol)
-      ;;           ("b" er/mark-outside-pairs)
-      ;;           ("'" er/mark-outside-quotes)
-      ;;           ("s" er/mark-text-sentence)
-      ;;           ("p" er/mark-text-paragraph))))
+   #+begin_src emacs-lisp
+     (use-package kakoune
+       ;; Having a non-chord way to escape is important, since key-chords don't work in macros
+       :bind ("C-z" . ryo-modal-mode)
+                                             ;:hook (after-init . my/kakoune-setup)
+       :config
+       (defun ryo-enter () "Enter normal mode" (interactive) (ryo-modal-mode 1))
+       (defun rjp/kakoune-setup-keybinds ()
+         "Set up default kakoune keybindings for normal mode."
+         ;; (global-subword-mode 1)
+         ;; (ryo-modal-major-mode-keys
+         ;;  'text-mode
+         ;;  ;; Region selectors
+         ;;   (:mc-all t)
+         ;;   ("M-i" (("w" er/mark-word)
+         ;;           ("b" er/mark-inside-pairs)
+         ;;           ("'" er/mark-inside-quotes)
+         ;;           ("s" er/mark-text-sentence)
+         ;;           ("p" er/mark-text-paragraph)))
+         ;;   ("M-a" (("w" er/mark-symbol)
+         ;;           ("b" er/mark-outside-pairs)
+         ;;           ("'" er/mark-outside-quotes)
+         ;;           ("s" er/mark-text-sentence)
+         ;;           ("p" er/mark-text-paragraph))))
 
-      ;; (ryo-modal-major-mode-keys
-      ;;  'prog-mode
-      ;;  ("b" kakoune-backward-same-syntax :first '(kakoune-set-mark-here))
-      ;;  ("B" kakoune-backward-same-syntax :first '(kakoune-set-mark-if-inactive))
-      ;;  ("w" forward-same-syntax :first '(kakoune-set-mark-here))
-      ;;  ("W" forward-same-syntax :first '(kakoune-set-mark-if-inactive)))
-      (ryo-modal-keys
-       ;; Basic keybindings
-       (:mc-all t)
-       ;; Navigation
-       ;; Treat arrow keys the same as "hjkl"
-       ("<down>" next-line)
-       ("<up>" previous-line)
-       ("<right>" forward-char)
-       ("<left>" backward-char)
-       ("w" forward-word)
-       ("M-w" forward-symbol)
-       ("g" (("a" beginning-of-line)
-             ("<down>" end-of-buffer)
-             ("<up>" beginning-of-buffer)
-             ("g" kakoune-gg)
-             ("e" end-of-line)
-             ("i" back-to-indentation)
-             ("[" backward-paragraph)
-             ("]" forward-paragraph)
-             ;; g-0 looks like g-) on keyboard
-             ;; g-9 looks like g-( on keyboard
-             ("0" forward-list)
-             ("9" backward-list)
-             ;; g-6 looks like g-^ on keyboard
-             ("6" up-list)
-             ("v" down-list)))
-       ;; To insert mode
-       ("a" forward-char :exit t)
-       ("A" move-end-of-line :exit t)
-       ("b" backward-word )
-       ("c" kakoune-d :exit t)
-       ("C" kill-line :exit t)
-       ("I" back-to-indentation :exit t)
-       ("o" kakoune-o :exit t)
-       ("O" kakoune-O :exit t)
-       ("i" kakoune-insert-mode)
-       ;; Selection
-       ("f" kakoune-select-to-char)
-       ("t" kakoune-select-up-to-char)
-       ("." kakoune-select-again :first '(kakoune-set-mark-if-inactive))
-       ("M-;" exchange-point-and-mark)
-       ("%" mark-whole-buffer)
-       ("e" er/expand-region)
-       ("E" er/contract-region)
-       ;; Multiple cursors
-       ("s" mc/mark-all-in-region)
-       ("S" mc/split-region)
-       ;; Operation
-       ("d" kakoune-d)
-       ("D" kill-line)
-       ("g f" find-file-at-point)
-       ("g x" kakoune-exchange)
-       ("g X" kakoune-exchange-cancel)
-       ("p" kakoune-p)
-       ("r" kakoune-replace-char)
-       ("R" kakoune-replace-selection)
-       ("x" kakoune-x)
-       ("X" kakoune-X)
-       ("y" kill-ring-save)
-       ("Y" kakoune-Y)
-       ("`" kakoune-downcase)
-       ("~" kakoune-upcase)
-       ("M-j" kakoune-join)
-       ;; Unimpaired-like functionality
-       ("[" (("SPC" kakoune-insert-line-above)
-             ("p" kakoune-paste-above)))
-       ("]" (("SPC" kakoune-insert-line-below)
-             ("p" kakoune-paste-below)))
+         ;; (ryo-modal-major-mode-keys
+         ;;  'prog-mode
+         ;;  ("b" kakoune-backward-same-syntax :first '(kakoune-set-mark-here))
+         ;;  ("B" kakoune-backward-same-syntax :first '(kakoune-set-mark-if-inactive))
+         ;;  ("w" forward-same-syntax :first '(kakoune-set-mark-here))
+         ;;  ("W" forward-same-syntax :first '(kakoune-set-mark-if-inactive)))
+         (ryo-modal-keys
+          ;; Basic keybindings
+          (:mc-all t)
+          ;; Navigation
+          ;; Treat arrow keys the same as "hjkl"
+          ("<down>" next-line)
+          ("<up>" previous-line)
+          ("<right>" forward-char)
+          ("<left>" backward-char)
+          ("w" forward-word)
+          ("M-w" forward-symbol)
+          ("g" (("a" beginning-of-line)
+                ("<down>" end-of-buffer)
+                ("<up>" beginning-of-buffer)
+                ("g" kakoune-gg)
+                ("e" end-of-line)
+                ("i" back-to-indentation)
+                ("[" backward-paragraph)
+                ("]" forward-paragraph)
+                ;; g-0 looks like g-) on keyboard
+                ;; g-9 looks like g-( on keyboard
+                ("0" forward-list)
+                ("9" backward-list)
+                ;; g-6 looks like g-^ on keyboard
+                ("6" up-list)
+                ("v" down-list)))
+          ;; To insert mode
+          ("a" forward-char :exit t)
+          ("A" move-end-of-line :exit t)
+          ("b" backward-word )
+          ("c" kakoune-d :exit t)
+          ("C" kill-line :exit t)
+          ("I" back-to-indentation :exit t)
+          ("o" kakoune-o :exit t)
+          ("O" kakoune-O :exit t)
+          ("i" kakoune-insert-mode)
+          ;; Selection
+          ("f" kakoune-select-to-char)
+          ("t" kakoune-select-up-to-char)
+          ("." kakoune-select-again :first '(kakoune-set-mark-if-inactive))
+          ("M-;" exchange-point-and-mark)
+          ("%" mark-whole-buffer)
+          ("e" er/expand-region)
+          ("E" er/contract-region)
+          ;; Multiple cursors
+          ("s" mc/mark-all-in-region)
+          ("S" mc/split-region)
+          ;; Operation
+          ("d" kakoune-d)
+          ("D" kill-line)
+          ("g f" find-file-at-point)
+          ("g x" kakoune-exchange)
+          ("g X" kakoune-exchange-cancel)
+          ("p" kakoune-p)
+          ("r" kakoune-replace-char)
+          ("R" kakoune-replace-selection)
+          ("x" kakoune-x)
+          ("X" kakoune-X)
+          ("y" kill-ring-save)
+          ("Y" kakoune-Y)
+          ("`" kakoune-downcase)
+          ("~" kakoune-upcase)
+          ("M-j" kakoune-join)
+          ;; Unimpaired-like functionality
+          ("[" (("SPC" kakoune-insert-line-above)
+                ("p" kakoune-paste-above)))
+          ("]" (("SPC" kakoune-insert-line-below)
+                ("p" kakoune-paste-below)))
 
 
-       ;; Numeric arguments
-       ("0" "M-0" :norepeat t)
-       ("1" "M-1" :norepeat t)
-       ("2" "M-2" :norepeat t)
-       ("3" "M-3" :norepeat t)
-       ("4" "M-4" :norepeat t)
-       ("5" "M-5" :norepeat t)
-       ("6" "M-6" :norepeat t)
-       ("7" "M-7" :norepeat t)
-       ("8" "M-8" :norepeat t)
-       ("9" "M-9" :norepeat t)
-       ("-" "M--" :norepeat t)
+          ;; Numeric arguments
+          ("0" "M-0" :norepeat t)
+          ("1" "M-1" :norepeat t)
+          ("2" "M-2" :norepeat t)
+          ("3" "M-3" :norepeat t)
+          ("4" "M-4" :norepeat t)
+          ("5" "M-5" :norepeat t)
+          ("6" "M-6" :norepeat t)
+          ("7" "M-7" :norepeat t)
+          ("8" "M-8" :norepeat t)
+          ("9" "M-9" :norepeat t)
+          ("-" "M--" :norepeat t)
 
-       ;; Shell commands
-       ("|" kakoune-shell-pipe)
-       ("!" kakoune-shell-command))
+          ;; Shell commands
+          ("|" kakoune-shell-pipe)
+          ("!" kakoune-shell-command))
 
-      (ryo-modal-keys
-       ("<S-left>" previous-buffer)
-       ("<S-right>" next-buffer)
-       ("#" rjp/toggle-line-nums)
+         (ryo-modal-keys
+          ("<S-left>" previous-buffer)
+          ("<S-right>" next-buffer)
+          ("#" rjp/toggle-line-nums)
+          )
+         ;; (ryo-modal-keys
+         ;;  (:mode 'artist-mode)
+         ;;  ("<down>" artist-next-line)
+         ;;  ("<up>" artist-previous-line)
+         ;;  ("<right>" artist-forward-char)
+         ;;  ("<left>" artist-backward-char)
+         ;;  ("l" artist-select-op-line)
+         ;;  ("L" artist-select-op-straight-line)
+         ;;  ("r" artist-select-op-rectangle)
+         ;;  ("R" artist-select-op-square)
+         ;;  ("c" artist-select-op-circle)
+         ;;  ("e" artist-select-op-ellipse)
+         ;;  ("f" artist-select-op-flood-fill)
+
+         ;;  ("K" artist-select-op-cut-rectangle)
+         ;;  ("k" artist-select-op-copy-rectangle)
+         ;;  ("y" artist-select-op-paste)
+         ;;  ("v" artist-select-op-vaporize-line)
+         ;;  ("V" artist-select-op-vaporize-lines)
+         ;;  ;("t" artist-select-op-text-see-thru)
+         ;;  ("t" artist-select-op-text-overwrite)
+
+         ;;  )
+         )
+       (defun my/kakoune-setup ()
+         "Call kakoune-setup-keybinds and then add some personal config."
+         ;; (kakoune-setup-keybinds)
+         (rjp/kakoune-setup-keybinds)
+         (setq ryo-modal-cursor-type 'box)
+                                             ;(add-hook 'prog-mode-hook #'ryo-enter)
+         (define-key ryo-modal-mode-map (kbd "SPC h") 'help-command)
+         ;; Access all C-x bindings easily
+         (define-key ryo-modal-mode-map (kbd "z") ctl-x-map)
+         ;; (ryo-modal-keys
+         ;;  ("," save-buffer)
+         ;;  ("P" counsel-yank-pop)
+         ;;  ("m" mc/mark-next-like-this)
+         ;;  ("M" mc/skip-to-next-like-this)
+         ;;  ("n" mc/mark-previous-like-this)
+         ;;  ("N" mc/skip-to-previous-like-this)
+         ;;  ("M-m" mc/edit-lines)
+         ;;  ("*" mc/mark-all-like-this)
+         ;;  ("v" er/expand-region)
+         ;;  ("C-v" set-rectangular-region-anchor)
+         ;;  ("M-s" mc/split-region)
+         ;;  (";" (("q" delete-window)
+         ;;        ("v" split-window-horizontally)
+         ;;        ("s" split-window-vertically)))
+         ;;  ("C-h" windmove-left)
+         ;;  ("C-j" windmove-down)
+         ;;  ("C-k" windmove-up)
+         ;;  ("C-l" windmove-right)
+         ;;  ("C-u" scroll-down-command :first '(deactivate-mark))
+         ;;  ("C-d" scroll-up-command :first '(deactivate-mark)))
+         )
+       (my/kakoune-setup)
        )
-      ;; (ryo-modal-keys
-      ;;  (:mode 'artist-mode)
-      ;;  ("<down>" artist-next-line)
-      ;;  ("<up>" artist-previous-line)
-      ;;  ("<right>" artist-forward-char)
-      ;;  ("<left>" artist-backward-char)
-      ;;  ("l" artist-select-op-line)
-      ;;  ("L" artist-select-op-straight-line)
-      ;;  ("r" artist-select-op-rectangle)
-      ;;  ("R" artist-select-op-square)
-      ;;  ("c" artist-select-op-circle)
-      ;;  ("e" artist-select-op-ellipse)
-      ;;  ("f" artist-select-op-flood-fill)
 
-      ;;  ("K" artist-select-op-cut-rectangle)
-      ;;  ("k" artist-select-op-copy-rectangle)
-      ;;  ("y" artist-select-op-paste)
-      ;;  ("v" artist-select-op-vaporize-line)
-      ;;  ("V" artist-select-op-vaporize-lines)
-      ;;  ;("t" artist-select-op-text-see-thru)
-      ;;  ("t" artist-select-op-text-overwrite)
-
-      ;;  )
-      )
-    (defun my/kakoune-setup ()
-      "Call kakoune-setup-keybinds and then add some personal config."
-      ;; (kakoune-setup-keybinds)
-      (rjp/kakoune-setup-keybinds)
-      (setq ryo-modal-cursor-type 'box)
-      ;(add-hook 'prog-mode-hook #'ryo-enter)
-      (define-key ryo-modal-mode-map (kbd "SPC h") 'help-command)
-      ;; Access all C-x bindings easily
-      (define-key ryo-modal-mode-map (kbd "z") ctl-x-map)
-      ;; (ryo-modal-keys
-      ;;  ("," save-buffer)
-      ;;  ("P" counsel-yank-pop)
-      ;;  ("m" mc/mark-next-like-this)
-      ;;  ("M" mc/skip-to-next-like-this)
-      ;;  ("n" mc/mark-previous-like-this)
-      ;;  ("N" mc/skip-to-previous-like-this)
-      ;;  ("M-m" mc/edit-lines)
-      ;;  ("*" mc/mark-all-like-this)
-      ;;  ("v" er/expand-region)
-      ;;  ("C-v" set-rectangular-region-anchor)
-      ;;  ("M-s" mc/split-region)
-      ;;  (";" (("q" delete-window)
-      ;;        ("v" split-window-horizontally)
-      ;;        ("s" split-window-vertically)))
-      ;;  ("C-h" windmove-left)
-      ;;  ("C-j" windmove-down)
-      ;;  ("C-k" windmove-up)
-      ;;  ("C-l" windmove-right)
-      ;;  ("C-u" scroll-down-command :first '(deactivate-mark))
-      ;;  ("C-d" scroll-up-command :first '(deactivate-mark)))
-      )
-    (my/kakoune-setup)
-    )
-
-#+end_src
+   #+end_src
 * Undo-tree
-Undo-tree configuration taken from kakoune site.
-#+begin_src emacs-lisp :tangle no
-  (use-package undo-tree
-    :config
-    (global-undo-tree-mode)
-    :ryo
-    ("u" undo-tree-undo)
-    ("U" undo-tree-redo)
-    ("SPC u" undo-tree-visualize)
-    :bind (:map undo-tree-visualizer-mode-map
-                ("h" . undo-tree-visualize-switch-branch-left)
-                ("j" . undo-tree-visualize-redo)
-                ("k" . undo-tree-visualize-undo)
-                ("l" . undo-tree-visualize-switch-branch-right)))
-#+end_src
+  Undo-tree configuration taken from kakoune site.
+  #+begin_src emacs-lisp :tangle no
+    (use-package undo-tree
+      :config
+      (global-undo-tree-mode)
+      :ryo
+      ("u" undo-tree-undo)
+      ("U" undo-tree-redo)
+      ("SPC u" undo-tree-visualize)
+      :bind (:map undo-tree-visualizer-mode-map
+                  ("h" . undo-tree-visualize-switch-branch-left)
+                  ("j" . undo-tree-visualize-redo)
+                  ("k" . undo-tree-visualize-undo)
+                  ("l" . undo-tree-visualize-switch-branch-right)))
+  #+end_src
 * Completion with company-mode
-1. Add company mode
-   #+BEGIN_SRC emacs-lisp
-     (use-package company
-       :defer 2
-       :diminish
-       :custom
-       (company-show-numbers t)
-       (company-global-modes '(not eshell-mode))
-       :config
-       (global-company-mode))
-   #+END_SRC
-2. Add anaconda mode when python is used
-   |---------+---------------------------------------------|
-   | C-M-i   | anaconda-mode-complete                      |
-   | M-.     | anaconda-mode-find-definitions              |
-   | C-x 4 . | anaconda-mode-find-definitions-other-window |
-   | C-x 5 . | anaconda-mode-find-definitions-other-frame  |
-   | M-=     | anaconda-mode-find-assignments              |
-   | C-x 4 = | anaconda-mode-find-assignments-other-window |
-   | C-x 5 = | anaconda-mode-find-assignments-other-frame  |
-   | M-r     | anaconda-mode-find-references               |
-   | C-x 4 r | anaconda-mode-find-references-other-window  |
-   | C-x 5 r | anaconda-mode-find-references-other-frame   |
-   | M-,     | xref-pop-marker-stack                       |
-   | M-?     | anaconda-mode-show-doc                      |
-   |---------+---------------------------------------------|
-   #+begin_src emacs-lisp
-     (use-package anaconda-mode
-                  :hook python-mode
-                  :config
-                  (add-hook 'python-mode-hook #'anaconda-eldoc-mode))
-   #+end_src
-3. And then company anaconda
-   #+begin_src emacs-lisp
-     (use-package company-anaconda
-       :after (company anaconda-mode)
-       :config
-       (add-to-list 'company-backends 'company-anaconda))
-   #+end_src
-4. pos-tip
-   We don't need this directly but company-quickhelp uses it
-   #+begin_src emacs-lisp
-     (use-package pos-tip :defer 3)
-   #+end_src
-5. company-quickhelp
-   #+begin_src emacs-lisp
-     (use-package company-quickhelp
-                  :after (company pos-tip)
-                  :config (company-quickhelp-mode)
-                  )
-   #+end_src
+  1. Add company mode
+     #+BEGIN_SRC emacs-lisp
+       (use-package company
+         :defer 2
+         :diminish
+         :custom
+         (company-show-numbers t)
+         (company-global-modes '(not eshell-mode))
+         :config
+         (global-company-mode))
+     #+END_SRC
+  2. Add anaconda mode when python is used
+     |---------+---------------------------------------------|
+     | C-M-i   | anaconda-mode-complete                      |
+     | M-.     | anaconda-mode-find-definitions              |
+     | C-x 4 . | anaconda-mode-find-definitions-other-window |
+     | C-x 5 . | anaconda-mode-find-definitions-other-frame  |
+     | M-=     | anaconda-mode-find-assignments              |
+     | C-x 4 = | anaconda-mode-find-assignments-other-window |
+     | C-x 5 = | anaconda-mode-find-assignments-other-frame  |
+     | M-r     | anaconda-mode-find-references               |
+     | C-x 4 r | anaconda-mode-find-references-other-window  |
+     | C-x 5 r | anaconda-mode-find-references-other-frame   |
+     | M-,     | xref-pop-marker-stack                       |
+     | M-?     | anaconda-mode-show-doc                      |
+     |---------+---------------------------------------------|
+     #+begin_src emacs-lisp
+       (use-package anaconda-mode
+         :hook python-mode
+         :config
+         (add-hook 'python-mode-hook #'anaconda-eldoc-mode))
+     #+end_src
+  3. And then company anaconda
+     #+begin_src emacs-lisp
+       (use-package company-anaconda
+         :after (company anaconda-mode)
+         :config
+         (add-to-list 'company-backends 'company-anaconda))
+     #+end_src
+  4. pos-tip
+     We don't need this directly but company-quickhelp uses it
+     #+begin_src emacs-lisp
+       (use-package pos-tip :defer 3)
+     #+end_src
+  5. company-quickhelp
+     #+begin_src emacs-lisp
+       (use-package company-quickhelp
+         :after (company pos-tip)
+         :config (company-quickhelp-mode)
+         )
+     #+end_src
 * Adding paths for info files
-#+begin_src emacs-lisp
-  (setq rjp/info-path
-        (eval-when-compile
-          (rjp/get-info-subdirs (expand-file-name "elpa/" user-emacs-directory))))
-  (use-package info
-  :commands info
-  :config
-  (info-initialize)
-  (setq Info-directory-list
-        (append
-         Info-directory-list
-         rjp/info-path))
-  )
-#+end_src
+  #+begin_src emacs-lisp
+    (setq rjp/info-path
+          (eval-when-compile
+            (rjp/get-info-subdirs (expand-file-name "elpa/" user-emacs-directory))))
+    (use-package info
+      :commands info
+      :config
+      (info-initialize)
+      (setq Info-directory-list
+            (append
+             Info-directory-list
+             rjp/info-path))
+      )
+  #+end_src
 * Workspaces
-#+begin_src emacs-lisp
-  (defun rjp/project-override (dir)
-    (let ((override (locate-dominating-file dir ".project.el")))
-      (if override
-        (cons 'vc override)
-        nil)))
-  (use-package tabspaces
-    :init (use-package project
-            :config
-            (add-hook 'project-find-functions #'rjp/project-override))
+  #+begin_src emacs-lisp
+    (defun rjp/project-override (dir)
+      (let ((override (locate-dominating-file dir ".project.el")))
+        (if override
+            (cons 'vc override)
+          nil)))
+    (use-package tabspaces
+      :init (use-package project
+              :config
+              (add-hook 'project-find-functions #'rjp/project-override))
 
-    :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
-    :commands (tabspaces-switch-or-create-workspace
-               tabspaces-open-or-create-project-and-workspace)
-    :custom
-    (tabspaces-use-filtered-buffers-as-default nil)
-    (tabspaces-default-tab "Default")
-    (tabspaces-remove-to-default t)
-    (tabspaces-include-buffers '("*scratch*"))
-    (tabspaces-initialize-project-with-todo nil)
-    ;;(tabspaces-todo-file-name "project-todo.org")
-    ;; sessions
-    ;;(tabspaces-session t)
-    ;;(tabspaces-session-auto-restore t)
-    (tab-bar-format '(tab-bar-format-history
-                      tab-bar-format-tabs
-                      tab-bar-separator
-                      tab-bar-format-add-tab
-                      tab-bar-format-align-right
-                      tab-bar-format-global))
+      :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
+      :commands (tabspaces-switch-or-create-workspace
+                 tabspaces-open-or-create-project-and-workspace)
+      :custom
+      (tabspaces-use-filtered-buffers-as-default nil)
+      (tabspaces-default-tab "Default")
+      (tabspaces-remove-to-default t)
+      (tabspaces-include-buffers '("*scratch*"))
+      (tabspaces-initialize-project-with-todo nil)
+      ;;(tabspaces-todo-file-name "project-todo.org")
+      ;; sessions
+      ;;(tabspaces-session t)
+      ;;(tabspaces-session-auto-restore t)
+      (tab-bar-format '(tab-bar-format-history
+                        tab-bar-format-tabs
+                        tab-bar-separator
+                        tab-bar-format-add-tab
+                        tab-bar-format-align-right
+                        tab-bar-format-global))
 
-    )
-#+end_src
+      )
+  #+end_src
 
 * Setup custom file
-#+begin_src emacs-lisp
-(setq custom-file "~/.emacs.d/custom.el")
-;(load custom-file)
-#+end_src
+  #+begin_src emacs-lisp
+    (setq custom-file "~/.emacs.d/custom.el")
+                                            ;(load custom-file)
+  #+end_src
 * Utility functions
-1. Print a list
-   #+begin_src emacs-lisp
-   (defun rjp/prinlist (lst)
-   " Print out list elements: one on each line"
-   (interactive)
-       (dolist (l lst)
-       (princ l)
-       (princ "\n")
-       ))
-   #+end_src
-2. Set line spacing (derived from ergoemacs)
-   Inspired by http://ergoemacs.org/emacs/emacs_toggle_line_spacing.html
-   #+begin_src emacs-lisp
-     (defun rjp/set-line-spacing (spacing)
-       "Set line spacing with an argument"
-       (interactive "nEnter line spacing:")
-       (if (zerop spacing)
-           (setq line-spacing nil)
-         (setq line-spacing spacing))
-       (redraw-frame (selected-frame)))
-   #+end_src
+  1. Print a list
+     #+begin_src emacs-lisp
+       (defun rjp/prinlist (lst)
+         " Print out list elements: one on each line"
+         (interactive)
+         (dolist (l lst)
+           (princ l)
+           (princ "\n")
+           ))
+     #+end_src
+  2. Set line spacing (derived from ergoemacs)
+     Inspired by http://ergoemacs.org/emacs/emacs_toggle_line_spacing.html
+     #+begin_src emacs-lisp
+       (defun rjp/set-line-spacing (spacing)
+         "Set line spacing with an argument"
+         (interactive "nEnter line spacing:")
+         (if (zerop spacing)
+             (setq line-spacing nil)
+           (setq line-spacing spacing))
+         (redraw-frame (selected-frame)))
+     #+end_src
 * Include files
-#+INCLUDE: "local_pkgs.org"
+  #+INCLUDE: "local_pkgs.org"
 
 * Post setup and Final Scratch Message
-1. Restore GC
-   #+begin_src emacs-lisp
-   (setq gc-cons-threshold 800000)
-   (setq gc-cons-percentage 0.1)
-   #+end_src
-2. Set startup message
-   #+BEGIN_SRC emacs-lisp
-     (setq initial-scratch-message
-           (concat "Ratish's emacs init: "
-                   (prin1-to-string (emacs-init-time))))
-   #+END_SRC
+  1. Restore GC
+     #+begin_src emacs-lisp
+       (setq gc-cons-threshold 800000)
+       (setq gc-cons-percentage 0.1)
+     #+end_src
+  2. Set startup message
+     #+BEGIN_SRC emacs-lisp
+       (setq initial-scratch-message
+             (concat "Ratish's emacs init: "
+                     (prin1-to-string (emacs-init-time))))
+     #+END_SRC
 * Todo items
 ** Key selection examples
-- [[https://gist.github.com/LLazarek/d9c226763860c3f53a6d28535e9efb64][nav-mode]] similar to vim's normal mode
-- [[https://www.spacemacs.org/doc/DOCUMENTATION.html#commands][Spacemacs key bindings]]
-- [[https://devhints.io/spacemacs][Spacemacs cheat sheet]]
-- [[https://github.com/jmorag/kakoune.el/blob/master/kakoune.el#L51][Kakoune]]
-- [[https://github.com/mawww/kakoune/blob/master/doc/pages/keys.asciidoc#goto-commands][Kakoune Keys]]
--
+   - [[https://gist.github.com/LLazarek/d9c226763860c3f53a6d28535e9efb64][nav-mode]] similar to vim's normal mode
+   - [[https://www.spacemacs.org/doc/DOCUMENTATION.html#commands][Spacemacs key bindings]]
+   - [[https://devhints.io/spacemacs][Spacemacs cheat sheet]]
+   - [[https://github.com/jmorag/kakoune.el/blob/master/kakoune.el#L51][Kakoune]]
+   - [[https://github.com/mawww/kakoune/blob/master/doc/pages/keys.asciidoc#goto-commands][Kakoune Keys]]
+   -
 
 

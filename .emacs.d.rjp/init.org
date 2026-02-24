@@ -1292,7 +1292,7 @@
    #+END_SRC
 ** VHDL
    :PROPERTIES:
-   :header-args: :tangle no
+   :header-args: :tangle yes
    :END:
    #+BEGIN_SRC emacs-lisp
      (custom-set-variables

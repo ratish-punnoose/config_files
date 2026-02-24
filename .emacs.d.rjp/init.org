@@ -1417,7 +1417,7 @@
    :header-args: :tangle yes
    :END:
 
-   #+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle no
      (use-package lispy
        :hook ((emacs-lisp-mode . lispy-mode)
               (lisp-mode . lispy-mode)
@@ -1430,7 +1430,33 @@
              ("M-o" . nil)
              ("C-," . hs-toggle-hiding)))
    #+end_src
+   #+begin_src emacs-lisp :tangle yes
+     (use-package lispy
+       :defer 5
+       :commands lispy-mode
+       :init
+       (add-hook 'emacs-lisp-mode-hook lispy-mode)
+       (add-hook 'ielm-mode-hook lispy-mode)
+       (add-hook 'lisp-interaction-mode-hook lispy-mode)
+       (add-hook 'lisp-interaction-mode-hook lispy-mode)
+       (add-hook 'scheme-mode-hook lispy-mode)
+       :bind
+       (:map lispy-mode-map
+             ("C-S-k" . lispy-kill-at-point)
+             ("M-o" . nil)
+             ("C-," . hs-toggle-hiding))
+       :config
+       (dolist (buffer (buffer-list))
+         (with-current-buffer buffer
+           (when (eq major-mode 'lisp-interaction-mode)
+             (lispy-mode)
+             )
+           )
+         )
+       )
 
+
+   #+end_src
 
 * Magit
   :PROPERTIES:

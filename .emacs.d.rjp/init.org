@@ -42,6 +42,12 @@
                          (directory-files dirname t)))
               nil))
         #+end_src
+     2. We also add a utility function to print out time taken to initialize
+        #+begin_src emacs-lisp
+          (defun rjp/init-time-so-far (msg_to_print)
+            "time since before-init-time"
+            (float-time (time-subtract (current-time) before-init-time)))
+        #+end_src
 
 
   4. Set load path two
@@ -135,16 +141,17 @@
     ;; As per use-package readme.md , section use-package.el is no longer needed at runtime
   #+end_src
 ** Other basic packages
-   #+begin_src emacs-lisp :tangle no
+   #+begin_src emacs-lisp :tangle yes
      (require 'diminish)
      (require 'bind-key)
      (require 'hydra)
    #+end_src
-
-   #+begin_src emacs-lisp :tangle yes
-     (use-package diminish   )
-     (use-package bind-key     )
-     (use-package hydra      )
+   The following can cut the load time by about 0.2 seconds. But not tested
+   thoroughly to see if there is any loss of function.
+   #+begin_src emacs-lisp :tangle no
+     (use-package diminish  :defer 2 )
+     (use-package bind-key  :defer 2   )
+     (use-package hydra     :defer 2 )
    #+end_src
 
 
@@ -170,6 +177,7 @@
      (use-package recentf
        :config
        (recentf-mode 1)
+       :defer 1
        :custom
        (recentf-max-saved-items 50 "Increase size of recent saves")
        (recentf-exclude '(".*poporg.*"))
@@ -208,6 +216,10 @@
    #+end_src
 
 * Appearance and UI
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
+
 ** Font
    Set default font to Consolas.  This is done using
    Options-> Save Options.
@@ -511,6 +523,9 @@
                        '(line-number-current-line ((t (:foreground "LimeGreen")))))
    #+end_src
 * Navigation
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
   Easier keys for switching windows
 ** For moving using arrows
    #+BEGIN_SRC emacs-lisp
@@ -534,7 +549,7 @@
     - o - maximize current window
     - ? - show these command bindings
 *** Declaration
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package ace-window
         :bind ("M-o" . 'ace-window)
         :custom
@@ -546,6 +561,9 @@
         )
     #+end_src
 * Search at Point
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
   To use this, start search with C-s and then type C-*.
   Note: find-tag-default-as-regexp and find-tag-default-as-symbol-regexp
   are useful here.
@@ -584,6 +602,9 @@
     (global-set-key "\C-t" 'tags-search)
   #+END_SRC
 * Org-mode
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
 ** Setup before loading org
    Loading it in this file does not work since org has to be started to
    evaluate this file itself.
@@ -1018,7 +1039,7 @@
         (custom-set-variables '(org-export-backends (quote (ascii html latex reveal))))
       #+end_src
    2. Download ox-reveal as needed
-      #+begin_src emacs-lisp
+      #+begin_src emacs-lisp :tangle no
         (use-package ox-reveal :defer t)
       #+end_src
 * Adoc Mode
@@ -1031,6 +1052,9 @@
 
 
 * Yasnippet
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
   #+begin_src emacs-lisp
     (use-package yasnippet
       :hook ((org-mode . yas-minor-mode)
@@ -1072,6 +1096,9 @@
       (yas-reload-all nil))
   #+end_src
 * Cygwin and Windows
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
   Cygwin + Windows: [[http://emacswiki.org/emacs/NTEmacsWithCygwin][Emacs with Cygwin]]
 
 ** Cygwin
@@ -1152,6 +1179,9 @@
    #+END_SRC
 
 * Language Support
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
 ** Auto fill mode
    #+begin_src emacs-lisp
      (add-hook 'text-mode-hook 'auto-fill-mode)
@@ -1167,6 +1197,9 @@
    #+end_src
 
 ** Flycheck
+   :PROPERTIES:
+   :header-args: :tangle yes
+   :END:
    Syntax check
    #+BEGIN_SRC emacs-lisp
      (use-package flycheck
@@ -1179,12 +1212,18 @@
    #+END_SRC
 
 ** Flyspell
+   :PROPERTIES:
+   :header-args: :tangle yes
+   :END:
    On the fly spelling
    #+begin_src emacs-lisp
      (use-package flyspell
        :hook ((text-mode org-mode) . flyspell-mode))
    #+end_src
 ** Highlight symbol
+   :PROPERTIES:
+   :header-args: :tangle yes
+   :END:
    Highlight symbols
    Doesn't currently work properly with hideshow
    #+BEGIN_SRC emacs-lisp :tangle no
@@ -1210,6 +1249,9 @@
      (global-prettify-symbols-mode t)
    #+END_SRC
 ** Poporg mode to pop out comments into org buffer
+   :PROPERTIES:
+   :header-args: :tangle yes
+   :END:
    #+begin_src emacs-lisp
      (use-package poporg
        :defer 2
@@ -1229,6 +1271,9 @@
        (add-hook 'scheme-mode-hook           #'enable-paredit-mode))
    #+END_SRC
 ** Matlab
+   :PROPERTIES:
+   :header-args: :tangle yes
+   :END:
    #+BEGIN_SRC emacs-lisp
      (use-package matlab
                                              ;:ensure matlab-mode
@@ -1246,6 +1291,9 @@
 
    #+END_SRC
 ** VHDL
+   :PROPERTIES:
+   :header-args: :tangle no
+   :END:
    #+BEGIN_SRC emacs-lisp
      (custom-set-variables
       '(vhdl-hide-all-init t)
@@ -1254,6 +1302,9 @@
       '(vhdl-speedbar-auto-open nil))
    #+END_SRC
 ** Verilog
+   :PROPERTIES:
+   :header-args: :tangle yes
+   :END:
    #+begin_src emacs-lisp
      (use-package verilog-mode
        :mode
@@ -1273,6 +1324,10 @@
      (custom-set-variables '(verilog-cexp-indent 0))
    #+end_src
 ** C,C++
+   :PROPERTIES:
+   :header-args: :tangle no
+   :END:
+
    #+BEGIN_SRC emacs-lisp
      (add-hook 'c-mode-hook 'imenu-add-menubar-index)
      (add-hook 'c++-mode-hook 'imenu-add-menubar-index)
@@ -1286,6 +1341,9 @@
      (setq c++-font-lock-extra-types ckeywords)
    #+END_SRC
 ** Promela
+   :PROPERTIES:
+   :header-args: :tangle no
+   :END:
    #+BEGIN_SRC emacs-lisp
      (use-package promela-mode
        :mode "\\.pml\\'"
@@ -1298,6 +1356,10 @@
      ;;(setq-default promela-auto-match-delimiter nil)
    #+END_SRC
 ** NuSMV
+   :PROPERTIES:
+   :header-args: :tangle no
+   :END:
+
    #+BEGIN_SRC emacs-lisp
      (use-package nusmv-mode   :mode "\\.smv$")
      ;;(autoload 'nusmv-mode "nusmv-mode" "NuSMV mode")
@@ -1315,17 +1377,26 @@
     #+END_SRC
 
 ** Ruby
+   :PROPERTIES:
+   :header-args: :tangle no
+   :END:
    #+BEGIN_SRC emacs-lisp
      (setq ruby-indent-level 4)
    #+END_SRC
 
 ** TLA+
+   :PROPERTIES:
+   :header-args: :tangle no
+   :END:
    #+begin_src emacs-lisp
      (use-package tla-mode
        :mode "\\.tla$")
    #+end_src
 
 ** Haskell
+   :PROPERTIES:
+   :header-args: :tangle no
+   :END:
    #+BEGIN_SRC emacs-lisp
      (use-package haskell-mode
        :mode (("\\.hs\\'"    . haskell-mode)
@@ -1342,7 +1413,11 @@
    #+END_SRC
 
 ** Lisp
-   #+begin_src emacs-lisp
+   :PROPERTIES:
+   :header-args: :tangle yes
+   :END:
+
+   #+begin_src emacs-lisp :tangle yes
      (use-package lispy
        :hook ((emacs-lisp-mode . lispy-mode)
               (lisp-mode . lispy-mode)
@@ -1358,6 +1433,9 @@
 
 
 * Magit
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
   Magit mostly just works.  Only thing to add here is to add a simple
   keystroke to start it.
   #+BEGIN_SRC emacs-lisp :tangle no
@@ -1667,6 +1745,10 @@
        )
    #+END_SRC
 * Wgrep
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
+
   #+begin_src emacs-lisp
     (use-package wgrep
       :hook ((grep-mode . wgrep-setup)))
@@ -1680,6 +1762,9 @@
       :hook (helm-grep-mode . wgrep-helm-setup))
   #+end_src
 * Tramp
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
   #+BEGIN_SRC emacs-lisp :tangle no
     (setq tramp-default-method "ssh")
   #+END_SRC
@@ -1690,6 +1775,9 @@
       (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
   #+end_src
 * Dired
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
   Dired narrow
   #+begin_src emacs-lisp
     ;;narrow dired to match filter
@@ -1699,6 +1787,9 @@
                   ("/" . dired-narrow)))
   #+end_src
 * Eshell
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
   - To use ssh with eshell
     #+begin_verse
     cd /ssh:hostname:~
@@ -2034,6 +2125,9 @@
             (eshell-grep "zgrep --color -H --null" args)))
       #+end_src
 * Artist mode
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
   - Allow movement beyond end (add additional newlines as needed)
     Uncomment if needed.  Alternative is to get out of artist mode and
     make space.
@@ -2075,6 +2169,9 @@
           (next-line arg)))
     #+end_src
 * Which-key
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
   #+begin_src emacs-lisp
     (use-package which-key
       :custom
@@ -2120,6 +2217,9 @@
        ("9" "M-9")))
   #+end_src
 * Kakoune
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
 ** Helper funcs
 *** Toggle line nums
     #+begin_src emacs-lisp
@@ -2332,6 +2432,9 @@
                   ("l" . undo-tree-visualize-switch-branch-right)))
   #+end_src
 * Completion with company-mode
+  :PROPERTIES:
+  :header-args: :tangle no
+  :END:
   1. Add company mode
      #+BEGIN_SRC emacs-lisp
        (use-package company
@@ -2384,6 +2487,9 @@
          )
      #+end_src
 * Adding paths for info files
+  :PROPERTIES:
+  :header-args: :tangle yes
+  :END:
   #+begin_src emacs-lisp
     (setq rjp/info-path
           (eval-when-compile
@@ -2399,6 +2505,9 @@
       )
   #+end_src
 * Workspaces
+  :PROPERTIES:
+  :header-args: :tangle no
+  :END:
   #+begin_src emacs-lisp
     (defun rjp/project-override (dir)
       (let ((override (locate-dominating-file dir ".project.el")))
